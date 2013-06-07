@@ -1,0 +1,12 @@
+{
+"informations" : { "name" : "devices",
+                   "description" : "Manage XiVO devices via REST API provd",
+                   "author" : "Sylvain Boily <sboily@proformatique.com>",
+                   "licence" : "AGPLV3"
+                 },
+"plugin" : { "endpoint" : "devices.device",
+             "position" : "left",
+             "name" : "Devices",
+             "parent" : ""
+           }
+}

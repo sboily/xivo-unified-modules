@@ -1,0 +1,12 @@
+{
+"informations" : { "name" : "users",
+                   "description" : "Manage XiVO users via REST API",
+                   "author" : "Sylvain Boily <sboily@proformatique.com>",
+                   "licence" : "AGPLV3"
+                 },
+"plugin" : { "endpoint" : "users.user",
+             "position" : "left",
+             "name" : "Users",
+             "parent" : ""
+           }
+}

@@ -1,0 +1,12 @@
+{
+"informations" : { "name" : "example",
+                   "description" : "Plugin example",
+                   "author" : "Sylvain Boily <sboily@proformatique.com>",
+                   "licence" : "AGPLV3"
+                 },
+"plugin" : { "endpoint" : "example.ex",
+             "position" : "left",
+             "name" : "Example",
+             "parent" : ""
+           }
+}
