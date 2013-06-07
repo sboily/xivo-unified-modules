@@ -17,8 +17,8 @@
 
 from flask import render_template, Blueprint, session, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
-from app import app, db
-from app.core.server.models import Servers
+from app import create_app as app, db
+from app.core.servers.models import Servers
 from restclient import GET, POST, PUT, DELETE
 from forms import UserForm
 import json
@@ -34,7 +34,7 @@ def before_request():
             g.url_rest_user = "https://%s:50051/1.0/users/" % g.server.address
         else:
             flash('Sorry you need to choose a server !')
-            return redirect(url_for("home"))
+            return redirect(url_for('home.homepage'))
     else:
         print 'User need to be identified !'
 
@@ -44,7 +44,7 @@ def user():
     users = _get_users()
     if not users:
         flash('Sorry the server have not any correct json data !')
-        return redirect(url_for("home"))
+        return redirect(url_for('home.homepage'))
     return render_template('users.html', users=users['items'])
 
 @users.route('/users/add', methods=['GET', 'POST'])
@@ -54,7 +54,7 @@ def user_add():
     if request.method == 'POST' and userform.validate_on_submit():
         _add_user(userform)
         flash('User added')
-        return redirect(url_for("users.user"))
+        return redirect(url_for('users.user'))
     return render_template('users_add.html', userform=userform)
 
 @users.route('/users/<id>', methods=['GET', 'POST'])

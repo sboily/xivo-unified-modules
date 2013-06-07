@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for a in $(find *  -maxdepth 0 -type d)
+do
+ tar cfvz $a.tgz $a
+done
+
+scp *.tgz root@market.xivo.fr:/var/www/market.xivo.fr/
+rm *.tgz

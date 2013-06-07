@@ -17,8 +17,8 @@
 
 from flask import render_template, Blueprint, session, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
-from app import app, db
-from app.core.server.models import Servers
+from app import create_app as app, db
+from app.core.servers.models import Servers
 from restclient import GET, POST, PUT, DELETE
 import json
 from forms import VoicemailForm
@@ -34,7 +34,7 @@ def before_request():
             g.url_rest_user = "https://%s:50051/1.0/voicemails/" % g.server.address
         else:
             flash('Sorry you need to choose a server !')
-            return redirect(url_for("home"))
+            return redirect(url_for('home.homepage'))
     else:
         print 'User need to be identified !'
 
@@ -44,7 +44,7 @@ def voicemail():
     voicemails = _get_voicemails()
     if not voicemails:
         flash('Sorry the server have not any correct json data !')
-        return redirect(url_for("home"))
+        return redirect(url_for('home.homepage'))
     return render_template('voicemails.html', voicemails=voicemails['items'])
 
 @voicemails.route('/voicemails/add', methods=['GET', 'POST'])
