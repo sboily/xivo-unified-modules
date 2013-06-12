@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, Blueprint
+from flask import render_template
 from flask.ext.login import login_required
 
-deploy = Blueprint('deploy', __name__, template_folder='templates/deploy')
+from setup import deploy
 
 @deploy.route('/deploy')
 @login_required

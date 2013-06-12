@@ -18,13 +18,13 @@
 from flask import render_template, Blueprint, session, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
 from app import create_app as app, db
-from app.core.servers.models import Servers
+from app.models import Servers
 from restclient import GET, POST, PUT, DELETE
 import json
 from forms import VoicemailForm
+from setup import voicemails
 import wtforms_json
 
-voicemails = Blueprint('voicemails', __name__, template_folder='templates/voicemails')
 wtforms_json.init()
 
 @voicemails.before_request

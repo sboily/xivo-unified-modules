@@ -15,14 +15,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, Blueprint
+from flask import render_template
 from flask.ext.login import login_required
-from app import servers_list, plugins_list
-
-devices = Blueprint('devices', __name__, template_folder='templates/devices')
+from setup import devices
 
 @devices.route('/devices')
 @login_required
 def device():
-    return render_template('devices.html', servers_list=servers_list, plugins_list=plugins_list)
+    return render_template('devices.html')
 

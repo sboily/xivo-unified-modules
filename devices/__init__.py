@@ -15,3 +15,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from yapsy.IPlugin import IPlugin
+from setup import devices
+import views
+
+class DeployPlugin(IPlugin):
+
+    def setup(self, app):
+        app.register_blueprint(devices)
+
+    def plugin_endpoint(self):
+        return "devices.device"

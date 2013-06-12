@@ -1,0 +1,12 @@
+[Core]
+Name = voicemails
+Module = voicemails
+
+[Documentation]
+Module = voicemails
+DisplayName = Voicemails
+Author = Sylvain Boily
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = Voicemails plugin for REST API XiVO
+License = AGPLv3

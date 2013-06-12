@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, Blueprint, session, flash, redirect, url_for, g, request
+from flask import render_template, session, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
 from app import create_app as app, db
-from app.core.servers.models import Servers
+from app.models import Servers
 from restclient import GET, POST, PUT, DELETE
 from forms import UserForm
 import json
 import wtforms_json
+from setup import users
 
-users = Blueprint('users', __name__, template_folder='templates/users')
 wtforms_json.init()
 
 @users.before_request

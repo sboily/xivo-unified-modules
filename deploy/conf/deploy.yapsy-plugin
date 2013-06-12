@@ -1,0 +1,12 @@
+[Core]
+Name = deploy
+Module = deploy
+
+[Documentation]
+Module = deploy
+DisplayName = Deploy Plugin
+Author = Sylvain Boily
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = Deploy plugin
+License = AGPLv3
