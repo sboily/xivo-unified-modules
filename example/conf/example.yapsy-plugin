@@ -10,3 +10,4 @@ Version = 0.1
 Website = http://blog.xivo.fr
 Description = Test plugin
 License = AGPL
+Parent = server

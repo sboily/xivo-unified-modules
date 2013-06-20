@@ -10,3 +10,4 @@ Version = 0.1
 Website = http://blog.xivo.fr
 Description = Deploy plugin
 License = AGPLv3
+Parent = organisation
