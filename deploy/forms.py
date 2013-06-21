@@ -15,17 +15,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from yapsy.IPlugin import IPlugin
-from setup import deploy
-import views
-import os
 
-class DeployPlugin(IPlugin):
+from flask.ext.wtf import TextField, ValidationError, SubmitField, TextAreaField
+from flask.ext.wtf import Required, IPAddress, Regexp, validators
+from app.utils import Form
+from flask.ext.babel import lazy_gettext as _
 
-    def setup(self, app):
-        app.register_blueprint(deploy)
-        mydbplugindir = os.path.join(app.config['BASEDIR'],'app/plugins/deploy/db/servers_ec2.db')
-        app.config['SQLALCHEMY_BINDS'].update({'servers_ec2': 'sqlite:///%s' % mydbplugindir})
+class DeployForm(Form):
+    name = TextField(_('Name'), [Required(),
+        validators.Length(min=3, max=30),
+        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
+    ])
 
-    def plugin_endpoint(self):
-        return "deploy.dep"
+    address = TextField(_('Address'))
+    access_key = TextField(_('Access key'))
+    secret_key = TextField(_('Secret key'))
+    key_name = TextField(_('Key Name'))
+
+    ssh_key = TextAreaField(_('SSH key'))
+
+    submit = SubmitField(_('Submit'))

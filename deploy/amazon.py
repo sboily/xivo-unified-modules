@@ -5,21 +5,21 @@ import sys
 import time
 
 class EC2Conn:
-    def __init__(self, access_key, secret_key, elastics_ip, server_type, instance_type):
+    def __init__(self, config):
         self.conn = None
-        self.access_key = access_key
-        self.secret_key = secret_key
-        self.elastics_ip = elastics_ip
-        self.server_type = server_type
-        self.instance_type = instance_type
+        self.access_key = config['access_key']
+        self.secret_key = config['secret_key']
+        self.elastics_ip = config['elastics_ip']
+        self.server_type = config
+        self.instance_params = config['instance_params']
 
     def connect(self):
         self.conn = EC2Connection(self.access_key, self.secret_key)
 
     def create_instance(self):
         address = self.elastics_ip
-        instance_type = self.instance_type
-        reservation = self.conn.run_instances( **self.server_type[instance_type])
+        instance_params = self.instance_params
+        reservation = self.conn.run_instances( **self.server_type[instance_params])
         print reservation
         instance = reservation.instances[0]
         time.sleep(10)

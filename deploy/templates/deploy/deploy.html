@@ -1,7 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 
+<div class="container">
 
-Deploy module ...
+<div class="widget stacked widget-table action-table">
+  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('deploy.deploy_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
+  <table class="table table-bordered">
+<div class="widget-content">
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>{{ _('Name') }}</th>
+        <th>{{ _('Created at') }}</th>
+      <th class="td-actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in servers %}
+      <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.created_time }}</td>
+      <td class="td-actions">
+        <a href="{{url_for('deploy.deploy_del', id=s.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        <a href="#" class="btn btn-small" for="deploy" id="{{ s.id }}"><i class="btn-icon-only icon-upload"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<script type=text/javascript>
+    $('[for="deploy"]').click(function() {
+        var id = $('[for="deploy"]').attr('id')
+        $.ajax({
+            type : 'GET',
+            url : '/deploy/cloud/' + id, 
+            success: function(data) {
+                alert('server deploy : ' + id);
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+               alert('ERROR')
+               }
+            })
+    });
+</script>
+
+
+
+</div>
 
 {% endblock %}

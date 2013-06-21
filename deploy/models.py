@@ -34,7 +34,7 @@ class Servers_EC2(db.Model):
     image_id = db.Column(db.String(200), default='ami-2c28ba45')
     instance_type = db.Column(db.String(200), default='t1.micro')
     key_name = db.Column(db.String(200))
-    ssk_key = db.Column(db.String(200))
+    ssh_key = db.Column(db.Text())
     instance_ec2 = db.Column(db.String(200))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
