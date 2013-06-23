@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from boto.ec2.connection import EC2Connection
 import sys
 import time

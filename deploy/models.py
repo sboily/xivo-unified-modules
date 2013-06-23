@@ -36,6 +36,7 @@ class Servers_EC2(db.Model):
     key_name = db.Column(db.String(200))
     ssh_key = db.Column(db.Text())
     instance_ec2 = db.Column(db.String(200))
+    status = db.Column(db.Integer)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, name):
