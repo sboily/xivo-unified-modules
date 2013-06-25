@@ -79,7 +79,7 @@ def deploy_status():
                                         'ip': _check_value(serv.address),
                                         'instance': _check_value(serv.instance_ec2),
                                         'progress' : _estimated_time_of_installation( \
-                                                      serv.installed_time, "0:08:15") }
+                                                      serv.installed_time, "0:08:30") }
                            })
     return jsonify(status)
 

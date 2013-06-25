@@ -22,7 +22,11 @@
     {% for s in servers %}
       <tr>
       <td>{{ s.name }}</td>
-      <td class="status" id="status-{{ s.id }}">{{ s.status }}</td>
+      <td class="status" id="status-{{ s.id }}">
+      <div class="progress progress-warning">
+          <div class="bar" id="status-{{ s.id }}" data-percentage="0"></div>
+      </div>
+      </td>
       <td class="ip" id="ip-{{ s.id }}">{% if s.address %}<a href="https://{{ s.address }}" target="_blank">{{ s.address }}</a>{% endif %}</td>
       <td class="instance" id="instance-{{ s.id }}">{{ s.instance_ec2 }}</td>
       <td>{{ s.created_time }}</td>
@@ -40,27 +44,24 @@
 
 <script>
 
+
 function loadStatus() {
-    $.getJSON('/deploy/status',
-         function(data) {
-             $.each( data, function( key, val ) {
-                 var status = '<div class="progress"> \
-                                 <div class="bar bar-warning" style="width: '+ val.progress +'%;"> \
-                                   <p class="text-center text-info"> \
-                                     '+ val.status +' ... \
-                                   </p> \
-                                 </div> \
-                               </div>';
-                 if (val.progress != 0 && val.progress < 100) {
-                     $('.status#status-' + key).attr('id', 'status-'+key).html(status);
-                  } else {
-                     $('.status#status-' + key).attr('id', 'status-'+key).text(val.status);
-                  }
-                  $('.ip#ip-' + key).attr('id', 'ip-'+key).html('<a href="https://' + val.ip + '" target="_blank">' + val.ip + '</a>');
-                 $('.instance#instance-' + key).attr('id', 'instance-'+key).text(val.instance);
-             })
-          });
-          setTimeout(loadStatus, 2000);
+    $('.progress .bar').progressbar({
+        display_text: 2,
+        use_percentage: true,
+        });
+
+        $.getJSON('/deploy/status',
+            function(data) {
+                $.each( data, function( key, val ) {
+                    if (val.status != 'running') {
+                    $('.bar#status-' + key).attr('data-percentage', val.progress); }
+                    else { $('.status#status-' + key).attr('id', 'status-'+key).text(val.status); };
+                    $('.ip#ip-' + key).attr('id', 'ip-'+key).html('<a href="https://' + val.ip + '" target="_blank">' + val.ip + '</a>');
+                    $('.instance#instance-' + key).attr('id', 'instance-'+key).text(val.instance);
+                })
+            });
+    setTimeout(loadStatus, 2000);
     }
 
 loadStatus();
