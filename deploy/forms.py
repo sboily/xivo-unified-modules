@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import TextField, ValidationError, SubmitField, TextAreaField
+from flask.ext.wtf import TextField, ValidationError, SubmitField, TextAreaField, QuerySelectField
 from flask.ext.wtf import Required, IPAddress, Regexp, validators
 from app.utils import Form
 from flask.ext.babel import lazy_gettext as _
+from models import Cloud_Provider
 
 class DeployForm(Form):
     name = TextField(_('Name'), [Required(),
@@ -27,7 +28,19 @@ class DeployForm(Form):
         validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
     ])
 
-    address = TextField(_('Address'))
+    cloud_provider = QuerySelectField(_('Cloud provider'), [Required()], get_label='name', \
+                                       query_factory=lambda: Cloud_Provider.query, \
+                                       allow_blank=True, blank_text=_('Please choose a provider ...'))
+
+    submit = SubmitField(_('Submit'))
+
+
+class CloudProviderForm(Form):
+    name = TextField(_('Name'), [Required(),
+        validators.Length(min=3, max=30),
+        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
+    ])
+
     access_key = TextField(_('Access key'))
     secret_key = TextField(_('Secret key'))
     key_name = TextField(_('Key Name'))

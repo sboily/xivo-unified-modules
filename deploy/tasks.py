@@ -1,53 +1,77 @@
-from fabric.api import run, sudo, put, env
 from amazon import EC2Conn
 import time
-import tempfile
-import os
-import sys
-from app.extensions import celery
+from app.extensions import celery, db
+from celery.signals import task_postrun, task_sent, task_success, task_prerun, task_failure
+from deploy_amazon import deploy_xivo_on_amazon
+from models import Servers_EC2
+
+
+@task_sent.connect(sender='tasks.deploy_on_cloud')
+def task_sent_handler(sender=None, task_id=None, task=None, args=None,
+                      kwargs=None, **kwds):
+    _update_status_in_db(args[0], 'failure')
+    print('Got signal task_sent for task id %s' % (task_id, ))
+
+@task_failure.connect(sender='tasks.deploy_on_cloud')
+def task_sent_error(sender=None, task_id=None, task=None, args=None,
+                      kwargs=None, **kwds):
+    print('Got signal task_error for task id %s' % (task_id, ))
+
+
+@task_postrun.connect
+def close_session(*args, **kwargs):
+    db.session.remove()
+
+@task_prerun.connect
+def t_prerun(sender=None, task_id=None, task=None, args=None, kwargs=None, **kwds):
+    print('Got signal task_prerun with value : %s' % (task_id))
+
+@task_success.connect
+def t_success(sender, result, **kwargs):
+    print('Got signal task_success for server : %s' % (result[0]))
+
+
 
 @celery.task(name='tasks.deploy_on_cloud', ignore_result=False)
 def deploy_on_cloud(id, config, ssh_key):
+    _update_status_in_db(id, 'initializing')
     instance = create_new_instance_on_amazon(config)
     print 'Waiting for the amazon checking ...'
-    time.sleep(60)
+    _save_instance_in_db(id, instance)
+    _update_status_in_db(id, 'checking')
+    time.sleep(65)
+    _update_status_in_db(id, 'installing')
+    print 'Deploy !'
+    deploy_xivo_on_amazon(instance.ip_address,ssh_key)
     print 'Finish !'
-    deploy_xivo_on_amazon(instance,ssh_key)
 
-def deploy_xivo_on_amazon(instance, ssh_key):
+    _update_status_in_db(id, 'running')
+    return (id, instance)
 
-    env.host_string = "admin@%s" % (instance.ip_address)
+def _save_instance_in_db(id, instance):
+    server_ec2 = Servers_EC2.query.get(id)
+    server_ec2.address = instance.ip_address
+    server_ec2.instance_ec2 = instance.id
+    db.session.add(server_ec2)
+    db.session.commit()
 
-    _, key_file = tempfile.mkstemp()
-    file = open(key_file, 'w')
-    file.write(ssh_key)
-    file.close()
+def _update_status_in_db(id, state):
+    server_ec2 = Servers_EC2.query.get(id)
+    server_ec2.status = state
+    db.session.add(server_ec2)
+    db.session.commit()
 
-    os.chmod(key_file, 0400)
+def undeploy_on_cloud(instance, config):
+    instance = delete_instance_on_amazon(instance, config)
 
-    env.key_filename = key_file
-    remote_dahdi_init = '/etc/init.d/'
-    dahdi_src = 'dahdi'
-    xivo_configure_src = 'xivo-configure'
-
-    # Install XiVO
-    sudo('apt-get update')
-    sudo('apt-get -y install curl')
-    run('curl -O http://mirror.xivo.fr/fai/xivo-migration/xivo_install_skaro.sh')
-    run('chmod +x xivo_install_skaro.sh')
-    put(dahdi_src, remote_dahdi_init, use_sudo=True)
-    sudo('chmod 755 /etc/init.d/dahdi')
-    sudo('yes n | LANG=en_US.UTF-8 ./xivo_install_skaro.sh')
-    put(xivo_configure_src)
-    run('chmod +x xivo-configure')
-    sudo('./xivo-configure')
-
-    os.remove(key_file)
-
+    return instance    
 
 def create_new_instance_on_amazon(config):
-    a = EC2Conn(config)
-    a.connect()
-    instance = a.create_instance()
-    return instance
+    ec2 = EC2Conn(config)
+    ec2.connect()
+    return ec2.create_instance()
 
+def delete_instance_on_amazon(instance_id, config):
+    ec2 = EC2Conn(config)
+    ec2.connect()
+    return ec2.delete_instance(instance_id)

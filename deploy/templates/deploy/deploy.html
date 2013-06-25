@@ -5,13 +5,15 @@
 
 <div class="widget stacked widget-table action-table">
   <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('deploy.deploy_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
+  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('deploy.provider_add')}}"><i class="icon-plus icon-white"></i> {{_('Add provider') }}</a></p>
   <table class="table table-bordered">
-<div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
         <th>{{ _('Name') }}</th>
         <th>{{ _('Status') }}</th>
+        <th>{{ _('IP') }}</th>
+        <th>{{ _('Instance') }}</th>
         <th>{{ _('Created at') }}</th>
       <th class="td-actions"></th>
       </tr>
@@ -20,11 +22,13 @@
     {% for s in servers %}
       <tr>
       <td>{{ s.name }}</td>
-      <td class="status" id="{{ s.id }}"></td>
+      <td class="status" id="status-{{ s.id }}">{{ s.status }}</td>
+      <td class="ip" id="ip-{{ s.id }}">{% if s.address %}<a href="https://{{ s.address }}" target="_blank">{{ s.address }}</a>{% endif %}</td>
+      <td class="instance" id="instance-{{ s.id }}">{{ s.instance_ec2 }}</td>
       <td>{{ s.created_time }}</td>
       <td class="td-actions">
         <a href="{{url_for('deploy.deploy_del', id=s.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
-        {% if s.status == 1 %}
+        {% if not s.status %}
             <a href="{{url_for('deploy.deploy_cloud', id=s.id)}}" class="btn btn-small"><i class="btn-icon-only icon-upload"></i></a>
         {% endif %}
         </td>
@@ -40,7 +44,20 @@ function loadStatus() {
     $.getJSON('/deploy/status',
          function(data) {
              $.each( data, function( key, val ) {
-                 $('.status').attr('id', key).text(val);
+                 var status = '<div class="progress"> \
+                                 <div class="bar bar-warning" style="width: '+ val.progress +'%;"> \
+                                   <p class="text-center text-info"> \
+                                     '+ val.status +' ... \
+                                   </p> \
+                                 </div> \
+                               </div>';
+                 if (val.progress != 0 && val.progress < 100) {
+                     $('.status#status-' + key).attr('id', 'status-'+key).html(status);
+                  } else {
+                     $('.status#status-' + key).attr('id', 'status-'+key).text(val.status);
+                  }
+                  $('.ip#ip-' + key).attr('id', 'ip-'+key).html('<a href="https://' + val.ip + '" target="_blank">' + val.ip + '</a>');
+                 $('.instance#instance-' + key).attr('id', 'instance-'+key).text(val.instance);
              })
           });
           setTimeout(loadStatus, 2000);

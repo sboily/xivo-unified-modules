@@ -51,3 +51,7 @@ class EC2Conn:
 
     def get_instances(self):
         return self.conn.get_all_instances()
+
+    def delete_instance(self, instance_id):
+        print "Delete instance id : ", instance_id
+        return self.conn.terminate_instances(instance_ids=[instance_id])

@@ -15,19 +15,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, current_app, flash, redirect, url_for, jsonify, g, session
+from flask import render_template, current_app, flash, redirect, url_for, jsonify, Blueprint, g
 from flask.ext.login import login_required
 
 from setup import deploy
 from app import db
 import os
+import datetime, time
 
 from flask.ext.babel import gettext as _
 
-from models import Servers_EC2
-from forms import DeployForm
+from forms import DeployForm, CloudProviderForm
+from models import Servers_EC2, Cloud_Provider
 
-from tasks import deploy_on_cloud
+from tasks import deploy_on_cloud, undeploy_on_cloud
 
 
 @deploy.route('/deploy')
@@ -42,10 +43,7 @@ def deploy_add():
     form = DeployForm()
     if form.validate_on_submit():
         server = Servers_EC2(form.name.data)
-        server.access_key = form.access_key.data
-        server.secret_key = form.secret_key.data
-        server.key_name = form.key_name.data
-        server.ssh_key = form.ssh_key.data
+        server.servers = form.cloud_provider.data
 
         db.session.add(server)
         db.session.commit()
@@ -53,36 +51,70 @@ def deploy_add():
         return redirect(url_for("deploy.dep"))
     return render_template('deploy_add.html', form=form)
 
+@deploy.route('/deploy/provider/add', methods=['GET', 'POST'])
+@login_required
+def provider_add():
+    form = CloudProviderForm()
+    if form.validate_on_submit():
+        provider = Cloud_Provider(form.name.data)
+        provider.access_key = form.access_key.data
+        provider.secret_key = form.secret_key.data
+        provider.key_name = form.key_name.data
+        provider.ssh_key = form.ssh_key.data
+
+        db.session.add(provider)
+        db.session.commit()
+        flash(_('Provider added'))
+        return redirect(url_for("deploy.dep"))
+    return render_template('provider_add.html', form=form)
 
 
 @deploy.route('/deploy/status')
 @login_required
 def deploy_status():
     status = {}
-    for serv in g.task:
-        res = deploy_on_cloud.AsyncResult(g.task[serv].task_id)
-        status.update({int(serv) : res.state})
+    server_ec2 = Servers_EC2.query.all()
+    for serv in server_ec2:
+        status.update({int(serv.id) : { 'status': _check_value(serv.status),
+                                        'ip': _check_value(serv.address),
+                                        'instance': _check_value(serv.instance_ec2),
+                                        'progress' : _estimated_time_of_installation( \
+                                                      serv.installed_time, "0:08:15") }
+                           })
     return jsonify(status)
 
+def _check_value(value):
+    if not value:
+        value = ''
+    return value 
+
+def _estimated_time_of_installation(installed_time, estimated_time):
+    if not installed_time:
+        return 0
+    h1 = _check_value(installed_time).replace(microsecond=0)
+    h2 = datetime.datetime.utcnow().replace(microsecond=0)
+    time_for_installing = datetime.datetime.strptime(estimated_time, "%H:%M:%S")
+    fix = datetime.datetime.strptime("0:00:00", "%H:%M:%S")
+    time_of_installation = datetime.datetime.strptime(str(h2-h1), "%H:%M:%S")
+    time_begin = time_for_installing-time_of_installation
+    time_fix = time_for_installing-fix
+    percentage = int(100-round((100.0*time_begin.total_seconds())/time_fix.total_seconds()))
+    if percentage > 100:
+         return 100
+    return percentage 
 
 @deploy.route('/deploy/del/<id>')
 @login_required
 def deploy_del(id):
-    server = Servers_EC2.query.filter(Servers_EC2.id == id).first()
-
-    if server:
-        db.session.delete(server)
-        db.session.commit()
-        flash(_('Server deleted'))
+    undeploy_on_ec2(id)
+    flash(_('Server deleted'))
     return redirect(url_for("deploy.dep"))
 
 @deploy.route('/deploy/cloud/<id>')
 @login_required
 def deploy_cloud(id):
-    task = deploy_on_ec2(id)
-    session['task'].update({id : task})
+    deploy_on_ec2(id)
     return redirect(url_for("deploy.dep"))
-
 
 def _get_servers():
     _initdb()
@@ -91,22 +123,37 @@ def _get_servers():
 def _initdb():
     db.create_all(bind='servers_ec2')
 
-def deploy_on_ec2(id):
-    server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
-
-    config = { 'access_key' : server_ec2.access_key,
-               'secret_key' : server_ec2.secret_key,
+def create_amazon_config(server_ec2):
+    config = { 'access_key' : server_ec2.servers.access_key,
+               'secret_key' : server_ec2.servers.secret_key,
                'elastics_ip' : server_ec2.elastics_ip,
                'instance_params' : server_ec2.instance_params,
                server_ec2.instance_params : { 'image_id' : server_ec2.image_id,
                                               'instance_type' : server_ec2.instance_type,
-                                              'security_groups' : [server_ec2.security_groups],
-                                              'key_name' : server_ec2.key_name,
+                                              'security_groups' : [server_ec2.servers.security_groups],
+                                              'key_name' : server_ec2.servers.key_name,
                                             }
              }
 
-    server_ec2.status = 1
+    return config
+
+def undeploy_on_ec2(id):
+    server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
+
+    if server_ec2.instance_ec2:
+        config = create_amazon_config(server_ec2)
+        inst = undeploy_on_cloud(server_ec2.instance_ec2, config)
+
+    if server_ec2:
+        db.session.delete(server_ec2)
+        db.session.commit()
+
+def deploy_on_ec2(id):
+    server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
+    config = create_amazon_config(server_ec2)
+
+    task = deploy_on_cloud.apply_async((id, config, server_ec2.servers.ssh_key))
+    server_ec2.task_id = task.task_id
+    server_ec2.installed_time = datetime.datetime.utcnow()
     db.session.add(server_ec2)
     db.session.commit()
-    task = deploy_on_cloud.apply_async((id, config, server_ec2.ssh_key))
-    return task
