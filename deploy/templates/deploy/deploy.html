@@ -54,7 +54,7 @@ function loadStatus() {
         $.getJSON('/deploy/status',
             function(data) {
                 $.each( data, function( key, val ) {
-                    if (val.status != 'running') {
+                    if (val.status != 'running' && val.progress != '') {
                     $('.bar#status-' + key).attr('data-percentage', val.progress); }
                     else { $('.status#status-' + key).attr('id', 'status-'+key).text(val.status); };
                     $('.ip#ip-' + key).attr('id', 'ip-'+key).html('<a href="https://' + val.ip + '" target="_blank">' + val.ip + '</a>');
