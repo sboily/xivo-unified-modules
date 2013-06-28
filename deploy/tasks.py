@@ -52,7 +52,7 @@ def deploy_on_cloud(id, config, ssh_key, user_info):
     return (id, instance)
 
 def _add_server_in_servers(instance, user_info):
-    server = Servers(name='A DEFINIR', address=instance.ip_address)
+    server = Servers(name=user_info['name'], address=instance.ip_address)
     org = Organisations.query.get(user_info['organisation_id'])
     user = User.query.get(user_info['user_id'])
 

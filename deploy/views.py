@@ -46,6 +46,7 @@ def deploy_add():
         server = Servers_EC2(form.name.data)
         server.servers = form.cloud_provider.data
 
+        server.organisation_id = g.user_organisation.id
         db.session.add(server)
         db.session.commit()
         flash(_('Server added'))
@@ -133,7 +134,8 @@ def deploy_cloud(id):
 
 def _get_servers():
     _initdb()
-    return Servers_EC2.query.order_by(Servers_EC2.name)
+    return Servers_EC2.query.filter(Servers_EC2.organisation_id == g.user_organisation.id) \
+                            .order_by(Servers_EC2.name)
 
 def _initdb():
     db.create_all(bind='servers_ec2')
@@ -178,7 +180,7 @@ def deploy_on_ec2(id):
     server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
     config = create_amazon_config(server_ec2)
 
-    user_info = {'user_id' : g.user.id, 'organisation_id' : g.user_organisation.id}
+    user_info = {'user_id' : g.user.id, 'organisation_id' : g.user_organisation.id, 'name' : server_ec2.name}
 
     task = deploy_on_cloud.apply_async((id, config, server_ec2.servers.ssh_key, user_info))
     server_ec2.task_id = task.task_id

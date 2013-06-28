@@ -36,6 +36,7 @@ class Servers_EC2(db.Model):
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
     installed_time = db.Column(db.DateTime)
     provider_id = db.Column(db.Integer, db.ForeignKey('cloud_provider.id'))
+    organisation_id = db.Column(db.Integer)
 
     def __init__(self, name):
         self.name = name
