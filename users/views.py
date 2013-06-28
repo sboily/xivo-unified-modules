@@ -84,22 +84,31 @@ def _check_json(json_value):
     return check_json
 
 def _get_users():
-    users_response = GET(g.url_rest_user, credentials=(g.server.login, g.server.password), 
+    try:
+        users_response = GET(g.url_rest_user, credentials=(g.server.login, g.server.password), 
                                           headers={'Content-Type': 'application/json'}, 
-                                          httplib_params={'timeout': '10', 'disable_ssl_certificate_validation' : True})
-    return _check_json(users_response)
+                                          httplib_params={'timeout': 10, 'disable_ssl_certificate_validation' : True})
+        return _check_json(users_response)
+    except:
+        return False
 
 def _get_user(id):
-    user_response = GET(g.url_rest_user + id, credentials=(g.server.login, g.server.password),
+    try:
+        user_response = GET(g.url_rest_user + id, credentials=(g.server.login, g.server.password),
                                                     headers={'Content-Type': 'application/json'}, 
-                                                    httplib_params={'timeout': '10', 'disable_ssl_certificate_validation' : True})
-    return _check_json(user_response)
+                                                    httplib_params={'timeout': 10, 'disable_ssl_certificate_validation' : True})
+        return _check_json(user_response)
+    except:
+        return False
 
 def _del_user(id):
-    del_response = DELETE(g.url_rest_user + id, credentials=(g.server.login, g.server.password),
+    try:
+        del_response = DELETE(g.url_rest_user + id, credentials=(g.server.login, g.server.password),
                                                       headers={'Content-Type': 'application/json'}, 
-                                                      httplib_params={'timeout': '10', 'disable_ssl_certificate_validation' : True})
-    return del_response
+                                                      httplib_params={'timeout': 10, 'disable_ssl_certificate_validation' : True})
+        return del_response
+    except:
+        return False
 
 def _add_user(userform):
     user = { 'firstname' : userform.firstname.data,
@@ -107,12 +116,16 @@ def _add_user(userform):
              'username' : userform.username.data,
              'password' : userform.password.data
            }
-    user_add = POST(g.url_rest_user,
-                    params=user,
-                    credentials=(g.server.login, g.server.password),
-                    headers={'Content-Type': 'application/json'},
-                    httplib_params={'timeout': '10', 'disable_ssl_certificate_validation' : True})
-    return True
+
+    try:
+        user_add = POST(g.url_rest_user,
+                        params=user,
+                        credentials=(g.server.login, g.server.password),
+                        headers={'Content-Type': 'application/json'},
+                        httplib_params={'timeout': 10, 'disable_ssl_certificate_validation' : True})
+        return True
+    except:
+        return False
 
 def _edit_user(userform, id):
     user = { 'firstname' : userform.firstname.data,
@@ -120,9 +133,12 @@ def _edit_user(userform, id):
              'username' : userform.username.data,
              'password' : userform.password.data
            }
-    user_edit = PUT(g.url_rest_user + id,
-                    params=user,
-                    credentials=(g.server.login, g.server.password),
-                    headers={'Content-Type': 'application/json'},
-                    httplib_params={'timeout': '10', 'disable_ssl_certificate_validation' : True})
-    return True
+    try:
+        user_edit = PUT(g.url_rest_user + id,
+                        params=user,
+                        credentials=(g.server.login, g.server.password),
+                        headers={'Content-Type': 'application/json'},
+                        httplib_params={'timeout': 10, 'disable_ssl_certificate_validation' : True})
+        return True
+    except:
+        return False
