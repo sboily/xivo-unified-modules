@@ -67,6 +67,9 @@ function loadStatus() {
                     if(val.status == 'running' || val.progress == 100) {
                         $('#btn-revoke-' + key).hide(); };
 
+                    if(val.status != 'running' && val.progress == 100) {
+                        $('.status#status-' + key).attr('id', 'status-'+key).text('Please waiting ...'); };
+
                     $('.ip#ip-' + key).attr('id', 'ip-'+key).html('<a href="https://' + val.ip + '" target="_blank">' + val.ip + '</a>');
                     $('.instance#instance-' + key).attr('id', 'instance-'+key).text(val.instance);
 
