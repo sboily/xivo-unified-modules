@@ -29,6 +29,7 @@ from forms import DeployForm, CloudProviderForm
 from models import Servers_EC2, Cloud_Provider
 
 from tasks import deploy_on_cloud, undeploy_on_cloud
+from celery.task.control import revoke
 
 
 @deploy.route('/deploy')
@@ -79,7 +80,7 @@ def deploy_status():
                                         'ip': _check_value(serv.address),
                                         'instance': _check_value(serv.instance_ec2),
                                         'progress' : _estimated_time_of_installation( \
-                                                      serv.installed_time, "0:08:30") }
+                                                      serv.installed_time, "0:08:20") }
                            })
     return jsonify(status)
 
@@ -89,13 +90,19 @@ def _check_value(value):
     return value 
 
 def _estimated_time_of_installation(installed_time, estimated_time):
+    # TODO refactor this method !
     if not installed_time:
         return 0
     h1 = _check_value(installed_time).replace(microsecond=0)
     h2 = datetime.datetime.utcnow().replace(microsecond=0)
     time_for_installing = datetime.datetime.strptime(estimated_time, "%H:%M:%S")
     fix = datetime.datetime.strptime("0:00:00", "%H:%M:%S")
-    time_of_installation = datetime.datetime.strptime(str(h2-h1), "%H:%M:%S")
+    diff_started = h2-h1
+
+    if diff_started.days != 0:
+        return 100
+
+    time_of_installation = datetime.datetime.strptime(str(diff_started), "%H:%M:%S")
     time_begin = time_for_installing-time_of_installation
     time_fix = time_for_installing-fix
     percentage = int(100-round((100.0*time_begin.total_seconds())/time_fix.total_seconds()))
@@ -109,6 +116,14 @@ def deploy_del(id):
     undeploy_on_ec2(id)
     flash(_('Server deleted'))
     return redirect(url_for("deploy.dep"))
+
+@deploy.route('/deploy/stop_task/<id>')
+@login_required
+def deploy_stop_task(id):
+    _stop_task(id)
+    flash(_('Task stopped'))
+    return redirect(url_for("deploy.dep"))
+
 
 @deploy.route('/deploy/cloud/<id>')
 @login_required
@@ -137,6 +152,17 @@ def create_amazon_config(server_ec2):
 
     return config
 
+def _stop_task(id):
+    server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
+    revoke(server_ec2.task_id, terminate=True)
+    server_ec2.status = None
+    server_ec2.address = None
+    server_ec2.instance_ec2 = None
+    server_ec2.installed_time = None
+    db.session.add(server_ec2)
+    db.session.commit()
+    
+
 def undeploy_on_ec2(id):
     server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
 
@@ -152,7 +178,9 @@ def deploy_on_ec2(id):
     server_ec2 = Servers_EC2.query.filter(Servers_EC2.id == id).first()
     config = create_amazon_config(server_ec2)
 
-    task = deploy_on_cloud.apply_async((id, config, server_ec2.servers.ssh_key))
+    user_info = {'user_id' : g.user.id, 'organisation_id' : g.user_organisation.id}
+
+    task = deploy_on_cloud.apply_async((id, config, server_ec2.servers.ssh_key, user_info))
     server_ec2.task_id = task.task_id
     server_ec2.installed_time = datetime.datetime.utcnow()
     db.session.add(server_ec2)
