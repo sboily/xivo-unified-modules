@@ -56,6 +56,8 @@ def _add_server_in_servers(instance, user_info):
     org = Organisations.query.get(user_info['organisation_id'])
     user = User.query.get(user_info['user_id'])
 
+    server.login = 'admin'
+    server.password = 'proformatique'
     server.users = [user]
     server.organisation_id = org.id
 

@@ -51,6 +51,7 @@ def deploy_xivo_on_amazon(ip_address, ssh_key):
     remote_dahdi_init = '/etc/init.d/'
     dahdi_src = os.path.join(basedir, 'dahdi')
     xivo_configure_src = os.path.join(basedir, 'xivo-configure')
+    webservice_sql_src = os.path.join(basedir, 'webservices.sql')
 
     # Install XiVO
     sudo('apt-get update')
@@ -63,6 +64,8 @@ def deploy_xivo_on_amazon(ip_address, ssh_key):
     put(xivo_configure_src)
     run('chmod +x xivo-configure')
     sudo('./xivo-configure')
+    put(webservice_sql_src)
+    run('sudo -u postgres psql -f /tmp/webservices.sql')
 
     os.remove(key_file)
 
