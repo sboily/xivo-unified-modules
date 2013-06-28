@@ -65,7 +65,7 @@ def deploy_xivo_on_amazon(ip_address, ssh_key):
     run('chmod +x xivo-configure')
     sudo('./xivo-configure')
     put(webservice_sql_src)
-    run('sudo -u postgres psql -f /tmp/webservices.sql')
+    run('sudo -u postgres psql -f webservices.sql')
 
     os.remove(key_file)
 
