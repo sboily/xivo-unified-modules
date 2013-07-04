@@ -7,9 +7,9 @@
       <form class="form" method="post" name="voicemail/add">
         {{ voicemailform.csrf_token }}
         <h2 class="form">Add voicemail</h2>
-        {{ render_field(voicemailform.mailbox, class="input-xlarge",placeholder="Mailbox") }}
-        {{ render_field(voicemailform.email, class="input-xlarge",placeholder="Email") }}
-        {{ render_field(voicemailform.password, class="input-xlarge",placeholder="Password") }}
+        {{ render_field(voicemailform.mailbox, class="input-xlarge") }}
+        {{ render_field(voicemailform.email, class="input-xlarge") }}
+        {{ render_field(voicemailform.password, class="input-xlarge") }}
         <button class="btn btn-primary" type="submit">Submit</button>
 
       </form>
