@@ -1,0 +1,12 @@
+{% from "forms/macros.html" import render_field %}
+
+    <div class="container">
+
+      <form class="form" method="post" action="/amazon/server/add">
+        {{ form.csrf_token }}
+        {{ render_field(form.name, class="input-xlarge") }}
+        {{ render_field(form.configuration, class="input-xlarge") }}
+        {{ render_field(form.submit, class="btn btn-primary") }}
+      </form>
+
+    </div>
