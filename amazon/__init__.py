@@ -16,17 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from yapsy.IPlugin import IPlugin
-from setup import amazon
+from setup import bp_amazon
 from deploy_amazon import DeployOnAmazon
 import views
 
 class DeployAmazonPlugin(IPlugin):
 
     def setup(self, app):
-        app.register_blueprint(amazon)
+        app.register_blueprint(bp_amazon)
 
         deploy_amazon = DeployOnAmazon()
         deploy_amazon.setup(app)
 
     def plugin_endpoint(self):
-        return "amazon.list"
+        return "amazon.provider_list"

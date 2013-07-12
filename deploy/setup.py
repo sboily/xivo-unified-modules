@@ -16,5 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from deploy_base import Deploy
 
-deploy = Blueprint('deploy', __name__, template_folder='templates/deploy')
+bp_deploy = Blueprint('deploy', __name__, template_folder='templates/deploy')
+
+deploy = Deploy()

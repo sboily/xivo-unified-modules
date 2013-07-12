@@ -16,5 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from deploy_amazon import DeployOnAmazon
 
-amazon = Blueprint('amazon', __name__, template_folder='templates/amazon')
+bp_amazon = Blueprint('amazon', __name__, template_folder='templates/amazon')
+
+amazon = DeployOnAmazon()

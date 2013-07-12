@@ -4,7 +4,7 @@ Module = deploy
 
 [Documentation]
 Module = deploy
-DisplayName = Deploy Plugin
+DisplayName = Deploy
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr

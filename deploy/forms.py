@@ -16,35 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import TextField, ValidationError, SubmitField, TextAreaField, QuerySelectField
-from flask.ext.wtf import Required, IPAddress, Regexp, validators
+from flask.ext.wtf import TextField, SubmitField, QuerySelectField
+from flask.ext.wtf import Required, Regexp, validators
 from app.utils import Form
 from flask.ext.babel import lazy_gettext as _
-from models import Cloud_Provider
+from models import RegisterProviders
 
 class DeployForm(Form):
     name = TextField(_('Name'), [Required(),
         validators.Length(min=3, max=30),
         validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
-    ])
+])
 
     cloud_provider = QuerySelectField(_('Cloud provider'), [Required()], get_label='name', \
-                                       query_factory=lambda: Cloud_Provider.query, \
+                                       query_factory=lambda: RegisterProviders.query, \
                                        allow_blank=True, blank_text=_('Please choose a provider ...'))
-
-    submit = SubmitField(_('Submit'))
-
-
-class CloudProviderForm(Form):
-    name = TextField(_('Name'), [Required(),
-        validators.Length(min=3, max=30),
-        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
-    ])
-
-    access_key = TextField(_('Access key'))
-    secret_key = TextField(_('Secret key'))
-    key_name = TextField(_('Key Name'))
-
-    ssh_key = TextAreaField(_('SSH key'))
 
     submit = SubmitField(_('Submit'))

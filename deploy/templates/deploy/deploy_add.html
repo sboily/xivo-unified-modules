@@ -3,16 +3,24 @@
     {% from "forms/macros.html" import render_field %}
 
     <div class="container">
-
-      <form class="form" method="post">
         {{ form.csrf_token }}
         <h2 class="form">{{ _('Add Server') }}</h2>
-        {{ render_field(form.name, class="input-xlarge") }}
         {{ render_field(form.cloud_provider) }}
-        {{ render_field(form.submit, class="btn btn-primary") }}
-      </form>
-
+      <div id='my_provider'></div>
     </div>
+
+
+<script>
+
+$('#cloud_provider').change(function() {
+   var id = $('[name="cloud_provider"] option:selected').val()
+   $.getJSON('/deploy/provider/' + id,
+         function(data) {
+             $('#my_provider').load(data.url);
+        })
+});
+
+</script> 
 
 {% endblock %}
 

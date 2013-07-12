@@ -16,16 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from yapsy.IPlugin import IPlugin
-from setup import deploy
+from setup import bp_deploy
 import views
-import os
+from deploy_base import Deploy
 
 class DeployPlugin(IPlugin):
 
     def setup(self, app):
-        app.register_blueprint(deploy)
-        mydbplugindir = os.path.join(app.config['BASEDIR'],'app/plugins/deploy/db/servers_ec2.db')
-        app.config['SQLALCHEMY_BINDS'].update({'servers_ec2': 'sqlite:///%s' % mydbplugindir})
+        app.register_blueprint(bp_deploy)
+
+        deploy_base = Deploy()
+        deploy_base.setup(app)
 
     def plugin_endpoint(self):
-        return "deploy.dep"
+        return "deploy.deploy_list"
