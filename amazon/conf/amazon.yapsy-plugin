@@ -4,7 +4,7 @@ Module = amazon
 
 [Documentation]
 Module = amazon
-DisplayName =  AmazonPlugin
+DisplayName =  Amazon
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
