@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from yapsy.IPlugin import IPlugin
-from setup import bp_deploy
+from setup import bp_deploy, deploy
 import views
 from deploy_base import Deploy
 
@@ -24,9 +24,13 @@ class DeployPlugin(IPlugin):
 
     def setup(self, app):
         app.register_blueprint(bp_deploy)
+        deploy.setup(app)
 
-        deploy_base = Deploy()
-        deploy_base.setup(app)
+    def activated(self, plugin):
+        deploy.activated(plugin)
+
+    def desactivated(self):
+        print 'need to be desactivated'
 
     def plugin_endpoint(self):
         return "deploy.deploy_list"

@@ -16,22 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from datetime import datetime
 from app import db
 
-class RegisterProviders(db.Model):
-    __bind_key__ = 'deploy_base'
-    __tablename__ = 'register_providers'
-
+class Deploy_Servers(object):
+    __bind_key__ = 'deploy_servers'
+    __tablename__ = 'deploy_servers'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
-    base_url = db.Column(db.String(200))
-    classname = db.Column(db.String(200))
-    organisation_id = db.Column(db.Integer)
+    instance = db.Column(db.String(200))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    installed_time = db.Column(db.DateTime)
+    organisation_id = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return "<%d : %s>" % (self.id, self.name)
+class Providers(object):
+    __bind_key__ = 'deploy_servers'
+    __tablename__ = 'deploy_providers'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    organisation_id = db.Column(db.Integer, nullable=False)

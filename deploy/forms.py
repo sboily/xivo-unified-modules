@@ -16,20 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import TextField, SubmitField, QuerySelectField
-from flask.ext.wtf import Required, Regexp, validators
+from flask.ext.wtf import QuerySelectField, Required
 from app.utils import Form
+from flask import g
 from flask.ext.babel import lazy_gettext as _
 from models import RegisterProviders
 
+def get_providers():
+    return RegisterProviders.query.filter(RegisterProviders.organisation_id==g.user_organisation.id) \
+                                  .order_by(RegisterProviders.name)
+
+
 class DeployForm(Form):
-    name = TextField(_('Name'), [Required(),
-        validators.Length(min=3, max=30),
-        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
-])
-
     cloud_provider = QuerySelectField(_('Cloud provider'), [Required()], get_label='name', \
-                                       query_factory=lambda: RegisterProviders.query, \
+                                       query_factory=get_providers, \
                                        allow_blank=True, blank_text=_('Please choose a provider ...'))
-
-    submit = SubmitField(_('Submit'))
