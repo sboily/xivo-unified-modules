@@ -18,13 +18,13 @@
 from app import db
 from flask import g
 import datetime
-from celery.task.control import revoke
 import os
 import time
 
 from app.plugins.deploy.deploy_base import Deploy
 from app.models import User, Servers
 from models import ProviderAmazon, ServersAmazon
+from celery.task.control import revoke
 
 from amazon import EC2Conn
 from fabric_amazon import deploy_xivo_on_amazon
@@ -42,10 +42,11 @@ class DeployOnAmazon(Deploy):
         with app.app_context():
             db.create_all(bind=self.db_bind)
 
-        self.register(app, {'name' : 'Amazon', 
-                            'db_bind' : self.db_bind, 
-                            'base_url' : '/amazon', 
-                            'classname' : 'DeployOnAmazon'
+        self.register(app, {'name' : 'Amazon',
+                            'db_bind' : self.db_bind,
+                            'base_url' : '/amazon',
+                            'classname' : 'DeployOnAmazon',
+                            'organisation_id' : 0
                             })
 
     def get_configurations(self):
