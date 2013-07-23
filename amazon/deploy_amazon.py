@@ -24,6 +24,7 @@ import time
 from app.plugins.deploy.deploy_base import Deploy
 from app.models import User, Servers
 from models import ProviderAmazon, ServersAmazon
+from forms import AmazonForm
 from celery.task.control import revoke
 
 from amazon import EC2Conn
@@ -71,6 +72,14 @@ class DeployOnAmazon(Deploy):
         if provider:
             db.session.delete(provider)
             db.session.commit()
+
+    def get_provider(self, id):
+        return ProviderAmazon.query.filter(ProviderAmazon.id == id).first()
+
+    def edit_provider(self, form, provider):
+        form.populate_obj(provider)
+        db.session.add(provider)
+        db.session.commit()
         
     def get_servers(self):
         servers =  ServersAmazon.query.filter(ServersAmazon.organisation_id == g.user_organisation.id) \

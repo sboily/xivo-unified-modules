@@ -37,10 +37,15 @@ def provider_add():
         return redirect(url_for("amazon.provider_list"))
     return render_template('amazon_provider_add.html', form=form)
 
-@bp_amazon.route('/amazon/edit/<id>')
+@bp_amazon.route('/amazon/edit/<id>', methods=['GET', 'POST'])
 @login_required
 def provider_edit(id):
-    form = AmazonForm()
+    provider = amazon.get_provider(id)
+    form = AmazonForm(obj=provider)
+    if form.validate_on_submit():
+        amazon.edit_provider(form, provider)
+        flash(_('Amazon provider edit'))
+        return redirect(url_for("amazon.provider_list"))
     return render_template('amazon_provider_edit.html', form=form)
 
 @bp_amazon.route('/amazon/del/<id>')
