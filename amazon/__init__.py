@@ -28,5 +28,8 @@ class DeployAmazonPlugin(IPlugin):
     def activated(self, plugin):
         amazon.activated(plugin)
 
+    def deactivated(self, plugin):
+        amazon.deactivated(plugin)
+
     def plugin_endpoint(self):
         return "amazon.provider_list"
