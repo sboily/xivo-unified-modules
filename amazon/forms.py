@@ -19,8 +19,13 @@
 from flask.ext.wtf import TextField, SubmitField, TextAreaField, QuerySelectField
 from flask.ext.wtf import Required, Regexp, validators
 from flask.ext.babel import lazy_gettext as _
+from flask import g
 from app.utils import Form
 from models import ProviderAmazon
+
+def get_configurations():
+    return ProviderAmazon.query.filter(ProviderAmazon.organisation_id == g.user_organisation.id) \
+                               .all()
 
 class AmazonForm(Form):
     name = TextField(_('Name'), [Required(),
@@ -43,7 +48,7 @@ class AmazonServerForm(Form):
     ])
 
     configuration = QuerySelectField(_('Amazon configuration'), [Required()], get_label='name', \
-                                       query_factory=lambda: ProviderAmazon.query, \
+                                       query_factory=get_configurations, \
                                        allow_blank=True, blank_text=_('Please choose a configuration ...'))
 
     submit = SubmitField(_('Submit'))
