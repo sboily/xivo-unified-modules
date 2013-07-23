@@ -39,13 +39,31 @@ class Deploy(object):
                                         .first()
 
         if plugin and plugin.id:
-            provider_registred = AssociateProviders.query.get(plugin.id)
-            if not provider_registred:
+            provider_registered = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
+                                                          .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                                          .first()
+            if not provider_registered:
                 associate = AssociateProviders()
                 associate.organisation_id = g.user_organisation.id
-                plugin.associate = [associate]
-                db.session.add_all([plugin,associate])
+                associate.provider_id = plugin.id
+                db.session.add(associate)
                 db.session.commit()
+
+    def deactivated(self, plugin_name):
+        if plugin_name == 'deploy':
+            return
+
+        plugin = RegisterProviders.query.filter(RegisterProviders.name == plugin_name.capitalize()) \
+                                        .first()
+
+        if plugin and plugin.id:
+            provider_registred = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
+                                                         .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                                         .first()
+            if provider_registred:
+                db.session.delete(provider_registred)
+                db.session.commit()
+        
 
     def register(self, app, info):
         self.db_bind = 'deploy_base'

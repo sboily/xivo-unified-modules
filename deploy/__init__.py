@@ -26,11 +26,11 @@ class DeployPlugin(IPlugin):
         app.register_blueprint(bp_deploy)
         deploy.setup(app)
 
-    def activated(self, plugin):
-        deploy.activated(plugin)
+    #def activated(self, plugin):
+    #    deploy.activated(plugin)
 
-    def desactivated(self):
-        print 'need to be desactivated'
+    #def desactivated(self, plugin_name):
+    #    deploy.deactivated(plugin)
 
     def plugin_endpoint(self):
         return "deploy.deploy_list"
