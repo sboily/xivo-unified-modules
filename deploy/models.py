@@ -27,11 +27,21 @@ class RegisterProviders(db.Model):
     name = db.Column(db.String(200))
     base_url = db.Column(db.String(200))
     classname = db.Column(db.String(200))
-    organisation_id = db.Column(db.Integer)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    associate = db.relationship('AssociateProviders', backref='associate',
+                                 lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
         return "<%d : %s>" % (self.id, self.name)
+
+class AssociateProviders(db.Model):
+    __bind_key__ = 'deploy_base'
+    __tablename__ = 'associate_providers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    provider_id = db.Column(db.Integer, db.ForeignKey('register_providers.id'))
+    organisation_id = db.Column(db.Integer)
+    created_time = db.Column(db.DateTime, default=datetime.utcnow)

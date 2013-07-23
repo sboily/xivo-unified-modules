@@ -17,7 +17,7 @@
 
 import os
 from app import db
-from models import RegisterProviders
+from models import RegisterProviders, AssociateProviders
 from flask import g
 from register_class import registerclass
 from tasks import deploy_on_cloud, undeploy_on_cloud
@@ -32,11 +32,20 @@ class Deploy(object):
         pass
 
     def activated(self, plugin_name):
-        plugin = RegisterProviders.query.filter(RegisterProviders.name == plugin_name.capitalize()).first()
-        if plugin and plugin.organisation_id == 0:
-            plugin.organisation_id = g.user_organisation.id
-            db.session.add(plugin)
-            db.session.commit()
+        if plugin_name == 'deploy':
+            return
+
+        plugin = RegisterProviders.query.filter(RegisterProviders.name == plugin_name.capitalize()) \
+                                        .first()
+
+        if plugin and plugin.id:
+            provider_registred = AssociateProviders.query.get(plugin.id)
+            if not provider_registred:
+                associate = AssociateProviders()
+                associate.organisation_id = g.user_organisation.id
+                plugin.associate = [associate]
+                db.session.add_all([plugin,associate])
+                db.session.commit()
 
     def register(self, app, info):
         self.db_bind = 'deploy_base'
@@ -47,7 +56,7 @@ class Deploy(object):
 
     def get_provider(self, id):
         provider = RegisterProviders.query.filter(RegisterProviders.id == id) \
-                                          .filter(RegisterProviders.organisation_id == g.user_organisation.id) \
+                                          .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
                                           .first()
         return provider.base_url + '/server/add'
 

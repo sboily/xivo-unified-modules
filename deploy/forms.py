@@ -20,10 +20,10 @@ from flask.ext.wtf import QuerySelectField, Required
 from app.utils import Form
 from flask import g
 from flask.ext.babel import lazy_gettext as _
-from models import RegisterProviders
+from models import RegisterProviders, AssociateProviders
 
 def get_providers():
-    return RegisterProviders.query.filter(RegisterProviders.organisation_id==g.user_organisation.id) \
+    return RegisterProviders.query.filter(AssociateProviders.organisation_id==g.user_organisation.id) \
                                   .order_by(RegisterProviders.name)
 
 
