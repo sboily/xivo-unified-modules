@@ -96,7 +96,10 @@ class Deploy(object):
         pass
 
     def deploy_server(self, provider, id):
-        return deploy_on_cloud.apply_async((provider, id))
+        user_info = {'user_id' : g.user.id,
+                     'organisation_id' : g.user_organisation.id
+                    }
+        return deploy_on_cloud.apply_async((provider, id, user_info))
 
     def undeploy_server(self, provider, id):
         return undeploy_on_cloud.apply_async((provider, id))

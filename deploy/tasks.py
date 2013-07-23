@@ -23,29 +23,13 @@ from app.models import Servers, Organisations, User
 from register_class import registerclass
 from models import RegisterProviders
 
-#@task_sent.connect(sender='tasks.deploy_on_cloud')
-#def task_sent_handler(sender=None, task_id=None, task=None, args=None,
-#                      kwargs=None, **kwds):
-#    _update_status_in_db(args[0], 'started')
-#    print('Got signal task_sent for task id %s' % (task_id, ))
-#
-#@task_failure.connect(sender='tasks.deploy_on_cloud')
-#def task_sent_error(sender=None, task_id=None, task=None, args=None,
-#                      kwargs=None, **kwds):
-#    _update_status_in_db(args[0], 'failed')
-#    print('Got signal task_error for task id %s' % (task_id, ))
-#
-#@task_postrun.connect
-#def close_session(*args, **kwargs):
-#    db.session.remove()
-
 @celery.task(name='tasks.deploy_on_cloud', ignore_result=False)
-def deploy_on_cloud(provider, id):
+def deploy_on_cloud(provider, id, user_info):
     task_id = deploy_on_cloud.request.id
     provider = RegisterProviders.query.filter(RegisterProviders.name == provider.capitalize()) \
                                        .first()
     cls = registerclass(provider)
-    cls.deploy_server(id, task_id)
+    cls.deploy_server(id, task_id, user_info)
 
 def undeploy_on_cloud(provider, id):
     task_id = deploy_on_cloud.request.id

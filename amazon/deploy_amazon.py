@@ -99,7 +99,7 @@ class DeployOnAmazon(Deploy):
         db.session.delete(server)
         db.session.commit()
 
-    def deploy_server(self, id, task_id):
+    def deploy_server(self, id, task_id, user_info):
         print 'deploy ...'
         self._update_status_in_db(id, 'initializing')
         server = ServersAmazon.query.get(id)
@@ -116,9 +116,7 @@ class DeployOnAmazon(Deploy):
         print 'Finish !'
 
         self._update_status_in_db(id, 'running')
-        user_info = {'user_id' : g.user.id,
-                     'organisation_id' : g.user_organisation.id,
-                     'name' : server.name}
+        user_info.update({'name' : server.name})
         self._add_server_in_servers(instance, user_info)
         return (id, instance)
 
