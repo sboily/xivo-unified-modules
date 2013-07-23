@@ -22,7 +22,7 @@ import os
 import time
 
 from app.plugins.deploy.deploy_base import Deploy
-from app.models import User, Servers
+from app.models import User, Servers, Organisations
 from models import ProviderAmazon, ServersAmazon
 from forms import AmazonForm
 from celery.task.control import revoke
