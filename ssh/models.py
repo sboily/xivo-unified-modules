@@ -27,6 +27,7 @@ class ServersSsh(Providers, db.Model):
     address = db.Column(db.String(200))
     status = db.Column(db.String(200))
     task_id = db.Column(db.String(200))
+    instance = db.Column(db.String(200))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
     installed_time = db.Column(db.DateTime)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider_ssh.id'))

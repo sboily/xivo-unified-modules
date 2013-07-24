@@ -21,23 +21,23 @@ from flask.ext.babel import gettext as _
 from setup import bp_ssh, ssh
 from forms import SshForm, SshServerForm
 
-@bp_amazon.route('/ssh')
+@bp_ssh.route('/ssh')
 @login_required
 def provider_list():
     list = ssh.get_configurations()
     return render_template('ssh_provider_list.html', list=list)
 
-@bp_amazon.route('/ssh/add', methods=['GET', 'POST'])
+@bp_ssh.route('/ssh/add', methods=['GET', 'POST'])
 @login_required
 def provider_add():
-    form = AmazonForm()
+    form = SshForm()
     if form.validate_on_submit():
         ssh.add_provider(form)
         flash(_('Ssh informations added'))
         return redirect(url_for("ssh.provider_list"))
     return render_template('ssh_provider_add.html', form=form)
 
-@bp_amazon.route('/ssh/edit/<id>', methods=['GET', 'POST'])
+@bp_ssh.route('/ssh/edit/<id>', methods=['GET', 'POST'])
 @login_required
 def provider_edit(id):
     provider = ssh.get_provider(id)
@@ -48,14 +48,14 @@ def provider_edit(id):
         return redirect(url_for("ssh.provider_list"))
     return render_template('ssh_provider_edit.html', form=form)
 
-@bp_amazon.route('/ssh/del/<id>')
+@bp_ssh.route('/ssh/del/<id>')
 @login_required
 def provider_delete(id):
     ssh.delete_provider(id)
     flash(_('Ssh information deleted'))
     return redirect(url_for("ssh.provider_list"))
 
-@bp_amazon.route('/ssh/server/add', methods=['GET', 'POST'])
+@bp_ssh.route('/ssh/server/add', methods=['GET', 'POST'])
 @login_required
 def server_add():
     form = SshServerForm()
@@ -65,14 +65,14 @@ def server_add():
         return redirect(url_for('deploy.deploy_list'))
     return render_template('ssh_server_add.html', form=form)
 
-@bp_amazon.route('/ssh/server/delete/<id>')
+@bp_ssh.route('/ssh/server/delete/<id>')
 @login_required
 def server_delete(id):
     ssh.delete_server(id)
     flash(_('Ssh server deleted'))
     return redirect(url_for('deploy.deploy_list'))
 
-@bp_amazon.route('/ssh/server/deploy/<id>')
+@bp_ssh.route('/ssh/server/deploy/<id>')
 @login_required
 def server_deploy(id):
     ssh.deploy_server(id)

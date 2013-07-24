@@ -56,10 +56,9 @@ class DeployOnSsh(Deploy):
 
     def add_provider(self, form):
         provider = ProviderSsh(form.name.data)
-        provider.access_key = form.access_key.data
-        provider.secret_key = form.secret_key.data
-        provider.key_name = form.key_name.data
-        provider.ssh_key = form.ssh_key.data
+        provider.login = form.login.data
+        provider.password = form.password.data
+        provider.ip = form.ip.data
         provider.organisation_id = g.user_organisation.id
 
         db.session.add(provider)
