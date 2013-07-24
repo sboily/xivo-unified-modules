@@ -102,15 +102,14 @@ class DeployOnSsh(Deploy):
         self._update_status_in_db(id, 'initializing')
         server = ServersSsh.query.get(id)
         self._init_deploy(server, id, task_id)
-        config = self._create_config(server)
         self._update_status_in_db(id, 'installing')
         print 'Deploy !'
-        deploy_xivo_on_ssh(server.servers.login, server.servers.password, server.ip)
+        deploy_xivo_on_ssh(server.servers.login, server.servers.password, server.servers.ip)
         print 'Finish !'
 
         self._update_status_in_db(id, 'running')
         user_info.update({'name' : server.name})
-        self._add_server_in_servers(server.ip, user_info)
+        self._add_server_in_servers(server.servers.ip, user_info)
         return (id, server.ip)
 
     def undeploy_server(self, id):
@@ -134,7 +133,7 @@ class DeployOnSsh(Deploy):
     def _update_status_in_db(self, id, state):
         server = ServersSsh.query.get(id)
         server.status = state
-        db.session.add(server_ec2)
+        db.session.add(server)
         db.session.commit()
 
     def _add_server_in_servers(self, ip, user_info):
