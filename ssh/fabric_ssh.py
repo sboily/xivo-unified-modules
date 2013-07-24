@@ -35,7 +35,7 @@ import tempfile
 import os
 
 
-def deploy_xivo_on_amazon(login, password, ip):
+def deploy_xivo_on_ssh(login, password, ip):
 
     env.host_string = "%s@%s" % (login, ip)
     en.password = password
