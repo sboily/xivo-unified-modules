@@ -18,37 +18,34 @@
 
 from app import db
 from datetime import datetime
-from app.plugins.deploy.models_base import Providers, Deploy_Servers
+from app.plugins.deploy.models_base import Providers
 
-class ServersAmazon(Deploy_Servers, db.Model):
-    __bind_key__ = 'deploy_amazon'
-    __tablename__ = 'servers_amazon'
+class ServersSsh(Providers, db.Model):
+    __bind_key__ = 'deploy_ssh'
+    __tablename__ = 'servers_ssh'
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(200))
-    elastics_ip = db.Column(db.String(200))
-    instance_params = db.Column(db.String(200), default='xivo')
-    image_id = db.Column(db.String(200), default='ami-2c28ba45')
-    instance_type = db.Column(db.String(200), default='t1.micro')
     status = db.Column(db.String(200))
     task_id = db.Column(db.String(200))
-    configuration_id = db.Column(db.Integer, db.ForeignKey('provider_amazon.id'))
+    created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    installed_time = db.Column(db.DateTime)
+    provider_id = db.Column(db.Integer, db.ForeignKey('provider_ssh.id'))
+    organisation_id = db.Column(db.Integer)
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return "<%d : %s (%s) - %s>" % (self.id, self.name, self.address, self.instance)
+        return "<%d : %s (%s) - %s>" % (self.id, self.name, self.address, self.instance_ec2)
 
-class ProviderAmazon(Providers, db.Model):
-    __bind_key__ = 'deploy_amazon'
-    __tablename__ = 'provider_amazon'
+class ProviderSsh(Providers, db.Model):
+    __bind_key__ = 'deploy_ssh'
+    __tablename__ = 'provider_ssh'
     id = db.Column(db.Integer, primary_key=True)
-    access_key = db.Column(db.String(200))
-    secret_key = db.Column(db.String(200))
-    security_groups = db.Column(db.String(200), default='default')
-    key_name = db.Column(db.String(200))
-    ssh_key = db.Column(db.Text())
-    servers = db.relationship('ServersAmazon', backref='servers',lazy='dynamic')
+    login = db.Column(db.String(200))
+    password = db.Column(db.String(200))
+    ip = db.Column(db.String(200))
+    servers = db.relationship('ServersSsh', backref='servers',lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
