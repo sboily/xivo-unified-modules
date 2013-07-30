@@ -46,7 +46,6 @@ class DeployOnSsh(Deploy):
                             'db_bind' : self.db_bind,
                             'base_url' : '/ssh',
                             'classname' : 'DeployOnSsh',
-                            'organisation_id' : 0
                             })
 
     def get_configurations(self):

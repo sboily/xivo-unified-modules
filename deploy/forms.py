@@ -23,7 +23,8 @@ from flask.ext.babel import lazy_gettext as _
 from models import RegisterProviders, AssociateProviders
 
 def get_providers():
-    return RegisterProviders.query.filter(AssociateProviders.organisation_id==g.user_organisation.id) \
+    return RegisterProviders.query.filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                  .filter(AssociateProviders.provider_id == RegisterProviders.id) \
                                   .order_by(RegisterProviders.name)
 
 

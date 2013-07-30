@@ -37,11 +37,11 @@ class Deploy(object):
 
         plugin = RegisterProviders.query.filter(RegisterProviders.name == plugin_name.capitalize()) \
                                         .first()
-
         if plugin and plugin.id:
             provider_registered = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
                                                           .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
                                                           .first()
+
             if not provider_registered:
                 associate = AssociateProviders()
                 associate.organisation_id = g.user_organisation.id
@@ -117,7 +117,6 @@ class Deploy(object):
                 provider = RegisterProviders(info['name'])
                 provider.base_url = info['base_url']
                 provider.classname = info['classname']
-                provider.organisation_id = info['organisation_id']
                 db.session.add(provider)
                 db.session.commit()
 

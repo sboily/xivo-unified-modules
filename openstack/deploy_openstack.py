@@ -43,11 +43,10 @@ class DeployOnOpenStack(Deploy):
         with app.app_context():
             db.create_all(bind=self.db_bind)
 
-        self.register(app, {'name' : 'OpenStack',
+        self.register(app, {'name' : 'Openstack',
                             'db_bind' : self.db_bind,
                             'base_url' : '/openstack',
                             'classname' : 'DeployOnOpenStack',
-                            'organisation_id' : 0
                             })
 
     def get_configurations(self):
