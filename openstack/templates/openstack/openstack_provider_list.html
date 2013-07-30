@@ -4,13 +4,14 @@
 <div class="container">
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('amazon.provider_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
+  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('openstack.provider_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
   <table class="table table-bordered table-striped table-highlight tablesorter" id="servers-table">
     <thead>
       <tr>
         <th>{{ _('Name') }}</th>
-        <th>{{ _('Key') }}</th>
-        <th>{{ _('SSH Key') }}</th>
+        <th>{{ _('Tenant') }}</th>
+        <th>{{ _('API') }}</th>
+        <th>{{ _('Login') }}</th>
       <th class="td-actions"></th>
       </tr>
     </thead>
@@ -18,11 +19,12 @@
     {% for l in list %}
       <tr>
       <td>{{ l.name }}</td>
-      <td>{{ l.access_key }}</td>
-      <td>{{ l.key_name }}</td>
+      <td>{{ l.tenant }}</td>
+      <td>{{ l.api_url }}</td>
+      <td>{{ l.login }}</td>
       <td class="td-actions">
-        <a href="{{url_for('amazon.provider_edit', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('amazon.provider_delete', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        <a href="{{url_for('openstack.provider_edit', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
+        <a href="{{url_for('openstack.provider_delete', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
       </td>
       </tr>
     {% endfor %}

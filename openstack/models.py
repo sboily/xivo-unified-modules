@@ -26,9 +26,6 @@ class ServersOpenStack(Deploy_Servers, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(200))
     elastics_ip = db.Column(db.String(200))
-    instance_params = db.Column(db.String(200), default='xivo')
-    image_id = db.Column(db.String(200), default='ami-2c28ba45')
-    instance_type = db.Column(db.String(200), default='t1.micro')
     status = db.Column(db.String(200))
     task_id = db.Column(db.String(200))
     configuration_id = db.Column(db.Integer, db.ForeignKey('provider_openstack.id'))
@@ -43,11 +40,14 @@ class ProviderOpenStack(Providers, db.Model):
     __bind_key__ = 'deploy_openstack'
     __tablename__ = 'provider_openstack'
     id = db.Column(db.Integer, primary_key=True)
-    access_key = db.Column(db.String(200))
-    secret_key = db.Column(db.String(200))
-    security_groups = db.Column(db.String(200), default='default')
-    key_name = db.Column(db.String(200))
-    ssh_key = db.Column(db.Text())
+    login = db.Column(db.String(200))
+    password = db.Column(db.String(200))
+    tenant = db.Column(db.String(200))
+    api_url = db.Column(db.String(200))
+    image_name = db.Column(db.String(200))
+    flavor = db.Column(db.String(200))
+    keypair_name = db.Column(db.String(200))
+    subnet_name = db.Column(db.String(200))
     servers = db.relationship('ServersOpenStack', backref='servers',lazy='dynamic')
 
     def __init__(self, name):

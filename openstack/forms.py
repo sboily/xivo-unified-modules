@@ -33,11 +33,14 @@ class OpenStackForm(Form):
         validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
     ])
 
-    access_key = TextField(_('Access key'))
-    secret_key = TextField(_('Secret key'))
-    key_name = TextField(_('Key Name'))
-
-    ssh_key = TextAreaField(_('SSH key'))
+    login = TextField(_('Login'))
+    password = TextField(_('Password'))
+    tenant = TextField(_('Tenant name'))
+    api_url = TextField(_('API url'))
+    image_name = TextField(_('Image name'))
+    flavor = TextField(_('Flavor'))
+    keypair_name = TextField(_('Key Name'))
+    subnet_name = TextField(_('Subnet Name'))
 
     submit = SubmitField(_('Submit'))
 

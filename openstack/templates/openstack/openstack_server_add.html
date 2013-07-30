@@ -2,7 +2,7 @@
 
     <div class="container">
 
-      <form class="form" method="post" action="/amazon/server/add">
+      <form class="form" method="post" action="/openstack/server/add">
         {{ form.csrf_token }}
         {{ render_field(form.name, class="input-xlarge") }}
         {{ render_field(form.configuration, class="input-xlarge") }}

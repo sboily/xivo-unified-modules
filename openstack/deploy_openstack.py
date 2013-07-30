@@ -57,12 +57,8 @@ class DeployOnOpenStack(Deploy):
 
     def add_provider(self, form):
         provider = ProviderOpenStack(form.name.data)
-        provider.access_key = form.access_key.data
-        provider.secret_key = form.secret_key.data
-        provider.key_name = form.key_name.data
-        provider.ssh_key = form.ssh_key.data
+        form.populate_obj(provider)
         provider.organisation_id = g.user_organisation.id
-
         db.session.add(provider)
         db.session.commit()
 
