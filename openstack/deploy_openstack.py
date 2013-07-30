@@ -100,19 +100,19 @@ class DeployOnOpenStack(Deploy):
         server = ServersOpenStack.query.get(id)
         self._init_deploy(server, id, task_id)
         config = self._create_config(server)
-        instance = self._create_new_instance_on_openstack(config)
+        (instance, ip) = self._create_new_instance_on_openstack(config)
         print 'Waiting for the openstack checking ...'
-        self._save_instance_in_db(id, instance)
+        self._save_instance_in_db(id, instance, ip)
         self._update_status_in_db(id, 'checking')
-        time.sleep(65)
+        time.sleep(15)
         self._update_status_in_db(id, 'installing')
         print 'Deploy !'
-        deploy_xivo_on_openstack(instance.ip_address,server.servers.ssh_key)
+        deploy_xivo_on_openstack(ip, server.servers.keypair_private)
         print 'Finish !'
 
         self._update_status_in_db(id, 'running')
         user_info.update({'name' : server.name})
-        self._add_server_in_servers(instance, user_info)
+        self._add_server_in_servers(ip, user_info)
         return (id, instance)
 
     def undeploy_server(self, id):
@@ -134,19 +134,19 @@ class DeployOnOpenStack(Deploy):
         db.session.commit()
 
     def _update_status_in_db(self, id, state):
-        server_ec2 = ServersOpenStack.query.get(id)
-        server_ec2.status = state
-        db.session.add(server_ec2)
+        server = ServersOpenStack.query.get(id)
+        server.status = state
+        db.session.add(server)
         db.session.commit()
 
     def _create_new_instance_on_openstack(self, config):
-        ec2 = EC2Conn(config)
-        ec2.connect()
-        return ec2.create_instance()
+        ops = OpenStackConn(config)
+        ops.connect()
+        return ops.create_instance()
 
 
-    def _add_server_in_servers(self, instance, user_info):
-        server = Servers(name=user_info['name'], address=instance.ip_address)
+    def _add_server_in_servers(self, ip, user_info):
+        server = Servers(name=user_info['name'], address=ip)
         org = Organisations.query.get(user_info['organisation_id'])
         user = User.query.get(user_info['user_id'])
 
@@ -158,31 +158,31 @@ class DeployOnOpenStack(Deploy):
         db.session.add(server)
         db.session.commit()
 
-    def _save_instance_in_db(self, id, instance):
+    def _save_instance_in_db(self, id, instance, ip):
         server = ServersOpenStack.query.get(id)
-        server.address = instance.ip_address
+        server.address = ip
         server.instance = instance.id
         db.session.add(server)
         db.session.commit()
 
     def _create_config(self, server):
-        config = {'login' : 'quintana',
-                  'password' : 'superpass',
-                  'tenant' : 'XiVO',
-                  'api' : 'http://10.41.0.2:5000/v2.0/',
-                  'image' : 'Debian GNU/Linux Squeeze 6.0.7',
-                  'flavor' : 'm1.small',
-                  'keypair' : 'Sylvain',
-                  'name' : 'pouet',
-                  'subnet' : 'xivo_subnets'
+        config = {'login' : server.servers.login,
+                  'password' : server.servers.password,
+                  'tenant' : server.servers.tenant,
+                  'api' : server.servers.api_url,
+                  'image' : server.servers.image_name,
+                  'flavor' : server.servers.flavor,
+                  'keypair' : server.servers.keypair_name,
+                  'name' : server.name,
+                  'subnet' : server.servers.subnet_name
                  }
 
         return config
 
     def _delete_instance_on_openstack(self, instance_id, config):
-        ec2 = EC2Conn(config)
-        ec2.connect()
-        return ec2.delete_instance(instance_id)
+        ops = OpenStackConn(config)
+        ops.connect()
+        return ops.delete_instance(instance_id)
 
     def stop_task(self, id):
         server = ServersOpenStack.query.filter(ServersOpenStack.id == id).first()

@@ -26,8 +26,9 @@ class OpenStackConn:
 
         while myserver.status != 'ACTIVE':
             myserver.get()
+            print myserver.status
             time.sleep(1)
 
         ip = myserver.addresses[self.subnet][0]['addr']
 
-        return ip
+        return (myserver, ip)

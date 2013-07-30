@@ -39,8 +39,9 @@ class OpenStackForm(Form):
     api_url = TextField(_('API url'))
     image_name = TextField(_('Image name'))
     flavor = TextField(_('Flavor'))
-    keypair_name = TextField(_('Key Name'))
     subnet_name = TextField(_('Subnet Name'))
+    keypair_name = TextField(_('Key Name'))
+    keypair_private = TextAreaField(_('SSH key'))
 
     submit = SubmitField(_('Submit'))
 

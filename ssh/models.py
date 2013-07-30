@@ -37,7 +37,7 @@ class ServersSsh(Providers, db.Model):
         self.name = name
 
     def __repr__(self):
-        return "<%d : %s (%s) - %s>" % (self.id, self.name, self.address, self.instance_ec2)
+        return "<%d : %s (%s) - %s>" % (self.id, self.name, self.address, self.instance)
 
 class ProviderSsh(Providers, db.Model):
     __bind_key__ = 'deploy_ssh'

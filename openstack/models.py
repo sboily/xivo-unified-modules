@@ -47,6 +47,7 @@ class ProviderOpenStack(Providers, db.Model):
     image_name = db.Column(db.String(200))
     flavor = db.Column(db.String(200))
     keypair_name = db.Column(db.String(200))
+    keypair_private = db.Column(db.Text())
     subnet_name = db.Column(db.String(200))
     servers = db.relationship('ServersOpenStack', backref='servers',lazy='dynamic')
 

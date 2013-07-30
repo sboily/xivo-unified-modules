@@ -124,13 +124,14 @@ class Deploy(object):
         status = {}
         servers = self.get_servers()
         for server in servers: 
-            for serv in server['sql']: 
-                status.update({int(serv.id) : { 'status': self._check_value(serv.status), 
+            for serv in server['sql']:
+                myid = str(server['provider']+"-"+str(serv.id))
+                status.update({myid : { 'status': self._check_value(serv.status), 
                                                 'ip': self._check_value(serv.address), 
                                                 'instance': self._check_value(serv.instance), 
                                                 'progress' : self._estimated_time_of_installation( \
                                                              serv.installed_time, "0:08:20") } 
-                              }) 
+                              })
         return status
 
     def _check_value(self, value): 

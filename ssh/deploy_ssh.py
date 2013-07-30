@@ -20,6 +20,7 @@ from flask import g
 import datetime
 import os
 import time
+import uuid
 
 from app.plugins.deploy.deploy_base import Deploy
 from app.models import User, Servers, Organisations
@@ -46,6 +47,7 @@ class DeployOnSsh(Deploy):
                             'db_bind' : self.db_bind,
                             'base_url' : '/ssh',
                             'classname' : 'DeployOnSsh',
+                            'organisation_id' : 0
                             })
 
     def get_configurations(self):
@@ -109,7 +111,7 @@ class DeployOnSsh(Deploy):
         self._update_status_in_db(id, 'running')
         user_info.update({'name' : server.name})
         self._add_server_in_servers(server.servers.ip, user_info)
-        return (id, server.ip)
+        return (id, server.servers.ip)
 
     def undeploy_server(self, id):
         server = ServersSsh.query.filter(ServersSsh.id == id).first()
@@ -126,6 +128,8 @@ class DeployOnSsh(Deploy):
     def _init_deploy(self, server, id, task_id):
         server.installed_time = datetime.datetime.utcnow()
         server.task_id = task_id
+        server.address = server.servers.ip
+        server.instance = str(uuid.uuid1())
         db.session.add(server)
         db.session.commit()
 
@@ -145,13 +149,6 @@ class DeployOnSsh(Deploy):
         server.users = [user]
         server.organisation_id = org.id
 
-        db.session.add(server)
-        db.session.commit()
-
-    def _save_instance_in_db(self, id, ip):
-        server = ServersSsh.query.get(id)
-        server.address = ip
-        server.instance = '-'
         db.session.add(server)
         db.session.commit()
 
