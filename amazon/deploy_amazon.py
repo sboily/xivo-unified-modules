@@ -47,7 +47,6 @@ class DeployOnAmazon(Deploy):
                             'db_bind' : self.db_bind,
                             'base_url' : '/amazon',
                             'classname' : 'DeployOnAmazon',
-                            'organisation_id' : 0
                             })
 
     def get_configurations(self):
