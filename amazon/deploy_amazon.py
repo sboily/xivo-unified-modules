@@ -22,7 +22,7 @@ import os
 import time
 
 from app.plugins.deploy.deploy_base import Deploy
-from app.models import User, Servers, Organisations
+from app.models import User, Servers
 from models import ProviderAmazon, ServersAmazon
 from forms import AmazonForm
 from celery.task.control import revoke
@@ -47,6 +47,7 @@ class DeployOnAmazon(Deploy):
                             'db_bind' : self.db_bind,
                             'base_url' : '/amazon',
                             'classname' : 'DeployOnAmazon',
+                            'organisation_id' : 0
                             })
 
     def get_configurations(self):
@@ -98,7 +99,7 @@ class DeployOnAmazon(Deploy):
         db.session.delete(server)
         db.session.commit()
 
-    def deploy_server(self, id, task_id, user_info):
+    def deploy_server(self, id, task_id):
         print 'deploy ...'
         self._update_status_in_db(id, 'initializing')
         server = ServersAmazon.query.get(id)
@@ -115,7 +116,9 @@ class DeployOnAmazon(Deploy):
         print 'Finish !'
 
         self._update_status_in_db(id, 'running')
-        user_info.update({'name' : server.name})
+        user_info = {'user_id' : g.user.id,
+                     'organisation_id' : g.user_organisation.id,
+                     'name' : server.name}
         self._add_server_in_servers(instance, user_info)
         return (id, instance)
 
