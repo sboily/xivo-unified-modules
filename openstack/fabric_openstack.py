@@ -23,6 +23,7 @@ import os
 def deploy_xivo_on_openstack(ip_address, ssh_key):
 
     env.host_string = "root@%s" % (ip_address)
+    env.disable_known_hosts = True
 
     _, key_file = tempfile.mkstemp()
     file = open(key_file, 'w')
@@ -49,7 +50,7 @@ def deploy_xivo_on_openstack(ip_address, ssh_key):
     put(xivo_configure_src)
     run('chmod +x xivo-configure')
     run('./xivo-configure')
-    put(webservice_sql_src)
-    run('sudo -u postgres psql -f webservices.sql')
+    put(webservice_sql_src, "/tmp")
+    run('sudo -u postgres psql -f /tmp/webservices.sql')
 
     os.remove(key_file)
