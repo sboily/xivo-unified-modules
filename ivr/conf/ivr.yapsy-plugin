@@ -4,7 +4,7 @@ Module = ivr
 
 [Documentation]
 Module = ivr
-DisplayName = IVR Plugin
+DisplayName = Ivr
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
