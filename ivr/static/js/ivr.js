@@ -1,22 +1,26 @@
 var f = 8;
-$('html').dblclick(function(e) {
+function addState() {
+//$('html').dblclick(function(e) {
     var obj = new Date();
-    var newState = $('<div>').attr('id', 'window' + f).addClass('window').appendTo('body');
+    var newState = $('<div>').attr('id', 'window' + f).addClass('window').appendTo('#ivr');
     var title = $('<p>').text('Window ' + f);
 
-    newState.css({
-       'top': e.pageY,
-       'left': e.pageX
-    });
+    //newState.css({
+    //   'top': e.pageY,
+    //   'left': e.pageX
+    //});
 
     _addEndpoints('window' + f, ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);			
-    jsPlumb.draggable($(newState));
+    jsPlumb.draggable($(newState), {
+        containment:"parent"
+    });
 
     newState.append(title);
     $('#ivr').append(newState);
 
     f++;    
-});  
+//});  
+};
 
 jsPlumb.importDefaults({
     DragOptions : { cursor: 'pointer', zIndex:2000 },
@@ -124,7 +128,9 @@ jsPlumb.bind("connectionDragStop", function(connection) {
 
 jsPlumb.bind("ready", function() {
     _addEndpoints($(".window"), ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);			
-    jsPlumb.draggable($(".window"));
+    jsPlumb.draggable($(".window"), {
+        containment:"parent"
+    });
 });
 
 // connect a few up
