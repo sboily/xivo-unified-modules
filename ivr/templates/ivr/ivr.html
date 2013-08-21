@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery-ui.min.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.jsPlumb-1.5.1.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
+    <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="ivr" style="border: 1px">
+    <div class="window" id="window1"><p>Window 1</p></div>
+    <div class="window" id="window2"><p>Window 2</p></div>
+    <div class="window" id="window3"><p>Window 3</p></div>
+    <div class="window" id="window4"><p>Window 4</p></div>
+</div>
+{% endblock %}

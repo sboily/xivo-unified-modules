@@ -1,0 +1,13 @@
+[Core]
+Name = ivr
+Module = ivr
+
+[Documentation]
+Module = ivr
+DisplayName = IVR Plugin
+Author = Sylvain Boily
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = IVR plugin
+License = AGPL
+Parent = server
