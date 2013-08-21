@@ -1,38 +1,42 @@
-var f = 8;
-function addState() {
-//$('html').dblclick(function(e) {
-    var obj = new Date();
-    var newState = $('<div>').attr('id', 'window' + f).addClass('window').appendTo('#ivr');
-    var title = $('<p>').text('Window ' + f);
+$(function() {
 
-    //newState.css({
-    //   'top': e.pageY,
-    //   'left': e.pageX
-    //});
+    var id=1;
 
-    _addEndpoints('window' + f, ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);			
-    jsPlumb.draggable($(newState), {
-        containment:"parent"
+    $(".icon").draggable({
+        helper:'clone'
     });
 
-    newState.append(title);
-    $('#ivr').append(newState);
+    $("#ivr").droppable({
+        accept: ".icon",
+        drop: function( event, ui ) {
 
-    f++;    
-//});  
-};
+             var newState = $(ui.helper).clone()
+                                        .removeClass("icon source unique ui-draggable ui-draggable-dragging target")
+                                        .attr('id', 'window' + id)
+                                        .addClass('window')
+                                        .css('position','');
+             $(this).append($(newState));
 
-jsPlumb.importDefaults({
-    DragOptions : { cursor: 'pointer', zIndex:2000 },
-    EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
-    Endpoints : [ [ "Dot", {radius:7} ], [ "Dot", { radius:11 } ]],
-    ConnectionOverlays : [[ "Arrow", { location:1 } ],
-    		      [ "Label", { location:0.1,
-    				   id:"label",
-    				   cssClass:"aLabel"
-    		      }]
-    		     ]
-});		
+            _addEndpoints($(newState), ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);			
+            jsPlumb.draggable($(newState), {
+                containment:"parent"
+            });
+
+            id++;    
+        }
+    });
+
+    jsPlumb.importDefaults({
+        DragOptions : { cursor: 'pointer', zIndex:2000 },
+        EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
+        Endpoints : [ [ "Dot", {radius:7} ], [ "Dot", { radius:11 } ]],
+        ConnectionOverlays : [[ "Arrow", { location:1 } ],
+    		              [ "Label", { location:0.1,
+    				           id:"label",
+    				           cssClass:"aLabel"
+    		              }]
+    		             ]
+     });		
 
 // this is the paint style for the connecting lines..
 var connectorPaintStyle = {
@@ -131,6 +135,8 @@ jsPlumb.bind("ready", function() {
     jsPlumb.draggable($(".window"), {
         containment:"parent"
     });
+});
+
 });
 
 // connect a few up

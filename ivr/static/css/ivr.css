@@ -61,3 +61,27 @@ filter:alpha(opacity=60);
 	color:white;	
 	border:1px solid white;
 }
+
+#toolbar{
+    width: 100%;
+    height: 70px;
+    background-color: #F4F4F4;
+}
+#toolbar div, .dropped_icon{
+    float: left;
+    margin: 2px;
+    padding: 2px;
+    border: 2px outset #c4c4c4;
+}
+.dropped_icon{
+    background: #fff;
+}
+.icon_selected{
+    background: #c4c4c4;
+}
+#toolbar div{
+    background: transparent;
+}
+#toolbar div :hover{
+    background: #fff;
+}

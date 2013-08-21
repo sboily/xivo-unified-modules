@@ -8,8 +8,10 @@
 {% endblock %}
 
 {% block content %}
-<div id="ivr_menu">
-    <button id="add" onclick="addState();" value="Add">Add</button>
+<div id="toolbar">
+    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='img/answer.png') }}" title="answer"/></div>
+    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='img/hangup.png') }}" title="hangup"/></div>
+    <div action="prompt" class="icon source target"><img src="{{ url_for('ivr.static', filename='img/prompt.png') }}" title="prompt"/></div>
 </div>
 
 <div id="ivr" style="border: 1px solid;  margin-left: 16%; height: 800px;">
