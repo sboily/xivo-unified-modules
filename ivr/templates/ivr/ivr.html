@@ -3,6 +3,7 @@
 {% block header %}
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery-ui.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.jsPlumb-1.5.1.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.ui-contextmenu.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/jquery-ui.css') }}">
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
@@ -10,9 +11,10 @@
 
 {% block content %}
 <div id="toolbar">
-    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='img/answer.png') }}" title="answer"/></div>
-    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='img/hangup.png') }}" title="hangup"/></div>
-    <div action="prompt" class="icon source target"><img src="{{ url_for('ivr.static', filename='img/prompt.png') }}" title="prompt"/></div>
+    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
+    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
+    <div action="prompt" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompt"/></div>
+    <div action="wait4digit" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digit.png') }}" title="wait4digit"/></div>
 </div>
 
 <div id="ivr" style="border: 1px solid;  margin-left: 16%; height: 600px;">

@@ -25,23 +25,61 @@ $(function() {
             if($(newState).hasClass("target"))
                 _addEndpoints($(newState), [], ["LeftMiddle"]);
 
-            jsPlumb.draggable($(newState), {
-                containment:"parent"
-            });
-
             if($(newState).hasClass("unique")) {
                 $(".icon[action='" + $(newState).attr("action") + "']")
                                                 .draggable({ disabled: true });
             }
 
+            jsPlumb.draggable($(newState), {
+                containment:"parent"
+            });
+
             id++;    
         }
     });
 
+    function delete_connection(conn) {
+        jsPlumb.deleteEndpoint(conn.endpoints[0].elementId, conn.endpoints[0]);
+        jsPlumb.deleteEndpoint(conn.endpoints[1].elementId, conn.endpoints[1]);
+        jsPlumb.detach(conn);
+    }
+
+    function contextmenu(elementId) {
+        $(this).contextmenu({
+            menu: [
+                {title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash"},
+                ],
+            select: function(event, ui) {
+                switch(ui.cmd) {
+                    case 'delete':
+                        var source_conns = jsPlumb.getConnections({
+                                               source:elementId
+                                           });
+                        for(i = 0; i < source_conns.length; i++) {
+                            delete_connection(source_conns[i]);
+                        }
+                        var target_conns = jsPlumb.getConnections({
+                                               target:elementId
+                                           });
+                        for(i = 0; i < target_conns.length; i++) {
+                            delete_connection(target_conns[i]);
+                        }
+                        if($("#" + elementId).hasClass("unique")) {
+                            $(".icon[action='" + $("#" + elementId).attr("action") + "']")
+                                                                   .draggable({ disabled: false });
+                        }
+                        jsPlumb.remove(elementId);
+                        $("#" + elementId).remove();
+                    break;
+                }
+            }
+        });
+    };
+
     jsPlumb.importDefaults({
         DragOptions : { cursor: 'pointer', zIndex:2000 },
         EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
-        Endpoints : [ [ "Dot", {radius:7} ], [ "Dot", { radius:11 } ]],
+        Endpoints : [ [ "Dot", { radius:3 } ], [ "Dot", { radius:3 } ]],
         ConnectionOverlays : [[ "Arrow", { location:1 } ],
     		              [ "Label", { location:0.1,
     				           id:"label",
@@ -88,8 +126,8 @@ $(function() {
     },
 
     targetEndpoint = {
-        endpoint:"Dot",					
-        paintStyle:{ fillStyle:"#1e8151",radius:11 },
+        endpoint:"Dot",
+        paintStyle:{ fillStyle:"#1e8151",radius:8 },
         hoverPaintStyle:endpointHoverStyle,
         maxConnections:-1,
         dropOptions:{ hoverClass:"hover", activeClass:"active" },
@@ -111,38 +149,36 @@ $(function() {
     _addEndpoints = function(toId, sourceAnchors, targetAnchors) {
         for (var i = 0; i < sourceAnchors.length; i++) {
     	    var sourceUUID = toId + sourceAnchors[i];
-    	    jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:sourceAnchors[i], uuid:sourceUUID });						
+    	    jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:sourceAnchors[i], uuid:sourceUUID });
     	}
         for (var j = 0; j < targetAnchors.length; j++) {
     	    var targetUUID = toId + targetAnchors[j];
-    	    jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:targetAnchors[j], uuid:targetUUID });						
+    	    jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:targetAnchors[j], uuid:targetUUID });
         }
     };
 
-    // listen for new connections; initialise them the same way we initialise the connections at startup.
-    jsPlumb.bind("connection", function(connInfo, originalEvent) { 
-        init(connInfo.connection);
-    });			
+    jsPlumb.bind("contextmenu", function(endpoint) {
+        contextmenu(endpoint.elementId);
+    });
 
-    // listen for clicks on connections, and offer to delete connections on click.
+    jsPlumb.bind("endpointClick", function(endpoint) {
+    });
+
+    jsPlumb.bind("connection", function(connInfo, originalEvent) {
+        init(connInfo.connection);
+    });
+
     jsPlumb.bind("click", function(conn, originalEvent) {
         if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-    	    jsPlumb.detach(conn); 
-    });	
-    
+    	    jsPlumb.detach(conn);
+    });
+
     jsPlumb.bind("connectionDrag", function(connection) {
         console.log("connection " + connection.id + " is being dragged. suspendedElement is ", connection.suspendedElement, " of type ", connection.suspendedElementType);
-    });		
+    });
     
     jsPlumb.bind("connectionDragStop", function(connection) {
         console.log("connection " + connection.id + " was dragged");
-    });
-
-    jsPlumb.bind("ready", function() {
-        _addEndpoints($(".window"), ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);			
-        jsPlumb.draggable($(".window"), {
-            containment:"parent"
-        });
     });
 
 });
