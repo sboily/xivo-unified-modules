@@ -96,16 +96,3 @@
     border: 1px solid;
     margin-left: 16%;
 }
-
-#ivr.active {
-    border:1px dotted green;
-}
-
-#ivr.hover {
-    border:1px dotted red;
-}
-
-#ivr.hl { 
-    border:3px solid red;
-}
-

@@ -16,7 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from ivr import Ivr
 
 bp_ivr = Blueprint('ivr', __name__, template_folder='templates/ivr',
                             static_folder='static', static_url_path='/%s' % __name__)
 
+ivr = Ivr()

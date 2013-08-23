@@ -15,13 +15,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, url_for
+from flask import render_template, url_for, request, jsonify
 from flask.ext.login import login_required
 
-from setup import bp_ivr
+from setup import bp_ivr, ivr
 
 @bp_ivr.route('/ivr')
 @login_required
 def show():
     return render_template('ivr.html')
 
+@bp_ivr.route('/ivr/save', methods=['GET', 'POST'])
+@login_required
+def ivr_save():
+    ivr.save(request.json)
+    return jsonify(request.json)

@@ -20,10 +20,10 @@ $(function() {
              $(this).append($(newStep));
 
             if($(newStep).hasClass("source"))
-                _addEndpoints(id, "source");
+                add_endpoint(id, "source");
 
             if($(newStep).hasClass("target"))
-                _addEndpoints(id, "target");
+                add_endpoint(id, "target");
 
             if($(newStep).hasClass("unique")) {
                 $(".icon[action='" + $(newStep).attr("action") + "']")
@@ -51,12 +51,21 @@ $(function() {
             case 'wait4digits':
                 wait4digits(element);
             break;
+            case 'prompts':
+                prompts(element);
+            break;
         }
     }
 
     wait4digits = function(element) {
         element.bind("dblclick", function() {
             $('#wait4digits').dialog({title: 'Prompt for digits properties ...'});
+        });
+    }
+
+    prompts = function(element) {
+        element.bind("dblclick", function() {
+            $('#prompts').dialog({title: 'Fill prompt name ...'});
         });
     }
 
@@ -67,22 +76,50 @@ $(function() {
     }
 
     save_ivr = function() {
-        var conns = jsPlumb.getConnections();
         var connection = Object();
+        var elems = $('#ivr').find('div[class*="window"]');
+        var c = 0;
 
-        for(i = 0; i < conns.length; i++) {
-            sourceid = conns[i].sourceId;
-            targetid = conns[i].targetId;
+        elems.each(function() {
+            var e = $(this);
+            var my_id = e.attr('id');
+            var my_action = e.attr('action');
+            var conns_source = jsPlumb.getConnections({source:my_id});
+            var conns_target = jsPlumb.getConnections({target:my_id});
 
-            connection[i] = Object();
-            connection[i].sourceid = sourceid;
-            connection[i].targetid = targetid;
-        }
+            connection[c] = Object();
+            connection[c].id = my_id;
+            connection[c].action = my_action;
 
-        connection.length = conns.length;
+            if (conns_source.length == 1) {
+                connection[c].source_sourceid = conns_source[0].sourceId;
+                connection[c].source_targetid = conns_source[0].targetId;
+            }
+
+            if (conns_target.length == 1) {
+                connection[c].target_sourceid = conns_target[0].sourceId;
+                connection[c].target_targetid = conns_target[0].targetId;
+            }
+
+            c++;
+        });
+
+        connection.length = connection.length;
+        console.log(connection);
 
         $('#dialog').text(JSON.stringify(connection));
         $('#dialog').dialog({title: 'Saving ...'});
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(connection),
+            dataType: 'json',
+            url: '/ivr/save',
+            success: function (e) {
+                console.log(e);
+            }
+        });
     }
 
     contextmenu = function(elementId) {
@@ -130,7 +167,7 @@ $(function() {
     	});
     };			
 
-    _addEndpoints = function(id, type) {
+    add_endpoint = function(id, type) {
         switch(type) {
             case 'source':
                 jsPlumb.makeSource('ep_' + id, {

@@ -13,7 +13,7 @@
 <div id="toolbar">
     <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
     <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
-    <div action="prompt" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompt"/></div>
+    <div action="prompts" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
     <div action="wait4digits" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
     <div action="save" class="save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
 </div>
@@ -24,7 +24,9 @@
 <div class="hidden dialog">
     <div id="dialog"></div>
 
-    <div id="wait4digits">I'm a dialog</div>
+    <div id="wait4digits">I'm a wait4digits</div>
+
+    <div id="prompts">I'm a prompt</div>
 
     <div id="save">
         <form method="post" action="#">
