@@ -14,9 +14,25 @@
     <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
     <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
     <div action="prompt" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompt"/></div>
-    <div action="wait4digit" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digit.png') }}" title="wait4digit"/></div>
+    <div action="wait4digits" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
+    <div action="save" class="save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
 </div>
 
-<div id="ivr" style="border: 1px solid;  margin-left: 16%; height: 600px;">
+<div id="ivr">
 </div>
+
+<div class="hidden dialog">
+    <div id="dialog"></div>
+
+    <div id="wait4digits">I'm a dialog</div>
+
+    <div id="save">
+        <form method="post" action="#">
+            <input type="text" name="connections" />
+            <input type="text" name="entities" />
+            <input type="text" name="vars" />
+        </form>
+    </div>
+</div>
+
 {% endblock %}
