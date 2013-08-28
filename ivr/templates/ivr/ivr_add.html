@@ -20,8 +20,10 @@
     <div action="reset" class="reset"><img src="{{ url_for('ivr.static', filename='images/reset.png') }}" title="reset"/></div>
 </div>
 
+{% block ivr_content %}
 <div id="ivr">
 </div>
+{% endblock %}
 
 <div class="hidden dialog">
     <div id="dialog"></div>

@@ -275,6 +275,69 @@ $(function() {
         });
     }
 
+    ivr_load = function(name) {
+        nodes = $.parseJSON($("#nodes").attr("data"));
+        connections = $.parseJSON($("#connections").attr("data"));
+
+        $.each(nodes, function(index, value) {
+            id = value.id.toString().substr(6);
+
+            $("#ivr").append(
+                $(".icon[action='"+ value.action +"']")
+                   .clone()
+                   .removeClass("icon")
+                   .removeClass("ui-draggable")
+                   .removeClass("ui-draggable-dragging")
+                   .addClass("dropped_icon window")
+                   .attr("id", value.id)
+                   .attr("style", "position: absolute; top: "+ value.positionY +"px; left: " + value.positionX + "px")
+                   );
+            $("#" + value.id).append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
+
+            if($("#" + value.id).hasClass("source"))
+                add_endpoint(id, "source");
+
+            if($("#" + value.id).hasClass("target"))
+                add_endpoint(id, "target");
+
+            if($("#" + value.id).hasClass("unique")) {
+                $(".icon[action='" + $("#" + value.id).attr("action") + "']")
+                                                      .draggable({ disabled: true });
+            }
+
+            console.log(value.config);
+
+            jsPlumb.draggable(jsPlumb.getSelector('#' + value.id), {
+                containment:"parent"
+            });
+
+
+            catch_action(value.id);
+        });
+
+        $.each(connections, function(index, value) {
+            digit = value.digitId;
+            my_label = value.sourceId.substring(6) + "-" + value.targetId.substring(6);
+            c = jsPlumb.connect({ 'source' : value.sourceId,
+                                  'target': value.targetId,
+                                });
+
+            label = c.getOverlay("label");
+            label.setLabel(my_label);
+            if (digit != null) {
+                c.addOverlay(["Label", { location:0.1,
+                                         id:"digit",
+                                         cssClass:"aLabel",
+                                         label : digit
+                                       }
+                             ]);
+            }
+        });
+
+
+        id++;
+    }
+
     ivr_reset = function() {
         $("#reset").dialog({
              bgiframe: true,
@@ -391,6 +454,11 @@ $(function() {
     $(".reset").click(function() {
         ivr_reset();
     });
+
+    if ($("#ivr").attr("action") == "edit") {
+        name = $("#ivr").attr("name");
+        ivr_load(name);
+    }
 
     jsPlumb.bind("endpointClick", function(endpoint, originalEvent) {
         console.log("endpointclick" + endpoint);

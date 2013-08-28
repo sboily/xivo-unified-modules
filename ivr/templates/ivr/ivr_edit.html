@@ -1,0 +1,13 @@
+{% extends "ivr_add.html" %}
+
+{% block ivr_content %}
+<div id="ivr" name="{{name}}" action="edit">
+</div>
+
+<div id="nodes" data='{{ nodes|tojson|safe }}'>
+</div>
+
+<div id="connections" data='{{ connections|tojson|safe }}'>
+</div>
+
+{% endblock %}

@@ -58,7 +58,12 @@ class Ivr(object):
             db.session.delete(my_ivr)
             db.session.commit()
 
-    def show(self, id):
+    def edit(self, id):
+        my_ivr = IvrDB.query.filter(IvrDB.id == id) \
+                            .first()
+        return my_ivr
+
+    def show(self):
         return True
         is_finish = False
         first_last = self.find_first_last_priority(json)

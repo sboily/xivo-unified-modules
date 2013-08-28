@@ -17,6 +17,7 @@
 
 from flask import render_template, url_for, request, jsonify, redirect, flash
 from flask.ext.login import login_required
+import json
 
 from setup import bp_ivr, ivr
 
@@ -40,9 +41,10 @@ def ivr_save():
 @bp_ivr.route('/ivr/edit/<id>')
 @login_required
 def ivr_edit(id):
-    my_ivr = ivr.show(id)
-    flash('Not implemented !')
-    return redirect(url_for("ivr.ivr_list"))
+    my_ivr = ivr.edit(id)
+    return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), connections=json.loads(my_ivr.connections))
+    #flash('Not implemented !')
+    #return redirect(url_for("ivr.ivr_list"))
 
 @bp_ivr.route('/ivr/delete/<id>')
 @login_required
