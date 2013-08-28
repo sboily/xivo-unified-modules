@@ -54,18 +54,125 @@ $(function() {
             case 'prompts':
                 prompts(element);
             break;
+            case 'execute':
+                execute(element);
+            break;
         }
     }
 
     wait4digits = function(element) {
         element.bind("dblclick", function() {
-            $('#wait4digits').dialog({title: 'Prompt for digits properties ...'});
+            $('#wait4digits').dialog({
+                title: 'Prompt for digits properties ...',
+                bgiframe: true,
+                modal: true,
+                width: 600,
+                height: 400,
+                buttons : {'Cancel' : function() {
+                                          $(this).dialog('close');
+                                      },
+                           'Save' : function() {
+                              element.attr("config", "wait4digits");
+                              element.attr("wait_prompt_path", $(this).find("input[name='wait_prompt_path']").val());
+                              element.attr("wait_expected_digits", $(this).find("input[name='wait_expected_digits']").val());
+                              element.attr("min_digits", $(this).find("input[name='min_digits']").val());
+                              element.attr("max_digits", $(this).find("input[name='max_digits']").val());
+                              element.attr("retries", $(this).find("input[name='retries']").val());
+                              element.attr("retry_timeout", $(this).find("input[name='retry_timeout']").val());
+
+                              $(this).dialog('close');
+                                    }
+                          }
+            });
+        });
+    }
+
+
+    whatdigit = function(info) {
+        $("#on_what_digit").dialog({
+            bgiframe: true,
+            modal: true,
+            width: 300,
+            height: 200,
+            title: 'On Digit Press...',
+            buttons : {'Cancel' : function() {
+                            $(this).dialog('close');
+                      },
+                       'Save' : function() {
+                            info.connection.addOverlay(["Label", { location:0.1,
+                                                                   id:"digit",
+                                                                   cssClass:"aLabel",
+                                                                   label : $(this).find("input[name='digit']").val()
+                                                                 }
+                                                       ]);
+                            $(this).dialog('close');
+                                }
+                      }
+        });
+    }
+
+    whatname = function() {
+        $("#on_what_name").dialog({
+            bgiframe: true,
+            modal: true,
+            width: 300,
+            height: 200,
+            title: 'Please enter name ...',
+            buttons : {'Cancel' : function() {
+                            $(this).dialog('close');
+                      },
+                       'Save' : function() {
+                            $('#ivr').attr('name', $(this).find("input[name='name']").val());
+                            $(this).dialog('close');
+                            ivr_save();
+                                }
+                      }
         });
     }
 
     prompts = function(element) {
         element.bind("dblclick", function() {
-            $('#prompts').dialog({title: 'Fill prompt name ...'});
+            $("#prompts").dialog({
+                bgiframe: true,
+                modal: true,
+                width: 500,
+                height: 270,
+                title: 'Prompt properties ...',
+                buttons : { 'Cancel' : function() {
+                                $(this).dialog('close');
+                                       },
+                            'Save' : function() {
+                                element.attr("config", "prompts");
+                                element.attr("prompt_path", $(this).find("input[name='prompt_path']").val());
+                                element.attr("escape_digits", $(this).find("input[name='escape_digits']").val());
+
+                                $(this).dialog('close');
+                                     }
+                          }
+            });
+        });
+    }
+
+    execute = function(element) {
+        element.bind("dblclick", function() {
+            $("#execute").dialog({
+                bgiframe: true,
+                modal: true,
+                width: 500,
+                height: 270,
+                title: 'Execute properties ...',
+                buttons : { 'Cancel' : function() {
+                                $(this).dialog('close');
+                                       },
+                            'Save' : function() {
+                                element.attr("config", "execute");
+                                element.attr("application", $(this).find("input[name='application']").val());
+                                element.attr("arguments", $(this).find("input[name='arguments']").val());
+
+                                $(this).dialog('close');
+                                     }
+                          }
+            });
         });
     }
 
@@ -75,45 +182,91 @@ $(function() {
         jsPlumb.detach(conn);
     }
 
-    save_ivr = function() {
-        var connection = Object();
+
+    get_element_config = function(element) {
+        my_elem = $("#" + element);
+        elem = my_elem.attr("config");
+        var config = Object();
+
+        switch(elem) {
+            case 'wait4digits':
+                config.wait_prompt_path = my_elem.attr('wait_prompt_path');
+                config.wait_expected_digits = my_elem.attr('wait_expected_digits');
+                config.min_digits = my_elem.attr('min_digits');
+                config.max_digits = my_elem.attr('max_digits');
+                config.retries = my_elem.attr('retries');
+                config.retry_timeout = my_elem.attr('retry_timeout');
+                return config;
+            break;
+
+            case 'prompts':
+                config.prompt_path = my_elem.attr('prompt_path');
+                config.escape_digits = my_elem.attr('escape_digits');
+                return config;
+            break;
+
+            case 'execute':
+                config.application = my_elem.attr('application');
+                config.arguments = my_elem.attr('arguments');
+                return config;
+            break;
+
+        }
+    }
+
+    ivr_save = function() {
         var elems = $('#ivr').find('div[class*="window"]');
-        var c = 0;
 
-        elems.each(function() {
-            var e = $(this);
-            var my_id = e.attr('id');
-            var my_action = e.attr('action');
-            var conns_source = jsPlumb.getConnections({source:my_id});
-            var conns_target = jsPlumb.getConnections({target:my_id});
+        if ($('#ivr').attr('name') != undefined) {
+            ivr_name = $('#ivr').attr('name');
+        } else {
+            whatname();
+            return false;
+        }
 
-            connection[c] = Object();
-            connection[c].id = my_id;
-            connection[c].action = my_action;
+        if (elems.length == 0) {
+            alert('Please add elements before saving ...');
+            return false;
+        }
 
-            if (conns_source.length == 1) {
-                connection[c].source_sourceid = conns_source[0].sourceId;
-                connection[c].source_targetid = conns_source[0].targetId;
-            }
-
-            if (conns_target.length == 1) {
-                connection[c].target_sourceid = conns_target[0].sourceId;
-                connection[c].target_targetid = conns_target[0].targetId;
-            }
-
-            c++;
+        var blocks = []
+        $("#ivr .window").each(function (idx, elem) {
+            var $elem = $(elem);
+            blocks.push({
+                id: $elem.attr('id'),
+                action: $elem.attr('action'),
+                positionX: parseInt($elem.css("left"), 10),
+                positionY: parseInt($elem.css("top"), 10),
+                config: get_element_config($elem.attr('id'))
+            });
         });
 
-        connection.length = connection.length;
-        console.log(connection);
+        var connections = [];
+        $.each(jsPlumb.getConnections(), function (idx, connection) {
+            if (connection.getOverlay('digit'))
+                digit = connection.getOverlay('digit').getLabel();
+            else
+                digit = null
+            connections.push({
+                connectionId: connection.id,
+                sourceId: connection.sourceId,
+                targetId: connection.targetId,
+                digitId: digit
+            });
+        });
 
-        $('#dialog').text(JSON.stringify(connection));
+        j = JSON.stringify({ 'name': ivr_name,
+                             'blocks' : blocks,
+                             'connections' : connections
+                           });
+
+        $('#dialog').text('Ivr ' + ivr_name + ' has been saved !');
         $('#dialog').dialog({title: 'Saving ...'});
 
         $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(connection),
+            data: j,
             dataType: 'json',
             url: '/ivr/save',
             success: function (e) {
@@ -122,8 +275,28 @@ $(function() {
         });
     }
 
+    ivr_reset = function() {
+        $("#reset").dialog({
+             bgiframe: true,
+             modal: true,
+             width: 300,
+             height: 200,
+             title: 'Confirm reset ...',
+             buttons : { 'Cancel' : function() {
+                                        $(this).dialog('close');
+                                    },
+                         'Reset' : function() {
+                                       jsPlumb.deleteEveryEndpoint();
+                                       $(".dropped_icon").remove();
+                                       $(".icon").draggable('enable');
+                                       id=1;
+                                       $(this).dialog('close');
+                                   }
+             }
+        });
+    }
+
     contextmenu = function(elementId) {
-        console.log(elementId);
         $(document).contextmenu({
             delegate: ".window",
             preventSelect: true,
@@ -168,6 +341,12 @@ $(function() {
     };			
 
     add_endpoint = function(id, type) {
+        elem = $("#window" + id).attr("action");
+        if (elem == 'wait4digits')
+            maxconn = -1;
+        else
+            maxconn = 1;
+
         switch(type) {
             case 'source':
                 jsPlumb.makeSource('ep_' + id, {
@@ -175,7 +354,7 @@ $(function() {
 		    anchor:"Continuous",
                     connector:[ "Flowchart", {  } ],
 		    connectorStyle:{ strokeStyle:"#5c96bc", lineWidth:2, outlineColor:"transparent", outlineWidth:4 },
-		    maxConnections:1,
+		    maxConnections:maxconn,
 		    onMaxConnections:function(info, e) {
 		        alert("Maximum connections (" + info.maxConnections + ") reached");
 		    }
@@ -206,19 +385,30 @@ $(function() {
     });
 
     $(".save").click(function() {
-        save_ivr();
+        ivr_save();
+    });
+
+    $(".reset").click(function() {
+        ivr_reset();
     });
 
     jsPlumb.bind("endpointClick", function(endpoint, originalEvent) {
         console.log("endpointclick" + endpoint);
     });
 
-    jsPlumb.bind("jsPlumbConnection", function(info, originalEvent) {
-        console.log("jsPlumbConnection" + info);
-    });
-
     jsPlumb.bind("connection", function(connInfo, originalEvent) {
+
+        if(connInfo.connection.sourceId == connInfo.connection.targetId) {
+            console.log ("source and target ids are same");
+            jsPlumb.detach(connInfo.connection);
+        }
+
         init(connInfo.connection);
+
+        if($('#' + connInfo.connection.sourceId).attr('action') == "wait4digits") {
+            current_connection = connInfo.connection;
+            whatdigit(connInfo);
+        }
     });
 
     jsPlumb.bind("click", function(conn, originalEvent) {

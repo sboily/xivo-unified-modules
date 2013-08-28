@@ -16,34 +16,82 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from app import db
+from models import IvrDB
+import os
+import json
 
 class Ivr(object): 
 
     def __init__(self):
         pass
 
-    def save(self, json):
+    def setup(self, app):
+        self.db_bind = 'ivr'
+        mydbplugindir = os.path.join(app.config['BASEDIR'],'app/plugins/ivr/db/ivr.db')
+        app.config['SQLALCHEMY_BINDS'].update({self.db_bind : 'sqlite:///%s' % mydbplugindir})
+
+        with app.app_context():
+            db.create_all(bind=self.db_bind)
+
+    def save(self, result):
+        name = result['name']
+        my_ivr = IvrDB.query.filter(IvrDB.name == name) \
+                            .first()
+
+        if not my_ivr:
+            my_ivr = IvrDB(name)
+
+        my_ivr.nodes = json.dumps(result['blocks'])
+        my_ivr.connections = json.dumps(result['connections'])
+
+        db.session.add(my_ivr)
+        db.session.commit()
+
+    def list(self):
+        return IvrDB.query.order_by(IvrDB.name) 
+
+    def delete(self, id):
+        my_ivr = IvrDB.query \
+                      .filter(IvrDB.id == id) \
+                      .first()
+        if my_ivr:
+            db.session.delete(my_ivr)
+            db.session.commit()
+
+    def show(self, id):
+        return True
         is_finish = False
         first_last = self.find_first_last_priority(json)
         action = first_last['action']
         target = first_last['nextstep']
         last = first_last['last']
+        config = first_last['config']
         print '[my_ivr]'
-        print 'exten = 1,1,%s' % self.application(action)
+        print 'exten = s,1,%s' % self.application(action, config)
         while(is_finish == False):
             next_step = self.find_priority(json, target)
             if next_step:
                 if target == last:
                     is_finish = True
-                (action, target) = self.get_priority(next_step)
-                print 'same = n,%s' % self.application(action)
+                (action, target, config) = self.get_priority(next_step)
+                print 'same = n,%s' % self.application(action, config)
             
-    def application(self, app):
+    def application(self, app, config):
         if app == 'answer':
             return 'Answer()'
         if app == 'hangup':
             return 'Hangup()'
+        if app == 'prompts':
+            app_config = 'Playback(%s)' % config['prompt_path']
+            return app_config
+        if app == 'execute':
+            app_config = '%s(%s)' %(config['application'], config['arguments'])
+            return app_config
         return 'NoOp(\'%s\')' % app
+
+    def set_application_config(self, app, config):
+        print app
+        print config
 
     def find_first_last_priority(self, json):
         first_and_last = {}
@@ -55,6 +103,11 @@ class Ivr(object):
             if json[j].has_key('target_sourceid') and not json[j].has_key('source_sourceid') :
                 if json[j]['target_targetid'] == json[j]['id']:
                     first_and_last.update({'last' : json[j]['target_targetid']})
+            if json.has_key('config'):
+                first_and_last.update({'config' : json[j]['config']})
+            else:
+                first_and_last.update({'config' : ''})
+
         return first_and_last
 
     def find_priority(self, json, target):
@@ -69,4 +122,9 @@ class Ivr(object):
         else:
             target = json['target_sourceid']
 
-        return(json['action'], target)
+        if json.has_key('config'):
+            config = json['config']
+        else:
+            config = ''
+
+        return(json['action'], target, config)

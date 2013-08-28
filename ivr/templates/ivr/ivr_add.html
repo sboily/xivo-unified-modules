@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery-ui.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.jsPlumb-1.5.2.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.ui-contextmenu.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
+    <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="toolbar">
+    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
+    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
+    <div action="prompts" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
+    <div action="wait4digits" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
+    <div action="execute" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
+    <div action="save" class="save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
+    <div action="reset" class="reset"><img src="{{ url_for('ivr.static', filename='images/reset.png') }}" title="reset"/></div>
+</div>
+
+<div id="ivr">
+</div>
+
+<div class="hidden dialog">
+    <div id="dialog"></div>
+
+    <div id="reset">
+        There may be unsaved data.
+        All your unsaved data will be lost.
+        Are you sure about this? 
+    </div>
+
+    <div id="wait4digits">
+        <div>Prompt File Path (optional)</div>
+        <div><input type="text" name="wait_prompt_path" /></div>
+        <br>
+        <div>Min no of digits expected</div>
+        <div><input type="text" name="min_digits" /></div>
+        <br>
+        <div>Max no of digits expected</div>
+        <div><input type="text" name="max_digits" /></div>
+        <br>
+        <div>Expected Digits</div>
+        <div><input type="text" name="wait_expected_digits" /></div>
+        <br>
+        <div>Retries</div>
+        <div><input type="text" name="retries" /></div>
+        <br>
+        <div>Retry timeout (in seconds)</div>
+        <div><input type="text" name="retry_timeout" /></div>
+    </div>
+
+    <div id="on_what_digit">
+        <div>Digit</div>
+        <div><input type="text" name="digit" /></div>
+    </div>
+
+    <div id="on_what_name">
+        <div>Name</div>
+        <div><input type="text" name="name" /></div>
+    </div>
+
+    <div id="prompts">
+        <div>Prompt File Path</div>
+        <div><input type="text" name="prompt_path" /></div>
+        <br>
+        <div>Escape Digits</div>
+        <div><input type="text" name="escape_digits" /></div>
+    </div>
+
+    <div id="execute">
+        <div>Application</div>
+        <div><input type="text" name="application" /></div>
+        <br>
+        <div>Arguments</div>
+        <div><input type="text" name="arguments" /></div>
+    </div>
+
+    <div id="save">
+        <form method="post" action="#">
+            <input type="text" name="connections" />
+            <input type="text" name="entities" />
+            <input type="text" name="vars" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}

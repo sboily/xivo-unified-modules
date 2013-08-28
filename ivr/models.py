@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 # Copyright (C) 2013 Sylvain Boily <sboily@proformatique.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,15 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from yapsy.IPlugin import IPlugin
-from setup import bp_ivr, ivr
-import views
+from app import db
+from datetime import datetime
 
-class IvrPlugin(IPlugin):
+class IvrDB(db.Model):
+    __bind_key__ = 'ivr'
+    __tablename__ = 'ivr'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    description = db.Column(db.Text())
+    nodes = db.Column(db.Text())
+    connections = db.Column(db.Text())
+    created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def setup(self, app):
-        app.register_blueprint(bp_ivr)
-        ivr.setup(app)
+    def __init__(self, name):
+        self.name = name
 
-    def plugin_endpoint(self):
-        return "ivr.ivr_list"
+    def __repr__(self):
+        return "<%d : %s>" % (self.id, self.name)

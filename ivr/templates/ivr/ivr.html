@@ -1,40 +1,36 @@
 {% extends "base.html" %}
-
-{% block header %}
-    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery-ui.js') }}"></script>
-    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.jsPlumb-1.5.1.js') }}"></script>
-    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.ui-contextmenu.js') }}"></script>
-    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
-    <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/jquery-ui.css') }}">
-    <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
-{% endblock %}
-
 {% block content %}
-<div id="toolbar">
-    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
-    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
-    <div action="prompts" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
-    <div action="wait4digits" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
-    <div action="save" class="save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
+
+<div class="container">
+
+<div class="widget stacked widget-table action-table">
+  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('ivr.ivr_add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
+  <table class="table table-bordered">
+<div class="widget-content">
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date</th>
+      <th class="td-actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in ivr %}
+      <tr>
+      <td>{{ i.name }}</td>
+      <td>{{ i.created_time }}</td>
+      <td class="td-actions">
+        <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
+        <a href="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
 
-<div id="ivr">
 </div>
 
-<div class="hidden dialog">
-    <div id="dialog"></div>
-
-    <div id="wait4digits">I'm a wait4digits</div>
-
-    <div id="prompts">I'm a prompt</div>
-
-    <div id="save">
-        <form method="post" action="#">
-            <input type="text" name="connections" />
-            <input type="text" name="entities" />
-            <input type="text" name="vars" />
-        </form>
-    </div>
-</div>
 
 {% endblock %}

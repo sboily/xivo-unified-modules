@@ -424,7 +424,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG or VML.  
  * 
@@ -936,7 +936,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -1228,7 +1228,7 @@
 		_dom = function(el) { return jsPlumb.CurrentLibrary.getDOMElement(el); },		
 		_getOffset = function(el, _instance) {
             var o = jsPlumb.CurrentLibrary.getOffset(_gel(el));
-		if (_instance != null) {
+			if (_instance != null) {
                 var z = _instance.getZoom();
                 return {left:o.left / z, top:o.top / z };    
             }
@@ -1691,7 +1691,7 @@
 
 		jsPlumbUtil.extend(OverlayCapableJsPlumbUIComponent, jsPlumbUIComponent, {
 			applyType : function(t, doNotRepaint) {			
-				this.removeAllOverlays();
+				this.removeAllOverlays(doNotRepaint);
 				if (t.overlays) {
 					for (var i = 0, j = t.overlays.length; i < j; i++)
 						this.addOverlay(t.overlays[i], true);
@@ -1731,13 +1731,14 @@
 				for (var i = 0, j = this._jsPlumb.overlays.length; i < j; i++)
 					this._jsPlumb.overlays[i].show();
 			},
-			removeAllOverlays : function() {
+			removeAllOverlays : function(doNotRepaint) {
 				for (var i = 0, j = this._jsPlumb.overlays.length; i < j; i++) {
 					if (this._jsPlumb.overlays[i].cleanup) this._jsPlumb.overlays[i].cleanup();
 				}
 
 				this._jsPlumb.overlays.splice(0, this._jsPlumb.overlays.length);
-				this.repaint();
+				if (!doNotRepaint)
+					this.repaint();
 			},
 			removeOverlay : function(overlayId) {
 				var idx = _getOverlayIndex(this, overlayId);
@@ -2116,6 +2117,7 @@
 					// if target not enabled, return.
 					if (!_targetsEnabled[tid]) return;
 
+					tep.isTarget = true;
 					// check for max connections??						
 					newEndpoint = existingUniqueEndpoint != null ? existingUniqueEndpoint : _currentInstance.addEndpoint(_p.target, tep);
 					if (_targetEndpointsUnique[tid]) _targetEndpoints[tid] = newEndpoint;
@@ -4480,7 +4482,7 @@
             return this.element;
         };		
                  
-        // container not supported in 1.5.1; you cannot change the container once it is set.
+        // container not supported in 1.5.2; you cannot change the container once it is set.
         // it might come back int a future release.
         this.setElement = function(el/*, container*/) {
             var parentId = this._jsPlumb.instance.getId(el),
@@ -5355,12 +5357,12 @@
                     
 // PARAMETERS						
         // merge all the parameters objects into the connection.  parameters set
-        // on the connection take precedence; then target endpoint params, then
-        // finally source endpoint params.
+        // on the connection take precedence; then source endpoint params, then
+        // finally target endpoint params.
         // TODO jsPlumb.extend could be made to take more than two args, and it would
         // apply the second through nth args in order.
-        var _p = jsPlumb.extend({}, this.endpoints[0].getParameters());
-        jsPlumb.extend(_p, this.endpoints[1].getParameters());
+        var _p = jsPlumb.extend({}, this.endpoints[1].getParameters());
+        jsPlumb.extend(_p, this.endpoints[0].getParameters());
         jsPlumb.extend(_p, this.getParameters());
         this.setParameters(_p);
 // END PARAMETERS
@@ -5370,7 +5372,7 @@
         // the very last thing we do is check to see if a 'type' was supplied in the params
         var _type = params.type || this.endpoints[0].connectionType || this.endpoints[1].connectionType;
         if (_type)
-            this.addType(_type, params.data, _jsPlumb.isSuspendDrawing());        
+            this.addType(_type, params.data, true);        
         
 // END PAINTING    
     };
@@ -5634,7 +5636,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -6700,7 +6702,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -8179,7 +8181,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -8541,7 +8543,7 @@
 /*
  * jsPlumb
  *
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  *
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.
@@ -8875,7 +8877,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -9426,7 +9428,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -10041,7 +10043,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
@@ -10251,7 +10253,13 @@
 		VmlComponent.apply(this, arguments);
 		var clazz = this._jsPlumb.instance.connectorClass + (params.cssClass ? (" " + params.cssClass) : "");
 		this.paint = function(style) {		
-			if (style !== null) {				
+			if (style !== null) {			
+
+				// we need to be at least 1 pixel in each direction, because otherwise coordsize gets set to
+				// 0 and overlays cannot paint.
+				this.w = Math.max(this.w, 1);
+				this.h = Math.max(this.h, 1);
+
 				var segments = this.getSegments(), p = { "path":"" },
                     d = [this.x, this.y, this.w, this.h];
 				
@@ -10479,7 +10487,8 @@
 			if (params.fillStyle) {
 				p.filled = "true";
 				p.fillcolor = params.fillStyle;
-			}
+			}			
+
 			var xmin = Math.min(d.hxy.x, d.tail[0].x, d.tail[1].x, d.cxy.x),
 				ymin = Math.min(d.hxy.y, d.tail[0].y, d.tail[1].y, d.cxy.y),
 				xmax = Math.max(d.hxy.x, d.tail[0].x, d.tail[1].x, d.cxy.x),
@@ -10487,13 +10496,13 @@
 				w = Math.abs(xmax - xmin),
 				h = Math.abs(ymax - ymin),
 				dim = [xmin, ymin, w, h];
-			
+
 			// for VML, we create overlays using shapes that have the same dimensions and
 			// coordsize as their connector - overlays calculate themselves relative to the
 			// connector (it's how it's been done since the original canvas implementation, because
 			// for canvas that makes sense).
 			p.path = getPath(d);
-			p.coordsize = (connector.w * scale) + "," + (connector.h * scale);
+			p.coordsize = (connector.w * scale) + "," + (connector.h * scale);			
 			
 			dim[0] = connector.x;
 			dim[1] = connector.y;
@@ -10546,7 +10555,7 @@
 /*
  * jsPlumb
  * 
- * Title:jsPlumb 1.5.1
+ * Title:jsPlumb 1.5.2
  * 
  * Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
  * elements, or VML.  
