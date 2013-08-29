@@ -18,6 +18,8 @@
     <div action="execute" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
     <div action="save" class="save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
     <div action="reset" class="reset"><img src="{{ url_for('ivr.static', filename='images/reset.png') }}" title="reset"/></div>
+    {% block ivr_toolbar %}
+    {% endblock %}
 </div>
 
 {% block ivr_content %}

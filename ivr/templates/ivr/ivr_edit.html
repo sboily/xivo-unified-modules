@@ -1,5 +1,9 @@
 {% extends "ivr_add.html" %}
 
+{% block ivr_toolbar %}
+<div id="ivr_name"><p>Name : {{name}}</p></div>
+{% endblock %}
+
 {% block ivr_content %}
 <div id="ivr" name="{{name}}" action="edit">
 </div>

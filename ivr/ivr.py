@@ -17,6 +17,7 @@
 
 from app import db
 from models import IvrDB
+from flask import g
 import os
 import json
 
@@ -36,6 +37,7 @@ class Ivr(object):
     def save(self, result):
         name = result['name']
         my_ivr = IvrDB.query.filter(IvrDB.name == name) \
+                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
 
         if not my_ivr:
@@ -43,16 +45,19 @@ class Ivr(object):
 
         my_ivr.nodes = json.dumps(result['blocks'])
         my_ivr.connections = json.dumps(result['connections'])
+        my_ivr.organisation_id = g.user_organisation.id
 
         db.session.add(my_ivr)
         db.session.commit()
 
     def list(self):
-        return IvrDB.query.order_by(IvrDB.name) 
+        return IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+                          .order_by(IvrDB.name) 
 
     def delete(self, id):
         my_ivr = IvrDB.query \
                       .filter(IvrDB.id == id) \
+                      .filter(IvrDB.organisation_id == g.user_organisation.id) \
                       .first()
         if my_ivr:
             db.session.delete(my_ivr)
@@ -60,6 +65,7 @@ class Ivr(object):
 
     def edit(self, id):
         my_ivr = IvrDB.query.filter(IvrDB.id == id) \
+                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
         return my_ivr
 

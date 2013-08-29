@@ -27,6 +27,7 @@ class IvrDB(db.Model):
     description = db.Column(db.Text())
     nodes = db.Column(db.Text())
     connections = db.Column(db.Text())
+    organisation_id = db.Column(db.Integer)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, name):
