@@ -42,9 +42,10 @@ def ivr_save():
 @login_required
 def ivr_edit(id):
     my_ivr = ivr.edit(id)
+    if not my_ivr:
+        flash('Sorry the is no IVR !')
+        return redirect(url_for("ivr.ivr_list"))
     return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), connections=json.loads(my_ivr.connections))
-    #flash('Not implemented !')
-    #return redirect(url_for("ivr.ivr_list"))
 
 @bp_ivr.route('/ivr/delete/<id>')
 @login_required
