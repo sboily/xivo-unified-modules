@@ -2,49 +2,42 @@ $(function() {
 
     var id=1;
 
-    $(".icon").draggable({
-        helper:'clone'
-    });
+    add_node = function(icon, name, styles) {
+        my_node = icon.clone()
+                      .attr('id', name)
+                      .removeClass("icon ui-draggable ui-draggable-dragging")
+                      .addClass("dropped_icon node")
+                      .css(styles);
 
-    $("#ivr").droppable({
-        accept: ".icon",
-        drop: function( event, ui ) {
+        my_node.append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
+        $("#ivr").append(my_node);
 
-             var newStep = $(ui.helper).clone()
-                                        .removeClass("icon ui-draggable ui-draggable-dragging")
-                                        .attr('id', 'window' + id)
-                                        .addClass("dropped_icon")
-                                        .addClass('window')
-                                        .css('position','');
-             $(newStep).append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
-             $(this).append($(newStep));
+        if(my_node.hasClass("source"))
+            add_endpoint(name, "source");
 
-            if($(newStep).hasClass("source"))
-                add_endpoint(id, "source");
+        if(my_node.hasClass("target"))
+            add_endpoint(name, "target");
 
-            if($(newStep).hasClass("target"))
-                add_endpoint(id, "target");
-
-            if($(newStep).hasClass("unique")) {
-                $(".icon[action='" + $(newStep).attr("action") + "']")
-                                                .draggable({ disabled: true });
-            }
-
-            jsPlumb.draggable(jsPlumb.getSelector('#window' + id), {
-                containment:"parent"
-            });
-
-            catch_action('window' + id);
-            id++;    
+        if(my_node.hasClass("unique")) {
+            $(".icon[action='" + my_node.attr("action") + "']")
+                                           .draggable({ disabled: true });
         }
-    });
 
-    catch_action = function(step) {
-        element = $('#' + step)
+        jsPlumb.draggable(jsPlumb.getSelector('#' + name), {
+             containment:"parent"
+        });
+
+        catch_action(name);
+
+        id++;    
+    }
+
+    catch_action = function(node) {
+        element = $('#' + node)
         action = element.attr("action");
 
-        $('#' + step).bind("contextmenu", function() {
-            contextmenu(step);
+        element.bind("contextmenu", function() {
+            contextmenu(node);
         });
 
         switch(action) {
@@ -183,8 +176,8 @@ $(function() {
     }
 
 
-    get_element_config = function(element) {
-        my_elem = $("#" + element);
+    get_node_config = function(node) {
+        my_elem = $("#" + node);
         elem = my_elem.attr("config");
         var config = Object();
 
@@ -215,7 +208,7 @@ $(function() {
     }
 
     ivr_save = function() {
-        var elems = $('#ivr').find('div[class*="window"]');
+        var elems = $('#ivr').find('div[class*="node"]');
 
         if ($('#ivr').attr('name') != undefined) {
             ivr_name = $('#ivr').attr('name');
@@ -230,14 +223,14 @@ $(function() {
         }
 
         var blocks = []
-        $("#ivr .window").each(function (idx, elem) {
+        $("#ivr .node").each(function (idx, elem) {
             var $elem = $(elem);
             blocks.push({
                 id: $elem.attr('id'),
                 action: $elem.attr('action'),
                 positionX: parseInt($elem.css("left"), 10),
                 positionY: parseInt($elem.css("top"), 10),
-                config: get_element_config($elem.attr('id'))
+                config: get_node_config($elem.attr('id'))
             });
         });
 
@@ -261,7 +254,14 @@ $(function() {
                            });
 
         $('#dialog').text('Ivr ' + ivr_name + ' has been saved !');
-        $('#dialog').dialog({title: 'Saving ...'});
+        $('#dialog').dialog({ title: 'Saving ...',
+                              hide: {effect: "fadeOut", duration: 500},
+                              open: function(event, ui) {
+                                        setTimeout(function(){
+                                            $('#dialog').dialog('close');                
+                                        }, 300);
+                                    }
+        });
 
         $.ajax({
             type: 'POST',
@@ -280,44 +280,22 @@ $(function() {
         connections = $.parseJSON($("#connections").attr("data"));
 
         $.each(nodes, function(index, value) {
-            id = value.id.toString().substr(6);
+            id = value.id.toString().substr(4);
+            styles = { position: "absolute",
+                       top: value.positionY +"px",
+                       left: value.positionX + "px"
+                     };
+            icon = $(".icon[action='"+ value.action +"']");
 
-            $("#ivr").append(
-                $(".icon[action='"+ value.action +"']")
-                   .clone()
-                   .removeClass("icon")
-                   .removeClass("ui-draggable")
-                   .removeClass("ui-draggable-dragging")
-                   .addClass("dropped_icon window")
-                   .attr("id", value.id)
-                   .attr("style", "position: absolute; top: "+ value.positionY +"px; left: " + value.positionX + "px")
-                   );
-            $("#" + value.id).append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
-
-            if($("#" + value.id).hasClass("source"))
-                add_endpoint(id, "source");
-
-            if($("#" + value.id).hasClass("target"))
-                add_endpoint(id, "target");
-
-            if($("#" + value.id).hasClass("unique")) {
-                $(".icon[action='" + $("#" + value.id).attr("action") + "']")
-                                                      .draggable({ disabled: true });
-            }
+            add_node(icon, value.id, styles);
 
             console.log(value.config);
 
-            jsPlumb.draggable(jsPlumb.getSelector('#' + value.id), {
-                containment:"parent"
-            });
-
-
-            catch_action(value.id);
         });
 
         $.each(connections, function(index, value) {
             digit = value.digitId;
-            my_label = value.sourceId.substring(6) + "-" + value.targetId.substring(6);
+            my_label = value.sourceId.substring(4) + "-" + value.targetId.substring(4);
             c = jsPlumb.connect({ 'source' : value.sourceId,
                                   'target': value.targetId,
                                 });
@@ -333,7 +311,6 @@ $(function() {
                              ]);
             }
         });
-
 
         id++;
     }
@@ -361,7 +338,7 @@ $(function() {
 
     contextmenu = function(elementId) {
         $(document).contextmenu({
-            delegate: ".window",
+            delegate: ".node",
             preventSelect: true,
             taphold: true,
             menu: [
@@ -396,45 +373,60 @@ $(function() {
 
 
     init = function(connection) {
-        connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "-" + connection.targetId.substring(6));
+        connection.getOverlay("label").setLabel(connection.sourceId.substring(4) + "-" + connection.targetId.substring(4));
         connection.bind("editCompleted", function(o) {
     	    if (typeof console != "undefined")
     	        console.log("connection edited. path is now ", o.path);
     	});
-    };			
+    };
 
-    add_endpoint = function(id, type) {
-        elem = $("#window" + id).attr("action");
-        if (elem == 'wait4digits')
-            maxconn = -1;
-        else
-            maxconn = 1;
+    endpoint_max_conn = function(elem) {
+        switch(elem) {
+            case 'wait4digits':
+                maxconn = -1;
+                break;
+            default:
+                maxconn = 1;
+        }
+
+        return maxconn;
+    }
+
+    add_endpoint = function(name, type) {
+        elem = $("#" + name).attr("action");
 
         switch(type) {
             case 'source':
-                jsPlumb.makeSource('ep_' + id, {
-		    parent:"window" + id,
-		    anchor:"Continuous",
+                endpointOptions = {
+		    parent:name,
+                    isSource:true,
+	            anchor:"Continuous",
                     connector:[ "Flowchart", {  } ],
-		    connectorStyle:{ strokeStyle:"#5c96bc", lineWidth:2, outlineColor:"transparent", outlineWidth:4 },
-		    maxConnections:maxconn,
+                    connectorStyle:{ strokeStyle:"#5c96bc", lineWidth:2, outlineColor:"transparent", outlineWidth:4 },
+	            maxConnections: endpoint_max_conn(elem),
 		    onMaxConnections:function(info, e) {
 		        alert("Maximum connections (" + info.maxConnections + ") reached");
 		    }
-	        });
+                }
+
+                jsPlumb.makeSource('ep_' + id, endpointOptions);
                 break;
             case 'target':
-                jsPlumb.makeTarget('window' + id, {
+                endpointOptions = {
+                    isTarget:true,
                     connector:[ "Flowchart", {  } ],
 		    anchor:"Continuous",
                     maxConnections:-1
-		});
-            break;
+                }
+
+                jsPlumb.makeTarget(name, endpointOptions);
+                break;
         }
     };
 
     jsPlumb.importDefaults({
         Endpoint : ["Dot", {radius:2}],
+        ConnectionsDetachable:false,
         HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
         ConnectionOverlays : [[ "Arrow", { location:1,
                                            id:"arrow",
@@ -447,18 +439,6 @@ $(function() {
                              ]
     });
 
-    $(".save").click(function() {
-        ivr_save();
-    });
-
-    $(".reset").click(function() {
-        ivr_reset();
-    });
-
-    if ($("#ivr").attr("action") == "edit") {
-        name = $("#ivr").attr("name");
-        ivr_load(name);
-    }
 
     jsPlumb.bind("endpointClick", function(endpoint, originalEvent) {
         console.log("endpointclick" + endpoint);
@@ -491,5 +471,29 @@ $(function() {
     jsPlumb.bind("connectionDragStop", function(connection) {
         console.log("connection " + connection.id + " was dragged");
     });
+
+    $(".icon").draggable({
+        helper:'clone'
+    });
+
+    $(".save").click(function() {
+        ivr_save();
+    });
+
+    $(".reset").click(function() {
+        ivr_reset();
+    });
+
+    $("#ivr").droppable({
+        accept: ".icon",
+        drop: function(event, ui) { 
+                  add_node(ui.helper, 'node' + id, {position: '' });
+              }
+    });
+
+    if ($("#ivr").attr("action") == "edit") {
+        name = $("#ivr").attr("name");
+        ivr_load(name);
+    }
 
 });

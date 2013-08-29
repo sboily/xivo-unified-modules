@@ -1,4 +1,4 @@
-.window { 
+.node { 
     border:1px solid #346789;
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;
@@ -20,7 +20,7 @@
     font-size:0.9em;
 }
 
-.window:hover {
+.node:hover {
     box-shadow: 2px 2px 19px #444;
     -o-box-shadow: 2px 2px 19px #444;
     -webkit-box-shadow: 2px 2px 19px #444;
@@ -80,10 +80,15 @@
     background: #fff;
 }
 
+#toolbar div#ivr_name{
+    border: 0px;
+    margin-left: 5%;
+}
+
 .endpoint {
     width: 70px;
     height: 8px;
-    background-color: rgb(153, 153, 153);
+    background-color: rgb(221, 72, 20);
     cursor: pointer;
     margin: -4px 0px 0px -4px;
     -moz-border-radius:0.5em;
@@ -92,7 +97,7 @@
 
 #ivr {
     height: 600px;
-    background: url('/app.plugins.ivr.setup/images/grid.png') #D2E0E6;
+    background: url('/app.plugins.ivr.setup/images/grid.png') rgb(153, 153, 153);
     border: 1px solid;
     margin-left: 16%;
 }
