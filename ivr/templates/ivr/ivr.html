@@ -22,7 +22,7 @@
       <td>{{ i.created_time }}</td>
       <td class="td-actions">
         <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        <a data-url="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-small confirm" id="{{i.id}}" data-toggle="modal" data-target="#confirm-dialog"><i class="btn-icon-only icon-remove"></i></a>
         </td>
       </tr>
     {% endfor %}
@@ -32,5 +32,5 @@
 
 </div>
 
-
+{% include "confirm.html" %}
 {% endblock %}

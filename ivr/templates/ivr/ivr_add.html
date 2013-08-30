@@ -11,8 +11,9 @@
 
 {% block content %}
 <div id="toolbar">
-    <div action="answer" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
-    <div action="hangup" class="icon target unique"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
+    <div action="start" class="icon source unique"><img src="{{ url_for('ivr.static', filename='images/start.png') }}" title="start"/></div>
+    <div action="answer" class="icon source target unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
+    <div action="hangup" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
     <div action="prompts" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
     <div action="wait4digits" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
     <div action="execute" class="icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
@@ -80,6 +81,11 @@
         <br>
         <div>Arguments</div>
         <div><input type="text" name="arguments" /></div>
+    </div>
+
+    <div id="start">
+        <div>Extension (optionnal)</div>
+        <div><input type="text" name="extension" /></div>
     </div>
 
     <div id="save">

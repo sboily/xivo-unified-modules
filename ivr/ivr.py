@@ -43,7 +43,7 @@ class Ivr(object):
         if not my_ivr:
             my_ivr = IvrDB(name)
 
-        my_ivr.nodes = json.dumps(result['blocks'])
+        my_ivr.nodes = json.dumps(result['nodes'])
         my_ivr.connections = json.dumps(result['connections'])
         my_ivr.organisation_id = g.user_organisation.id
 
