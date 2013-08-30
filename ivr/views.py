@@ -38,6 +38,12 @@ def ivr_save():
     ivr.save(request.json)
     return jsonify({'Response' : True})
 
+@bp_ivr.route('/ivr/show/<id>')
+@login_required
+def ivr_show(id):
+    my_ivr = ivr.show(id)
+    return my_ivr
+
 @bp_ivr.route('/ivr/edit/<id>')
 @login_required
 def ivr_edit(id):

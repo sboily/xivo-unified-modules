@@ -21,7 +21,11 @@ from flask import g
 import os
 import json
 
-class Ivr(object): 
+class Ivr(object):
+
+    nodes = None
+    connections = None
+    dialplan = None
 
     def __init__(self):
         pass
@@ -69,73 +73,135 @@ class Ivr(object):
                             .first()
         return my_ivr
 
-    def show(self):
-        return True
-        is_finish = False
-        first_last = self.find_first_last_priority(json)
-        action = first_last['action']
-        target = first_last['nextstep']
-        last = first_last['last']
-        config = first_last['config']
-        print '[my_ivr]'
-        print 'exten = s,1,%s' % self.application(action, config)
-        while(is_finish == False):
-            next_step = self.find_priority(json, target)
-            if next_step:
-                if target == last:
-                    is_finish = True
-                (action, target, config) = self.get_priority(next_step)
-                print 'same = n,%s' % self.application(action, config)
-            
-    def application(self, app, config):
-        if app == 'answer':
-            return 'Answer()'
-        if app == 'hangup':
-            return 'Hangup()'
-        if app == 'prompts':
-            app_config = 'Playback(%s)' % config['prompt_path']
-            return app_config
-        if app == 'execute':
-            app_config = '%s(%s)' %(config['application'], config['arguments'])
-            return app_config
-        return 'NoOp(\'%s\')' % app
+    def debug(self, my_ivr):
+        import pprint
+        pprint.pprint(json.loads(my_ivr.nodes))
+        pprint.pprint(json.loads(my_ivr.connections))
 
-    def set_application_config(self, app, config):
-        print app
-        print config
+    def show(self, id):
+        global nodes
+        global connections
+        global dialplan
 
-    def find_first_last_priority(self, json):
-        first_and_last = {}
-        for j in json:
-            if json[j].has_key('source_sourceid') and not json[j].has_key('target_sourceid'):
-                if json[j]['source_sourceid'] == json[j]['id']:
-                    first_and_last.update({'action' : json[j]['action']})
-                    first_and_last.update({'nextstep' : json[j]['source_targetid']})
-            if json[j].has_key('target_sourceid') and not json[j].has_key('source_sourceid') :
-                if json[j]['target_targetid'] == json[j]['id']:
-                    first_and_last.update({'last' : json[j]['target_targetid']})
-            if json.has_key('config'):
-                first_and_last.update({'config' : json[j]['config']})
-            else:
-                first_and_last.update({'config' : ''})
+        my_ivr = IvrDB.query.filter(IvrDB.id == id) \
+                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .first()
 
-        return first_and_last
+        nodes = json.loads(my_ivr.nodes)
+        connections = json.loads(my_ivr.connections)
+        dialplan = []
 
-    def find_priority(self, json, target):
-        for j in json:
-            if json[j]['id'] == target:
-                return(json[j])
+        dialplan.append("[%s]" % my_ivr.name)
+
+        my_start = self.start()
+        start = "exten = %s,1,NoOp(IVR %s launched with extension %s)" \
+                     %(my_start['extension'], my_ivr.name, my_start['extension'])
+        dialplan.append({my_start['extension'] : [start]})
+
+        target = my_start['target']
+        self.generate_same(target, my_start['extension'])
+
+        d = self.generate_dialplan()
+        return '<br>'.join(d)
+
+    def generate_dialplan(self):
+        final_dialplan = []
+        final_dialplan.append(dialplan[0])
+        for d in sorted(dialplan[1].keys()):
+            for e in dialplan[1][d]:
+                final_dialplan.append(e)
+            final_dialplan.append('<br>')
+        return final_dialplan
+
+
+    def generate_same(self, target, exten):
+        while True:
+            my_app = self.get_application(target)
+
+            if my_app:
+                for d in my_app:
+                    dialplan[1][exten].append("same = n,%s" % d)
+
+            target = self.get_next_priority(target)
+            if not target:
+                break
+
+        return dialplan
+
+
+    def get_application(self, target):
+        for node in nodes:
+            if node['id'] == target:
+                if node.has_key('config'):
+                    config = node['config']
+                else:
+                    config = None
+                return self.application(node['id'], node['action'], config)
+
+    def get_next_priority(self, id):
+        target = {}
+        return self.find_connection(id)
+
+    def start(self):
+        my_start = {}
+        for node in nodes:
+            if node['action'] == 'start':
+                my_start.update({'id': node['id']})
+                my_start.update({'target': self.find_connection(node['id'])})
+                if node.has_key('config'):
+                    my_start.update({'extension': node['config']['extension']})
+                else:
+                    my_start.update({'extension': 's'})
+                return my_start
         return False
 
-    def get_priority(self, json):
-        if json.has_key('source_targetid'):
-            target = json['source_targetid']
-        else:
-            target = json['target_sourceid']
+    def find_connection(self, id):
+        for conn in connections:
+            if conn['sourceId'] == id and not conn['digitId']:
+                return conn['targetId']
+        return False
 
-        if json.has_key('config'):
-            config = json['config']
-        else:
-            config = ''
+    def application(self, id, app, config):
+        app_config = []
+        if app == 'answer':
+            return ['Answer()']
+        if app == 'hangup':
+            return ['Hangup()']
+        if app == 'prompts':
+            app_config = ['Playback(%s)' % self.application_config(config, 'prompt_path')]
+            return app_config
+        if app == 'execute':
+            app_config = ['%s(%s)' %(self.application_config(config, 'application'), \
+                                    self.application_config(config, 'arguments'))]
+            return app_config
+        if app == 'wait4digits':
+            conf = self.application_config(config, 'wait_prompt_path')
+            if conf != 'error':
+                app_config.append('Background(%s)' % conf)
+                app_config.append('WaitExten(3)')
+            else:
+                app_config = ['WaitExten()']
 
-        return(json['action'], target, config)
+            branch = self.application_find_digits(id)
+            for exten in branch:
+                dialplan[1].update({exten['extension'] : ["exten = %s,1,NoOp(You have pressed %s)" %(exten['extension'], exten['extension'])]})
+                self.generate_same(exten['target'], exten['extension'])
+
+            return app_config
+        return ['NoOp(\'%s\')' % app]
+
+    def application_find_digits(self, id):
+        digits = []
+        for conn in connections:
+            if conn['sourceId'] == id and conn['digitId']:
+                digits.append({'extension' : conn['digitId'], 'target' : conn['targetId']})
+        return digits
+
+    def application_config(self, config, path):
+        if not config:
+            return 'error'
+
+        if config.has_key(path):
+             return config[path]
+
+        return 'error'
