@@ -35,6 +35,7 @@ $(function() {
     catch_action = function(node) {
         element = $('#' + node)
         action = element.attr("action");
+        config = {};
 
         element.bind("contextmenu", function() {
             contextmenu(node);
@@ -74,7 +75,8 @@ $(function() {
                          }
             break;
         }
-        node_config(element, config);
+        if (config)
+            node_config(element, config);
     }
 
     node_config = function(element, config) {
