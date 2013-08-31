@@ -1,0 +1,22 @@
+<div id="toolbar" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Basic</a></li>
+        <li><a href="#tab2" data-toggle="tab">Advanced</a></li>
+    </ul>
+    <div class="tab-content">
+       <div class="tab-pane active" id="tab1">
+           <div action="start" class="nodes icon source unique"><img src="{{ url_for('ivr.static', filename='images/start.png') }}" title="start"/></div>
+           <div action="answer" class="nodes icon source target unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
+           <div action="hangup" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
+           <div action="prompts" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
+           <div action="wait4digits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
+           <div action="save" class="nodes save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
+           <div action="reset" class="nodes reset"><img src="{{ url_for('ivr.static', filename='images/reset.png') }}" title="reset"/></div>
+       </div>
+       <div class="tab-pane" id="tab2">
+           <div action="execute" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
+           <div action="debug" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/debug.png') }}" title="debug"/></div>
+           <div action="func" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/func.png') }}" title="func"/></div>
+       </div>
+    </div>
+</div>
