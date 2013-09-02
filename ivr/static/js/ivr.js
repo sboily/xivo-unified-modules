@@ -1,6 +1,18 @@
 $(function() {
 
     var id=1;
+    var node_config = Object();
+
+    $.each($('.nodes_config').children('.node_config'), function( index ) {
+        node_config[this.id] = Object();
+        node_config[this.id].title = $(this).attr('title');
+        node_config[this.id].height = $(this).attr('height');
+        node_config[this.id].width = $(this).attr('width');
+        my_node_config = node_config[this.id].config = Object()
+        $.each($('#' + this.id + " :input"), function(i) {
+            my_node_config[i] = $(this).attr('name');
+        });
+    });
 
     add_node = function(icon, name, styles) {
         my_node = icon.clone()
@@ -12,13 +24,13 @@ $(function() {
         my_node.append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
         $("#ivr").append(my_node);
 
-        if(my_node.hasClass("source"))
+        if (my_node.hasClass("source"))
             add_endpoint(name, "source");
 
-        if(my_node.hasClass("target"))
+        if (my_node.hasClass("target"))
             add_endpoint(name, "target");
 
-        if(my_node.hasClass("unique")) {
+        if (my_node.hasClass("unique")) {
             $(".icon[action='" + my_node.attr("action") + "']")
                                         .draggable({ disabled: true });
         }
@@ -32,80 +44,60 @@ $(function() {
         id++;    
     }
 
+    add_popover = function(name) {
+        my_node = $('#' + name);
+        my_desc = my_node.attr("description");
+
+        if (my_desc.length == 0) {
+            my_node.popover("destroy");
+            return true;
+        }
+
+        if(my_desc != undefined)
+            my_desc = '<i class="icon-comment"></i> ' + my_desc;
+        else
+            my_desc = '<i class="icon-comment"></i> No information';
+
+        my_node.popover({ placement: 'top',
+                          trigger: 'hover',
+                          animation: true,
+                          html: true,
+                          delay: { show: 0, hide: 100 },
+                          title: name
+                        });
+
+        my_node.data('popover').options.content = my_desc;
+    }
+
     catch_action = function(node) {
         element = $('#' + node)
         action = element.attr("action");
         config = {};
+        input = [];
 
         element.bind("contextmenu", function() {
             contextmenu(node);
         });
 
-        switch(action) {
-            case 'wait4digits':
-                config = { title: 'Prompt for digits properties ...',
-                           width: 600,
-                           height: 400,
-                           name: action,
-                           input: [ 'wait_prompt_path', 'wait_expected_digits', 'min_digits', 'max_digits', 'retries', 'retry_timeout' ]
-                         }
-            break;
-            case 'prompts':
-                config = { title: 'Prompt properties ...',
-                           width: 500,
-                           height: 270,
-                           name: action,
-                           input: [ 'prompt_path', 'escape_digits' ]
-                         }
-            break;
-            case 'execute':
-                config = { title: 'Execute properties ...',
-                           width: 500,
-                           height: 270,
-                           name: action, 
-                           input: [ 'application', 'arguments' ]
-                         }
-            break;
-            case 'start':
-                config = { title: 'Execute properties ...',
-                           width: 500,
-                           height: 190,
-                           name: action, 
-                           input: [ 'extension' ]
-                         }
-            break;
+        try {
+            $.each(node_config[action]["config"], function (i) {
+                attribute = node_config[action]["config"][i];
+                input.push(attribute);
+            });
+
+            config = { title: node_config[action].title,
+                       width: node_config[action].width,
+                       height: node_config[action].height,
+                       name: action,
+                       input: input
+                     }
+
+        } catch(e) {
+            console.log("This node hasn't configuration : " + node);
         }
+
         if (config)
-            node_config(element, config);
-    }
-
-    node_config = function(element, config) {
-        element.bind("dblclick", function() {
-            
-            $.each(config.input, function(index, value) {
-                $('#' + config.name + " input[name='" + value + "']").val(element.attr(value));
-            });
-           
-            $("#" + config.name).dialog({
-                bgiframe: true,
-                modal: true,
-                width: config.width,
-                height: config.height,
-                title: config.name + ' properties ...',
-                buttons : { 'Cancel' : function() {
-                                $(this).dialog('close');
-                                       },
-                            'Save' : function() {
-                                element.attr("config", config.name);
-                                $.each(config.input, function(index, value) {
-                                    element.attr(value, $("#" + config.name).find("input[name='" + value + "']").val());
-                                });
-
-                                $(this).dialog('close');
-                                     }
-                          }
-            });
-        });
+            edit_node_config(element, config);
     }
 
     whatdigit = function(conn) {
@@ -156,6 +148,37 @@ $(function() {
         jsPlumb.detach(conn);
     }
 
+    edit_node_config = function(element, config) {
+        element.bind("dblclick", function() {
+
+            $.each(config.input, function(index, value) {
+                $('#' + config.name + " :input[name='" + value + "']").val(element.attr(value));
+            });
+
+            $("#" + config.name).dialog({
+                bgiframe: true,
+                modal: true,
+                width: config.width,
+                height: config.height,
+                title: config.name + ' properties ...',
+                buttons : { 'Cancel' : function() {
+                                $(this).dialog('close');
+                                       },
+                            'Save' : function() {
+                                element.attr("config", config.name);
+                                $.each(config.input, function(index, value) {
+                                    element.attr(value, $("#" + config.name).find(":input[name='" + value + "']").val());
+                                });
+
+                                ivr_save();
+                                add_popover(element[0].id);
+
+                                $(this).dialog('close');
+                                     }
+                          }
+            });
+        });
+    }
 
     set_node_config = function(value) {
         node = value.id;
@@ -170,34 +193,16 @@ $(function() {
         elem = my_elem.attr("config");
         var config = Object();
 
-        switch(elem) {
-            case 'wait4digits':
-                config.wait_prompt_path = my_elem.attr('wait_prompt_path');
-                config.wait_expected_digits = my_elem.attr('wait_expected_digits');
-                config.min_digits = my_elem.attr('min_digits');
-                config.max_digits = my_elem.attr('max_digits');
-                config.retries = my_elem.attr('retries');
-                config.retry_timeout = my_elem.attr('retry_timeout');
-                return config;
-            break;
-
-            case 'prompts':
-                config.prompt_path = my_elem.attr('prompt_path');
-                config.escape_digits = my_elem.attr('escape_digits');
-                return config;
-            break;
-
-            case 'execute':
-                config.application = my_elem.attr('application');
-                config.arguments = my_elem.attr('arguments');
-                return config;
-            break;
-            case 'start':
-                config.extension = my_elem.attr('extension');
-                return config;
-            break;
-
+        try {
+            $.each(node_config[elem]["config"], function (i) {
+                attribute = node_config[elem]["config"][i];
+                config[attribute] = my_elem.attr(attribute);
+            });
+        } catch(e) {
+            console.log("This node hasn't configuration : " + node);
         }
+
+        return config;
     }
 
     ivr_save = function() {
@@ -285,6 +290,10 @@ $(function() {
             if (value.config) {
                 $('#' + value.id).attr('config', value.action);
                 set_node_config(value);
+            }
+
+            if ($('#' + value.id).attr('description')) {
+                add_popover(value.id);
             }
 
         });

@@ -7,8 +7,6 @@
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/jquery-ui.css') }}">
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
-</script>
-
 {% endblock %}
 
 {% block content %}
@@ -21,33 +19,33 @@
 </div>
 {% endblock %}
 
-<div class="hidden dialog">
-    <div id="dialog"></div>
+<div class="hidden dialog nodes_config">
+
+    {% for act in actions %}
+        <div id="{{ act }}" class="node_config" title="{{ actions[act].title }}" width="{{ actions[act].width }}" height="{{ actions[act].height }}">
+        {% for input in actions[act].input %}
+            <div>{{ actions[act].input[input] }}</div>
+            <div><input type="text" name="{{ input }}" class="input-xlarge" /></div>
+        {% endfor %}
+        {% for textarea in actions[act].textarea %}
+            <div>{{ actions[act].textarea[textarea] }}</div>
+            <div><textarea name="{{ textarea }}" class="input-xlarge"></textarea></div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div id="save">
+        <form method="post" action="#">
+            <input type="text" name="connections" />
+            <input type="text" name="entities" />
+            <input type="text" name="vars" />
+        </form>
+    </div>
 
     <div id="reset">
         There may be unsaved data.
         All your unsaved data will be lost.
         Are you sure about this? 
-    </div>
-
-    <div id="wait4digits">
-        <div>Prompt File Path (optional)</div>
-        <div><input type="text" name="wait_prompt_path" /></div>
-        <br>
-        <div>Min no of digits expected</div>
-        <div><input type="text" name="min_digits" /></div>
-        <br>
-        <div>Max no of digits expected</div>
-        <div><input type="text" name="max_digits" /></div>
-        <br>
-        <div>Expected Digits</div>
-        <div><input type="text" name="wait_expected_digits" /></div>
-        <br>
-        <div>Retries</div>
-        <div><input type="text" name="retries" /></div>
-        <br>
-        <div>Retry timeout (in seconds)</div>
-        <div><input type="text" name="retry_timeout" /></div>
     </div>
 
     <div id="on_what_digit">
@@ -60,34 +58,8 @@
         <div><input type="text" name="name" /></div>
     </div>
 
-    <div id="prompts">
-        <div>Prompt File Path</div>
-        <div><input type="text" name="prompt_path" /></div>
-        <br>
-        <div>Escape Digits</div>
-        <div><input type="text" name="escape_digits" /></div>
-    </div>
+    <div id="dialog"></div>
 
-    <div id="execute">
-        <div>Application</div>
-        <div><input type="text" name="application" /></div>
-        <br>
-        <div>Arguments</div>
-        <div><input type="text" name="arguments" /></div>
-    </div>
-
-    <div id="start">
-        <div>Extension (optionnal)</div>
-        <div><input type="text" name="extension" /></div>
-    </div>
-
-    <div id="save">
-        <form method="post" action="#">
-            <input type="text" name="connections" />
-            <input type="text" name="entities" />
-            <input type="text" name="vars" />
-        </form>
-    </div>
 </div>
 
 {% endblock %}

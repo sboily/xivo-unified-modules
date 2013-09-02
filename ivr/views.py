@@ -21,6 +21,8 @@ import json
 
 from setup import bp_ivr, ivr
 
+from actions import ivrActions
+
 @bp_ivr.route('/ivr')
 @login_required
 def ivr_list():
@@ -30,7 +32,8 @@ def ivr_list():
 @bp_ivr.route('/ivr/add')
 @login_required
 def ivr_add():
-    return render_template('ivr_add.html')
+    actions = ivrActions()
+    return render_template('ivr_add.html', actions=json.loads(actions.getJsonactions()))
 
 @bp_ivr.route('/ivr/save', methods=['POST'])
 @login_required
@@ -48,10 +51,11 @@ def ivr_show(id):
 @login_required
 def ivr_edit(id):
     my_ivr = ivr.edit(id)
+    actions = ivrActions()
     if not my_ivr:
         flash('Sorry the is no IVR !')
         return redirect(url_for("ivr.ivr_list"))
-    return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), connections=json.loads(my_ivr.connections))
+    return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), connections=json.loads(my_ivr.connections), actions=json.loads(actions.getJsonactions()))
 
 @bp_ivr.route('/ivr/delete/<id>')
 @login_required
