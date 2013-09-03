@@ -66,6 +66,15 @@ class ivrActions(object):
                        'textarea' : { 'description' : 'Description' }
                      }
 
+        self.voicemail = { 'title' : 'Voicemail properties ...',
+                       'height' : 300,
+                       'width' : 320,
+                       'tab' : 1,
+                       'icon' : 'voicemail.png',
+                       'input' : { 'mailbox' : 'Mailbox number' },
+                       'textarea' : { 'description' : 'Description' }
+                     }
+
     def getJsonactions(self):
         for act in self.__dict__.items():
             if act[0] != 'actions':

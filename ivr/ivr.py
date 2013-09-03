@@ -155,7 +155,7 @@ class Ivr(object):
                 my_start.update({'target': self.find_connection(node['id'])})
                 if node.has_key('config'):
                     extension = 's'
-                    if node['config'].has_key('extension'):
+                    if node['config'].has_key('extension') and node['config']['extension'] != '':
                         extension = node['config']['extension']
                     my_start.update({'extension': extension})
                 return my_start
@@ -194,6 +194,8 @@ class Ivr(object):
                 self.generate_same(exten['target'], exten['extension'])
 
             return app_config
+        if app == 'voicemail':
+            return ['Voicemail(%s)' % self.application_config(config, 'mailbox'), 'Hangup()']
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):
