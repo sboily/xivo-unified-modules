@@ -29,6 +29,14 @@
     filter:alpha(opacity=60);
 }
 
+.node-icon-action-remove {
+    float: right;
+}
+
+.node-icon-action-wrench {
+    float: left;
+}
+
 .hidden {
     display: none;
 }

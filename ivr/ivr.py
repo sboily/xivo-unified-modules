@@ -45,7 +45,10 @@ class Ivr(object):
                             .first()
 
         if not my_ivr:
+            info = "add"
             my_ivr = IvrDB(name)
+        else:
+            info = "edit"
 
         my_ivr.nodes = json.dumps(result['nodes'])
         my_ivr.connections = json.dumps(result['connections'])
@@ -53,6 +56,8 @@ class Ivr(object):
 
         db.session.add(my_ivr)
         db.session.commit()
+
+        return { 'action' : info, 'id' : my_ivr.id }
 
     def list(self):
         return IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
@@ -149,9 +154,10 @@ class Ivr(object):
                 my_start.update({'id': node['id']})
                 my_start.update({'target': self.find_connection(node['id'])})
                 if node.has_key('config'):
-                    my_start.update({'extension': node['config']['extension']})
-                else:
-                    my_start.update({'extension': 's'})
+                    extension = 's'
+                    if node['config'].has_key('extension'):
+                        extension = node['config']['extension']
+                    my_start.update({'extension': extension})
                 return my_start
         return False
 

@@ -38,8 +38,8 @@ def ivr_add():
 @bp_ivr.route('/ivr/save', methods=['POST'])
 @login_required
 def ivr_save():
-    ivr.save(request.json)
-    return jsonify({'Response' : True})
+    my_ivr = ivr.save(request.json)
+    return jsonify(my_ivr)
 
 @bp_ivr.route('/ivr/show/<id>')
 @login_required
@@ -55,7 +55,9 @@ def ivr_edit(id):
     if not my_ivr:
         flash('Sorry the is no IVR !')
         return redirect(url_for("ivr.ivr_list"))
-    return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), connections=json.loads(my_ivr.connections), actions=json.loads(actions.getJsonactions()))
+    return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), \
+                                            connections=json.loads(my_ivr.connections), \
+                                            actions=json.loads(actions.getJsonactions()), id=id)
 
 @bp_ivr.route('/ivr/delete/<id>')
 @login_required

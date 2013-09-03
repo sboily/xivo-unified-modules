@@ -1,3 +1,14 @@
+<div>
+   <button class="save btn-small btn-success"><i class="btn-icon-only icon-file icon-white"></i> Save</button>
+   <button class="reset btn-small btn-danger"><i class="btn-icon-only icon-ban-circle icon-white"></i> Reset</button>
+   {% if id is defined %}
+   <a href="{{url_for('ivr.ivr_show', id=id)}}" class="btn btn-small confirm dialplan-show" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="btn-icon-only icon-eye-open"></i> Show</a>
+   {% endif %}
+
+</div>
+
+<br>
+
 <div id="toolbar" class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Basic</a></li>
@@ -10,8 +21,6 @@
            <div action="hangup" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
            <div action="prompts" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
            <div action="wait4digits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
-           <div action="save" class="nodes save"><img src="{{ url_for('ivr.static', filename='images/save.png') }}" title="save"/></div>
-           <div action="reset" class="nodes reset"><img src="{{ url_for('ivr.static', filename='images/reset.png') }}" title="reset"/></div>
        </div>
        <div class="tab-pane" id="tab2">
            <div action="execute" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>

@@ -21,6 +21,10 @@ $(function() {
                       .addClass("dropped_icon node")
                       .css(styles);
 
+        my_node.append("<i class='btn-icon-only icon-remove node-icon-action-remove'>");
+        if (node_config[my_node.attr("action")])
+            my_node.append("<i class='btn-icon-only icon-wrench node-icon-action-wrench'>");
+
         my_node.append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
         $("#ivr").append(my_node);
 
@@ -70,34 +74,36 @@ $(function() {
     }
 
     catch_action = function(node) {
-        element = $('#' + node)
-        action = element.attr("action");
-        config = {};
-        input = [];
+        my_element = $('#' + node);
+        my_node_close = $('#' + node + ' .node-icon-action-remove');
+        my_node_action = my_element.attr("action");
+        my_node_config = {};
+        my_node_input = [];
 
-        element.bind("contextmenu", function() {
-            contextmenu(node);
+        my_node_close.bind("click", function() {
+            if (confirm("Delete node " + node + "?"))
+                delete_node(node);
         });
 
         try {
-            $.each(node_config[action]["config"], function (i) {
-                attribute = node_config[action]["config"][i];
-                input.push(attribute);
+            $.each(node_config[my_node_action]["config"], function (i) {
+                attribute = node_config[my_node_action]["config"][i];
+                my_node_input.push(attribute);
             });
 
-            config = { title: node_config[action].title,
-                       width: node_config[action].width,
-                       height: node_config[action].height,
-                       name: action,
-                       input: input
-                     }
-
+            var my_node_config = { title: node_config[my_node_action].title,
+                                   width: node_config[my_node_action].width,
+                                   height: node_config[my_node_action].height,
+                                   name: my_node_action,
+                                   input: my_node_input
+                                 }
         } catch(e) {
             console.log("This node hasn't configuration : " + node);
+            return false;
         }
 
-        if (config)
-            edit_node_config(element, config);
+        if (my_node_config)
+            edit_node_config(my_element, my_node_config, node);
     }
 
     whatdigit = function(conn) {
@@ -148,26 +154,28 @@ $(function() {
         jsPlumb.detach(conn);
     }
 
-    edit_node_config = function(element, config) {
-        element.bind("dblclick", function() {
+    edit_node_config = function(element, my_node_config, node) {
+        my_node_edit = $('#' + node + ' .node-icon-action-wrench');
 
-            $.each(config.input, function(index, value) {
-                $('#' + config.name + " :input[name='" + value + "']").val(element.attr(value));
+        my_node_edit.bind("click", function() {
+
+            $.each(my_node_config.input, function(index, value) {
+                $('#' + my_node_config.name + " :input[name='" + value + "']").val(element.attr(value));
             });
 
-            $("#" + config.name).dialog({
+            $("#" + my_node_config.name).dialog({
                 bgiframe: true,
                 modal: true,
-                width: config.width,
-                height: config.height,
-                title: config.name + ' properties ...',
+                width: my_node_config.width,
+                height: my_node_config.height,
+                title: my_node_config.name + ' properties ...',
                 buttons : { 'Cancel' : function() {
                                 $(this).dialog('close');
                                        },
                             'Save' : function() {
-                                element.attr("config", config.name);
-                                $.each(config.input, function(index, value) {
-                                    element.attr(value, $("#" + config.name).find(":input[name='" + value + "']").val());
+                                element.attr("config", my_node_config.name);
+                                $.each(my_node_config.input, function(index, value) {
+                                    element.attr(value, $("#" + my_node_config.name).find(":input[name='" + value + "']").val());
                                 });
 
                                 ivr_save();
@@ -253,6 +261,8 @@ $(function() {
 
         $('#dialog').text('Ivr ' + ivr_name + ' has been saved !');
         $('#dialog').dialog({ title: 'Saving ...',
+                              width: 300,
+                              height: 100,
                               hide: {effect: "fadeOut", duration: 500},
                               open: function(event, ui) {
                                         setTimeout(function(){
@@ -268,9 +278,12 @@ $(function() {
             dataType: 'json',
             url: '/ivr/save',
             success: function (e) {
-                console.log(e);
+                console.log(e.id);
+                if (e.action == 'add')
+                    window.location = "/ivr/edit/" + e.id;
             }
         });
+
     }
 
     ivr_load = function(name) {
@@ -341,38 +354,33 @@ $(function() {
         });
     }
 
-    contextmenu = function(elementId) {
+    delete_node = function(node) {
+        var source_conns = jsPlumb.getConnections({source:node});
+
+        for(i = 0; i < source_conns.length; i++) {
+            delete_connection(source_conns[i]);
+        }
+
+        var target_conns = jsPlumb.getConnections({target:node});
+
+        for(i = 0; i < target_conns.length; i++) {
+             delete_connection(target_conns[i]);
+        }
+
+        if ($("#" + node).hasClass("unique")) {
+            $(".icon[action='" + $("#" + node).attr("action") + "']")
+                                              .draggable({ disabled: false });
+        }
+
+        jsPlumb.remove(node);
+        $("#" + node).remove();
+    }
+
+    contextmenu = function(node) {
         $(document).contextmenu({
-            delegate: ".node",
+            delegate: "#ivr",
             preventSelect: true,
             taphold: true,
-            menu: [
-                {title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash"},
-                ],
-            select: function(event, ui) {
-                switch(ui.cmd) {
-                    case 'delete':
-                        var source_conns = jsPlumb.getConnections({
-                                               source:elementId
-                                           });
-                        for(i = 0; i < source_conns.length; i++) {
-                            delete_connection(source_conns[i]);
-                        }
-                        var target_conns = jsPlumb.getConnections({
-                                               target:elementId
-                                           });
-                        for(i = 0; i < target_conns.length; i++) {
-                            delete_connection(target_conns[i]);
-                        }
-                        if($("#" + elementId).hasClass("unique")) {
-                            $(".icon[action='" + $("#" + elementId).attr("action") + "']")
-                                                                   .draggable({ disabled: false });
-                        }
-                        jsPlumb.remove(elementId);
-                        $("#" + elementId).remove();
-                    break;
-                }
-            }
         });
     };
 
@@ -472,6 +480,10 @@ $(function() {
     
     jsPlumb.bind("connectionDragStop", function(conn) {
         console.log("connection " + conn.id + " was dragged");
+    });
+
+    $("#ivr").bind("contextmenu", function() {
+            contextmenu(node);
     });
 
     $(".save").click(function() {
