@@ -75,6 +75,51 @@ class ivrActions(object):
                        'textarea' : { 'description' : 'Description' }
                      }
 
+        self.debug = { 'title' : 'Debug properties ...',
+                       'height' : 300,
+                       'width' : 320,
+                       'tab' : 1,
+                       'icon' : 'debug.png',
+                       'input' : { 'arguments' : 'Arguments' },
+                       'textarea' : { 'description' : 'Description' }
+                     }
+
+        self.func = { 'title' : 'Function properties ...',
+                       'height' : 300,
+                       'width' : 320,
+                       'tab' : 1,
+                       'icon' : 'func.png',
+                       'input' : { 'name' : 'Name' },
+                       'textarea' : { 'function' : 'Function', 'description' : 'Description' }
+                     }
+
+        self.language = { 'title' : 'Language properties ...',
+                          'height' : 300,
+                          'width' : 320,
+                          'tab' : 1,
+                          'icon' : 'language.png',
+                          'input' : { 'language' : 'Language' },
+                          'textarea' : { 'description' : 'Description' }
+                        }
+
+        self.authenticate = { 'title' : 'Language properties ...',
+                              'height' : 300,
+                              'width' : 320,
+                              'tab' : 2,
+                              'icon' : 'authenticate.png',
+                              'input' : { 'code' : 'Code', 'maxdigits' : 'Maximum digits (user need to finish with #)' },
+                              'textarea' : { 'description' : 'Description' }
+                        }
+
+        self.switchivr = { 'title' : 'Goto to another IVR properties ...',
+                              'height' : 300,
+                              'width' : 320,
+                              'tab' : 2,
+                              'icon' : 'authenticate.png',
+                              'input' : { 'name' : 'Name', 'start' : 'Number of the start IVR (s if you haven\'t one' },
+                              'textarea' : { 'description' : 'Description' }
+                        }
+
     def getJsonactions(self):
         for act in self.__dict__.items():
             if act[0] != 'actions':

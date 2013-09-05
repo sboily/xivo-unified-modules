@@ -217,6 +217,16 @@ class Ivr(object):
             return app_config
         if app == 'voicemail':
             return ['Voicemail(%s)' % self.application_config(config, 'mailbox'), 'Hangup()']
+        if app == 'debug':
+            return ['NoOp(%s)' % self.application_config(config, 'arguments')]
+        if app == 'func':
+            return ['NoOp(func is not supported for the moment)']
+        if app == 'language':
+            return ['Set(CHANNEL(language)=%s)' % self.application_config(config, 'language')]
+        if app == 'authenticate':
+            return ['Authenticate(%s,,%s)' %(self.application_config(config, 'code'), self.application_config(config, 'maxdigits'))]
+        if app == 'switchivr':
+            return ['Goto(myivr-%s,%s,1)' %(self.application_config(config, 'name'), self.application_config(config, 'start'))]
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):
