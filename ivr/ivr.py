@@ -83,6 +83,17 @@ class Ivr(object):
         pprint.pprint(json.loads(my_ivr.nodes))
         pprint.pprint(json.loads(my_ivr.connections))
 
+
+    def shows(self):
+        my_ivr = IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .all()
+
+        ivrs = '; Produce by XiVO cloud IVR<br>'
+        for ivr in my_ivr:
+            ivrs += self.show(ivr.id)
+
+        return ivrs
+
     def show(self, id):
         global nodes
         global connections
@@ -96,7 +107,7 @@ class Ivr(object):
         connections = json.loads(my_ivr.connections)
         dialplan = []
 
-        dialplan.append("[%s]" % my_ivr.name)
+        dialplan.append("[myivr-%s]" % my_ivr.name)
 
         my_start = self.start()
         start = "exten = %s,1,NoOp(IVR %s launched with extension %s)" \
@@ -153,11 +164,11 @@ class Ivr(object):
             if node['action'] == 'start':
                 my_start.update({'id': node['id']})
                 my_start.update({'target': self.find_connection(node['id'])})
+                extension = 's'
                 if node.has_key('config'):
-                    extension = 's'
                     if node['config'].has_key('extension') and node['config']['extension'] != '':
                         extension = node['config']['extension']
-                    my_start.update({'extension': extension})
+                my_start.update({'extension': extension})
                 return my_start
         return False
 
