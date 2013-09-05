@@ -89,14 +89,14 @@ class Ivr(object):
         pprint.pprint(json.loads(my_ivr.connections))
 
 
-    def shows(self, id):
+    def shows(self, server_id):
         my_ivr = IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
-                            .filter(IvrDB.server_id == id) \
+                            .filter(IvrDB.server_id == server_id) \
                             .all()
 
         ivrs = '; Produce by XiVO cloud IVR<br>'
         for ivr in my_ivr:
-            ivrs += self.show(ivr.id)
+            ivrs += self.show(ivr.id, server_id)
 
         return ivrs
 
