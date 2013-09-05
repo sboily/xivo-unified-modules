@@ -56,6 +56,10 @@ def get_ivr(host, username, password):
         print content
 
 def main():
+    host = None
+    username = None
+    password = None
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], "h:u:p:")
     except getopt.GetoptError as err:
