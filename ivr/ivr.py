@@ -41,6 +41,7 @@ class Ivr(object):
     def save(self, result):
         name = result['name']
         my_ivr = IvrDB.query.filter(IvrDB.name == name) \
+                            .filter(IvrDB.server_id == g.server_id) \
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
 
@@ -53,6 +54,7 @@ class Ivr(object):
         my_ivr.nodes = json.dumps(result['nodes'])
         my_ivr.connections = json.dumps(result['connections'])
         my_ivr.organisation_id = g.user_organisation.id
+        my_ivr.server_id = g.server_id
 
         db.session.add(my_ivr)
         db.session.commit()
