@@ -21,8 +21,8 @@ import urllib
 from BeautifulSoup import BeautifulSoup
 import getopt, sys
 
-def get_ivr(host, username, password):
-    url_ivr = "%s/ivr/shows" % host
+def get_ivr(host, username, password, server):
+    url_ivr = "%s/ivr/shows/%s" %(host, server)
     url_login = "%s/login" % host
 
     h = httplib2.Http(disable_ssl_certificate_validation=True)
@@ -59,9 +59,10 @@ def main():
     host = None
     username = None
     password = None
+    server = None
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:u:p:")
+        opts, args = getopt.getopt(sys.argv[1:], "h:u:p:s:")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -74,19 +75,22 @@ def main():
             username = a
         elif o == "-p":
             password = a
+        elif o == "-s":
+            server = a
         else:
             assert False, "unhandled option"
 
-    if host and username and password:
-        get_ivr( host, username, password)
+    if host and username and password and server:
+        get_ivr( host, username, password, server)
     else:
         usage()
 
 def usage():
     usage = """
-    -h define the host (manage.xivo.fr)
+    -h define the host (ex. https://manage.xivo.fr)
     -u define the username
     -p define the password
+    -s define the id of the server
     """
 
     print usage

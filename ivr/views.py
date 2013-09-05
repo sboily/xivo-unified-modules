@@ -46,10 +46,10 @@ def ivr_save():
 def ivr_show(id):
     return ivr.show(id)
 
-@bp_ivr.route('/ivr/shows')
+@bp_ivr.route('/ivr/shows/<id>')
 @login_required
-def ivr_shows():
-    return ivr.shows()
+def ivr_shows(id):
+    return ivr.shows(id)
 
 @bp_ivr.route('/ivr/edit/<id>')
 @login_required

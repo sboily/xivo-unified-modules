@@ -61,11 +61,13 @@ class Ivr(object):
 
     def list(self):
         return IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+                          .filter(IvrDB.server_id == g.server_id) \
                           .order_by(IvrDB.name) 
 
     def delete(self, id):
         my_ivr = IvrDB.query \
                       .filter(IvrDB.id == id) \
+                            .filter(IvrDB.server_id == g.server_id) \
                       .filter(IvrDB.organisation_id == g.user_organisation.id) \
                       .first()
         if my_ivr:
@@ -74,6 +76,7 @@ class Ivr(object):
 
     def edit(self, id):
         my_ivr = IvrDB.query.filter(IvrDB.id == id) \
+                            .filter(IvrDB.server_id == g.server_id) \
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
         return my_ivr
@@ -84,8 +87,9 @@ class Ivr(object):
         pprint.pprint(json.loads(my_ivr.connections))
 
 
-    def shows(self):
+    def shows(self, id):
         my_ivr = IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .filter(IvrDB.server_id == id) \
                             .all()
 
         ivrs = '; Produce by XiVO cloud IVR<br>'
@@ -94,12 +98,16 @@ class Ivr(object):
 
         return ivrs
 
-    def show(self, id):
+    def show(self, id, server_id=None):
         global nodes
         global connections
         global dialplan
 
+        if server_id == None:
+            server_id = g.server_id
+
         my_ivr = IvrDB.query.filter(IvrDB.id == id) \
+                            .filter(IvrDB.server_id == server_id) \
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
 
