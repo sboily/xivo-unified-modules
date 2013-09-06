@@ -41,9 +41,14 @@ class Ivr(object):
     def save(self, result):
         name = result['name']
         is_edit = result['is_edit']
-        old_name = result['old_name']
+        old_name = False
+        if result.has_key('old_name'):
+            query_name = result['old_name']
+            old_name = True
+        else:
+            query_name = name
 
-        my_ivr = IvrDB.query.filter(IvrDB.name == name or IvrDB.name == old_name) \
+        my_ivr = IvrDB.query.filter(IvrDB.name == query_name) \
                             .filter(IvrDB.server_id == g.server_id) \
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
