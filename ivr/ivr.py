@@ -238,6 +238,8 @@ class Ivr(object):
             return ['Authenticate(%s,,%s)' %(self.application_config(config, 'code'), self.application_config(config, 'maxdigits'))]
         if app == 'switchivr':
             return ['Goto(xivo-cloud-ivr-%s,%s,1)' %(self.application_config(config, 'context'), self.application_config(config, 'start'))]
+        if app == 'directory':
+            return ['Directory(%s)' % self.application_config(config, 'vmcontext')]
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):
