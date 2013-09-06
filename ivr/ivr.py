@@ -40,17 +40,22 @@ class Ivr(object):
 
     def save(self, result):
         name = result['name']
-        my_ivr = IvrDB.query.filter(IvrDB.name == name) \
+        is_edit = result['is_edit']
+        old_name = result['old_name']
+
+        my_ivr = IvrDB.query.filter(IvrDB.name == name or IvrDB.name == old_name) \
                             .filter(IvrDB.server_id == g.server_id) \
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
 
-        if not my_ivr:
+        if is_edit:
+            info = "edit"
+        else:
             info = "add"
             my_ivr = IvrDB(name)
-        else:
-            info = "edit"
 
+        if old_name:
+            my_ivr.name = name
         my_ivr.nodes = json.dumps(result['nodes'])
         my_ivr.connections = json.dumps(result['connections'])
         my_ivr.organisation_id = g.user_organisation.id

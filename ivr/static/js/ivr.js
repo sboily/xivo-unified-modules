@@ -2,6 +2,7 @@ $(function() {
 
     var id=1;
     var node_config = Object();
+    var ivr_name_edit = false;
 
     $.each($('.nodes_config').children('.node_config'), function( index ) {
         node_config[this.id] = Object();
@@ -215,9 +216,13 @@ $(function() {
 
     ivr_save = function() {
         var elems = $('#ivr').find('div[class*="node"]');
+        var is_edit = false;
+        var old_name = false;
 
         if ($('#ivr').attr('name') != undefined) {
             ivr_name = $('#ivr').attr('name');
+            old_name = $('#ivr').attr('old-name');
+            is_edit = true;
         } else {
             whatname();
             return false;
@@ -255,6 +260,8 @@ $(function() {
         });
 
         j = JSON.stringify({ 'name': ivr_name,
+                             'is_edit' : is_edit,
+                             'old_name' : old_name,
                              'nodes' : nodes,
                              'connections' : connections
                            });
@@ -278,7 +285,6 @@ $(function() {
             dataType: 'json',
             url: '/ivr/save',
             success: function (e) {
-                console.log(e.id);
                 if (e.action == 'add')
                     window.location = "/ivr/edit/" + e.id;
             }
@@ -499,6 +505,28 @@ $(function() {
         drop: function(event, ui) { 
                   add_node(ui.helper, 'node' + id, {position: '' });
               }
+    });
+
+    $("#ivr_name").bind("click", function() {
+        if (!ivr_name_edit) {
+            old_name = $('#ivr').attr('name');
+            $("#ivr_name p").replaceWith("<p>New name ? : <input type='text' placeholder='Press enter to save ...'></input></p>");
+            ivr_name_edit = true;
+            $("#ivr_name p").keypress(function(event) {
+                if (event.keyCode == 13) {
+                    new_name = $("#ivr_name input").val();
+                    if (new_name) {
+                        $('#ivr').attr('name', new_name);
+                        $('#ivr').attr('old-name', old_name);
+                        ivr_save();
+                        $("#ivr_name p").replaceWith("<p>Name : " + new_name + "</p>");
+                    } else {
+                        $("#ivr_name p").replaceWith("<p>Name : " + old_name + "</p>");
+                    }
+                    ivr_name_edit = false;
+                }
+            });
+        }
     });
 
 });
