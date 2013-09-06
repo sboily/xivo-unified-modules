@@ -116,7 +116,7 @@ class ivrActions(object):
                               'width' : 320,
                               'tab' : 2,
                               'icon' : 'authenticate.png',
-                              'input' : { 'name' : 'Name', 'start' : 'Number of the start IVR (s if you haven\'t one' },
+                              'input' : { 'context' : 'Context name (without auto prefix)', 'start' : 'Number of the start IVR (s if you haven\'t one' },
                               'textarea' : { 'description' : 'Description' }
                         }
 

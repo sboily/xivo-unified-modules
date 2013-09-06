@@ -61,6 +61,7 @@ def ivr_edit(id):
         return redirect(url_for("ivr.ivr_list"))
     return render_template('ivr_edit.html', name=my_ivr.name, nodes=json.loads(my_ivr.nodes), \
                                             connections=json.loads(my_ivr.connections), \
+                                            context=my_ivr.context, \
                                             actions=json.loads(actions.getJsonactions()), id=id)
 
 @bp_ivr.route('/ivr/delete/<id>')

@@ -1,11 +1,11 @@
 {% extends "ivr_add.html" %}
 
 {% block ivr_toolbar %}
-<div id="ivr_name"><p>Name : {{name}}</p></div>
+<div id="ivr_name"><p title="Click to change name">Name : {{name}} ({{context}})</p></div>
 {% endblock %}
 
 {% block ivr_content %}
-<div id="ivr" name="{{name}}" action="edit">
+<div id="ivr" name="{{name}}" action="edit" context="{{context}}">
 </div>
 
 <div id="nodes" data='{{ nodes|tojson|safe }}'>

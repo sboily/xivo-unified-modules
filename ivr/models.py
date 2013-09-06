@@ -24,6 +24,7 @@ class IvrDB(db.Model):
     __tablename__ = 'ivr'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
+    context = db.Column(db.String(200))
     description = db.Column(db.Text())
     nodes = db.Column(db.Text())
     connections = db.Column(db.Text())

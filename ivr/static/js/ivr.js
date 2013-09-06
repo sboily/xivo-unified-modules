@@ -134,14 +134,15 @@ $(function() {
         $("#on_what_name").dialog({
             bgiframe: true,
             modal: true,
-            width: 300,
-            height: 200,
+            width: 380,
+            height: 250,
             title: 'Please enter name ...',
             buttons : {'Cancel' : function() {
                             $(this).dialog('close');
                       },
                        'Save' : function() {
                             $('#ivr').attr('name', $(this).find("input[name='name']").val());
+                            $('#ivr').attr('context', $(this).find("input[name='context']").val());
                             $(this).dialog('close');
                             ivr_save();
                                 }
@@ -228,6 +229,8 @@ $(function() {
             return false;
         }
 
+        context = $('#ivr').attr('context');
+
         if (elems.length == 0) {
             alert('Please add elements before saving ...');
             return false;
@@ -260,8 +263,9 @@ $(function() {
         });
 
         j = JSON.stringify({ 'name': ivr_name,
-                             'is_edit' : is_edit,
+                             'context' : context,
                              'old_name' : old_name,
+                             'is_edit' : is_edit,
                              'nodes' : nodes,
                              'connections' : connections
                            });
@@ -510,6 +514,7 @@ $(function() {
     $("#ivr_name").bind("click", function() {
         if (!ivr_name_edit) {
             old_name = $('#ivr').attr('name');
+            context = $('#ivr').attr('context');
             $("#ivr_name p").replaceWith("<p>New name ? : <input type='text' placeholder='Press enter to save ...'></input></p>");
             ivr_name_edit = true;
             $("#ivr_name p").keypress(function(event) {
@@ -519,9 +524,9 @@ $(function() {
                         $('#ivr').attr('name', new_name);
                         $('#ivr').attr('old-name', old_name);
                         ivr_save();
-                        $("#ivr_name p").replaceWith("<p>Name : " + new_name + "</p>");
+                        $("#ivr_name p").replaceWith("<p>Name : " + new_name + " (" + context + ")</p>");
                     } else {
-                        $("#ivr_name p").replaceWith("<p>Name : " + old_name + "</p>");
+                        $("#ivr_name p").replaceWith("<p>Name : " + old_name + " (" + context + ")</p>");
                     }
                     ivr_name_edit = false;
                 }

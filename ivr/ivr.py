@@ -53,11 +53,12 @@ class Ivr(object):
                             .filter(IvrDB.organisation_id == g.user_organisation.id) \
                             .first()
 
-        if is_edit:
+        if is_edit and my_ivr:
             info = "edit"
         else:
             info = "add"
             my_ivr = IvrDB(name)
+            my_ivr.context = result['context']
 
         if old_name:
             my_ivr.name = name
@@ -127,7 +128,7 @@ class Ivr(object):
         connections = json.loads(my_ivr.connections)
         dialplan = []
 
-        dialplan.append("[myivr-%s]" % my_ivr.name)
+        dialplan.append("[xivo-cloud-ivr-%s]" % my_ivr.context)
 
         my_start = self.start()
         start = "exten = %s,1,NoOp(IVR %s launched with extension %s)" \
@@ -236,7 +237,7 @@ class Ivr(object):
         if app == 'authenticate':
             return ['Authenticate(%s,,%s)' %(self.application_config(config, 'code'), self.application_config(config, 'maxdigits'))]
         if app == 'switchivr':
-            return ['Goto(myivr-%s,%s,1)' %(self.application_config(config, 'name'), self.application_config(config, 'start'))]
+            return ['Goto(xivo-cloud-ivr-%s,%s,1)' %(self.application_config(config, 'context'), self.application_config(config, 'start'))]
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):
