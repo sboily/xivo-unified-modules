@@ -239,7 +239,7 @@ class Ivr(object):
         if app == 'switchivr':
             return ['Goto(xivo-cloud-ivr-%s,%s,1)' %(self.application_config(config, 'context'), self.application_config(config, 'start'))]
         if app == 'directory':
-            return ['Directory(%s)' % self.application_config(config, 'vmcontext')]
+            return ['Directory(%s)' % self.application_config(config, 'vmcontext'), 'Hangup()']
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):
