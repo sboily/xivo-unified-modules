@@ -202,7 +202,10 @@ class Ivr(object):
     def application(self, id, app, config):
         app_config = []
         if app == 'answer':
-            return ['Answer()']
+            arg = ''
+            if self.application_config(config, 'timeout') != 'error':
+                arg = self.application_config(config, 'timeout')
+            return ['Answer(%s)' % arg]
         if app == 'hangup':
             return ['Hangup()']
         if app == 'prompts':
@@ -213,12 +216,13 @@ class Ivr(object):
                                     self.application_config(config, 'arguments'))]
             return app_config
         if app == 'wait4digits':
-            conf = self.application_config(config, 'wait_prompt_path')
-            if conf != 'error':
-                app_config.append('Background(%s)' % conf)
-                app_config.append('WaitExten(3)')
+            wait_prompt = self.application_config(config, 'wait_prompt_path')
+            timeout = self.application_config(config, 'timeout')
+            if wait_prompt != 'error' and len(wait_prompt) != 0:
+                app_config.append('Background(%s)' % wait_prompt)
+                app_config.append('WaitExten(%s)' % timeout)
             else:
-                app_config = ['WaitExten()']
+                app_config = ['WaitExten(%s)' % timeout]
 
             branch = self.application_find_digits(id)
             for exten in branch:
@@ -239,7 +243,24 @@ class Ivr(object):
         if app == 'switchivr':
             return ['Goto(xivo-cloud-ivr-%s,%s,1)' %(self.application_config(config, 'context'), self.application_config(config, 'start'))]
         if app == 'directory':
-            return ['Directory(%s)' % self.application_config(config, 'vmcontext'), 'Hangup()']
+            return ['Directory(%s)' % self.application_config(config, 'vmcontext')]
+        if app == 'read':
+            return ['Read(%s,%s,%s,,,%s)' %(self.application_config(config, 'variable'), self.application_config(config, 'prompt'), \
+                                            self.application_config(config, 'maxdigits'), self.application_config(config, 'timeout'))]
+        if app == 'gotoif':
+            return ['GotoIf(%s?%s:%s)' %(self.application_config(config, 'expression'), self.application_config(config, 'true'), \
+                                         self.application_config(config, 'false'))]
+        if app == 'gotoiftime':
+            return ['GotoIfTime(%s?%s:%s)' %(self.application_config(config, 'expression'), self.application_config(config, 'true'), \
+                                         self.application_config(config, 'false'))]
+        if app == 'setvar':
+            return ['Set(%s=%s)' %(self.application_config(config, 'variable'), self.application_config(config, 'value'))]
+        if app == 'goto':
+            return ['Goto(%s)' % self.application_config(config, 'arguments')]
+        if app == 'wait':
+            return ['Wait(%s)' % self.application_config(config, 'timeout')]
+        if app == 'dial':
+            return ['Dial(%s)' % self.application_config(config, 'arguments'), 'Hangup()']
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):

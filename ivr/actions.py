@@ -23,17 +23,13 @@ class ivrActions(object):
         self.actions = {}
 
         self.wait4digits = { 'title' : 'Wait4digits properties ...',
-                             'height' : 400,
-                             'width' : 600,
+                             'height' : 350,
+                             'width' : 380,
                              'tab' : 1,
                              'icon' : 'wait4digits.png',
                              'maxconn' : { 'source' : -1, 'target' : -1 },
                              'input' :  { 'wait_prompt_path' : 'Prompt File Path (optional)',
-                                          'min_digits' : 'Min no of digits expected',
-                                          'max_digits' : 'Max no of digits expected',
-                                          'wait_expected_digits' : 'Expected Digits',
-                                          'retries' : 'Retries',
-                                          'retry_timeout' : 'Retry timeout (in seconds)'
+                                          'timeout' : 'Timeout (in seconds)'
                                        },
                              'textarea' : { 'description' : 'Description' }
                            }
@@ -128,6 +124,81 @@ class ivrActions(object):
                            'input' : { 'vmcontext' : 'Voicemail context name' },
                            'textarea' : { 'description' : 'Description' }
                         }
+
+        self.read = { 'title' : 'Read properties ...',
+                      'height' : 300,
+                      'width' : 320,
+                      'tab' : 2,
+                      'icon' : 'read.png',
+                      'input' : { 'variable' : 'Variable', 'timeout' : 'Timeout', 'prompt' : 'Prompt', 'maxdigits' : 'Max digits' },
+                      'textarea' : { 'description' : 'Description' }
+                    }
+
+        self.dial = { 'title' : 'Dial properties ...',
+                      'height' : 300,
+                      'width' : 320,
+                      'tab' : 1,
+                      'icon' : 'dial.png',
+                      'input' : { 'arguments' : 'Arguments' },
+                      'textarea' : { 'description' : 'Description' }
+                    }
+
+        self.answer = { 'title' : 'Answer properties ...',
+                        'height' : 300,
+                        'width' : 320,
+                        'tab' : 1,
+                        'icon' : 'answer.png',
+                        'input' : { 'timeout' : 'Timeout' },
+                        'textarea' : { 'description' : 'Description' }
+                      }
+
+        self.gotoif = { 'title' : 'Gotoif properties ...',
+                        'height' : 300,
+                        'width' : 320,
+                        'tab' : 2,
+                        'maxconn' : { 'source' : 1, 'target' : 2 },
+                        'icon' : 'gotoif.png',
+                        'input' : { 'expression' : 'Expression', 'true' : 'If true', 'false' : 'If false' },
+                        'textarea' : { 'description' : 'Description' }
+                      }
+
+        self.gotoiftime = { 'title' : 'Gotoiftime properties ...',
+                            'height' : 300,
+                            'width' : 320,
+                            'tab' : 2,
+                            'maxconn' : { 'source' : 1, 'target' : 2 },
+                            'icon' : 'gotoiftime.png',
+                            'input' : { 'expression' : 'Expression', 'true' : 'If true', 'false' : 'If false' },
+                            'textarea' : { 'description' : 'Description' }
+                          }
+
+        self.setvar = { 'title' : 'Set variable properties ...',
+                        'height' : 300,
+                        'width' : 320,
+                        'tab' : 2,
+                        'icon' : 'setvar.png',
+                        'input' : { 'variable' : 'Variable Name', 'value' : 'Values' },
+                        'textarea' : { 'description' : 'Description' }
+                      }
+
+        self.goto = { 'title' : 'Goto properties ...',
+                      'height' : 300,
+                      'width' : 320,
+                      'tab' : 2,
+                      'icon' : 'goto.png',
+                      'input' : { 'arguments' : 'Arguments' },
+                      'textarea' : { 'description' : 'Description' }
+                      }
+
+        self.wait = { 'title' : 'Wait properties ...',
+                      'height' : 300,
+                      'width' : 320,
+                      'tab' : 2,
+                      'icon' : 'wait.png',
+                      'input' : { 'timeout' : 'Timeout' },
+                      'textarea' : { 'description' : 'Description' }
+                      }
+
 
     def getJsonactions(self):
         for act in self.__dict__.items():
