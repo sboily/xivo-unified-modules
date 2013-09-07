@@ -261,6 +261,10 @@ class Ivr(object):
             return ['Wait(%s)' % self.application_config(config, 'timeout')]
         if app == 'dial':
             return ['Dial(%s)' % self.application_config(config, 'arguments'), 'Hangup()']
+        if app == 'busy':
+            return ['Busy(%s)' % self.application_config(config, 'timeout')]
+        if app == 'congestion':
+            return ['Congestion(%s)' % self.application_config(config, 'timeout')]
         return ['NoOp(\'%s\')' % app]
 
     def application_find_digits(self, id):

@@ -199,6 +199,24 @@ class ivrActions(object):
                       'textarea' : { 'description' : 'Description' }
                       }
 
+        self.busy = { 'title' : 'Busy properties ...',
+                      'height' : 300,
+                      'width' : 320,
+                      'tab' : 2,
+                      'icon' : 'busy.png',
+                      'input' : { 'timeout' : 'Timeout' },
+                      'textarea' : { 'description' : 'Description' }
+                      }
+
+        self.congestion = { 'title' : 'Congestion properties ...',
+                            'height' : 300,
+                            'width' : 320,
+                            'tab' : 2,
+                            'icon' : 'congestion.png',
+                            'input' : { 'timeout' : 'Timeout' },
+                            'textarea' : { 'description' : 'Description' }
+                          }
+
 
     def getJsonactions(self):
         for act in self.__dict__.items():
