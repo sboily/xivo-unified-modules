@@ -22,15 +22,25 @@
 <div class="hidden dialog nodes_config">
 
     {% for act in actions %}
-        <div id="{{ act }}" class="node_config" title="{{ actions[act].title }}" width="{{ actions[act].width }}" height="{{ actions[act].height }}">
+        <div id="{{ act }}" class="node_config" title="{{ actions[act].title }}" 
+        {% if actions[act].maxconn %}
+            maxconnsource="{{ actions[act].maxconn.source }}" maxconntarget="{{ actions[act].maxconn.target }}"
+        {% endif %}
+        width="{{ actions[act].width }}" height="{{ actions[act].height }}">
         {% for input in actions[act].input %}
             <div>{{ actions[act].input[input] }}</div>
             <div><input type="text" name="{{ input }}" class="input-xlarge" /></div>
         {% endfor %}
-        {% for textarea in actions[act].textarea %}
-            <div>{{ actions[act].textarea[textarea] }}</div>
-            <div><textarea name="{{ textarea }}" class="input-xlarge"></textarea></div>
-        {% endfor %}
+        {% if actions[act].textarea %}
+            {% for textarea in actions[act].textarea %}
+                <div>{{ actions[act].textarea[textarea] }}</div>
+                <div><textarea name="{{ textarea }}" class="input-xlarge"></textarea></div>
+            {% endfor %}
+        {% endif %}
+        <div>Label priority</div>
+        <div><input type="text" name="label" class="input-xlarge"/></div>
+        <div>Description</div>
+        <div><textarea name="description" class="input-xlarge"></textarea></div>
         </div>
     {% endfor %}
 
@@ -51,6 +61,15 @@
     <div id="on_what_digit">
         <div>Digit</div>
         <div><input type="text" name="digit" /></div>
+    </div>
+
+    <div id="on_what_true_false">
+        <div>On action</div>
+        <div><select id="my_action">
+                 <option value="true">True</option>
+                 <option value="false">False</option>
+             </select>
+        </div>
     </div>
 
     <div id="on_what_name">

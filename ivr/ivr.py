@@ -20,6 +20,7 @@ from models import IvrDB
 from flask import g
 import os
 import json
+import random
 
 class Ivr(object):
 
@@ -28,7 +29,7 @@ class Ivr(object):
     dialplan = None
 
     def __init__(self):
-        pass
+        self.current_exten = None
 
     def setup(self, app):
         self.db_bind = 'ivr'
@@ -136,6 +137,7 @@ class Ivr(object):
         dialplan.append({my_start['extension'] : [start]})
 
         target = my_start['target']
+        self.current_exten = my_start['extension']
         self.generate_same(target, my_start['extension'])
 
         d = self.generate_dialplan()
@@ -156,8 +158,13 @@ class Ivr(object):
             my_app = self.get_application(target)
 
             if my_app:
+                my_label = self.get_priority_label(target)
                 for d in my_app:
-                    dialplan[1][exten].append("same = n,%s" % d)
+                    if my_label:
+                        dialplan[1][exten].append("same = n(%s),%s" % (my_label, d))
+                        my_label = False
+                    else:
+                        dialplan[1][exten].append("same = n,%s" % d)
 
             target = self.get_next_priority(target)
             if not target:
@@ -165,18 +172,26 @@ class Ivr(object):
 
         return dialplan
 
-
-    def get_application(self, target):
+    def get_node_configuration(self, target):
+        node_info = {}
         for node in nodes:
             if node['id'] == target:
+                node_info = { 'id' : node['id'], 'action' : node['action'] }
                 if node.has_key('config'):
-                    config = node['config']
+                    node_info.update({ 'config' : node['config']})
                 else:
-                    config = None
-                return self.application(node['id'], node['action'], config)
+                    node_info.update({ 'config' : None })
+        return node_info
+
+    def get_application(self, target):
+        node_info = self.get_node_configuration(target)
+        return self.application(node_info['id'], node_info['action'], node_info['config'])
+
+    def get_priority_label(self, target):
+        node_info = self.get_node_configuration(target)
+        return self.application_config(node_info['config'], 'label')
 
     def get_next_priority(self, id):
-        target = {}
         return self.find_connection(id)
 
     def start(self):
@@ -195,7 +210,7 @@ class Ivr(object):
 
     def find_connection(self, id):
         for conn in connections:
-            if conn['sourceId'] == id and not conn['digitId']:
+            if conn['sourceId'] == id and not conn['digitId'] and conn['action'] != 'false':
                 return conn['targetId']
         return False
 
@@ -203,7 +218,7 @@ class Ivr(object):
         app_config = []
         if app == 'answer':
             arg = ''
-            if self.application_config(config, 'timeout') != 'error':
+            if self.application_config(config, 'timeout'):
                 arg = self.application_config(config, 'timeout')
             return ['Answer(%s)' % arg]
         if app == 'hangup':
@@ -218,7 +233,7 @@ class Ivr(object):
         if app == 'wait4digits':
             wait_prompt = self.application_config(config, 'wait_prompt_path')
             timeout = self.application_config(config, 'timeout')
-            if wait_prompt != 'error' and len(wait_prompt) != 0:
+            if wait_prompt and len(wait_prompt) != 0:
                 app_config.append('Background(%s)' % wait_prompt)
                 app_config.append('WaitExten(%s)' % timeout)
             else:
@@ -251,8 +266,21 @@ class Ivr(object):
             return ['GotoIf(%s?%s:%s)' %(self.application_config(config, 'expression'), self.application_config(config, 'true'), \
                                          self.application_config(config, 'false'))]
         if app == 'gotoiftime':
-            return ['GotoIfTime(%s?%s:%s)' %(self.application_config(config, 'expression'), self.application_config(config, 'true'), \
-                                         self.application_config(config, 'false'))]
+            my_action = self.application_find_action(id)
+            random_exten = random.random()
+            for a in my_action:
+                if a['action'] == 'false':
+                    dialplan[1].update({random_exten : []})
+                    self.generate_same(a['target'], random_exten)
+                if a['action'] == 'true':
+                    pass
+
+            app_config.append('GotoIfTime(%s?${PRIORITY}+%s)' %(self.application_config(config, 'expression'), len(dialplan[1][random_exten])))
+            for d in dialplan[1][random_exten]:
+                app_config.append(d)
+            del dialplan[1][random_exten]
+
+            return app_config
         if app == 'setvar':
             return ['Set(%s=%s)' %(self.application_config(config, 'variable'), self.application_config(config, 'value'))]
         if app == 'goto':
@@ -274,11 +302,18 @@ class Ivr(object):
                 digits.append({'extension' : conn['digitId'], 'target' : conn['targetId']})
         return digits
 
+    def application_find_action(self, id):
+        action = []
+        for conn in connections:
+            if conn['sourceId'] == id and conn['action']:
+                action.append({'action' : conn['action'], 'target' : conn['targetId']})
+        return action
+
     def application_config(self, config, path):
         if not config:
-            return 'error'
+            return False
 
         if config.has_key(path):
              return config[path]
 
-        return 'error'
+        return False

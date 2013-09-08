@@ -41,7 +41,8 @@ $(function() {
         }
 
         jsPlumb.draggable(jsPlumb.getSelector('#' + name), {
-            containment:"parent"
+            containment:"parent",
+            grid: [ 10,10 ] 
         });
 
         catch_action(name);
@@ -122,6 +123,29 @@ $(function() {
                                                         id:"digit",
                                                         cssClass:"aLabel",
                                                         label : $(this).find("input[name='digit']").val()
+                                                                 }
+                                                       ]);
+                            $(this).dialog('close');
+                                }
+                      }
+        });
+    }
+
+    whattruefalse = function(conn) {
+        $("#on_what_true_false").dialog({
+            bgiframe: true,
+            modal: true,
+            width: 300,
+            height: 200,
+            title: 'On action true/false ...',
+            buttons : {'Cancel' : function() {
+                            $(this).dialog('close');
+                      },
+                       'Save' : function() {
+                            conn.addOverlay(["Label", { location:0.1,
+                                                        id:"action",
+                                                        cssClass:"aLabel",
+                                                        label : $(this).find("#my_action option:selected").val()
                                                                  }
                                                        ]);
                             $(this).dialog('close');
@@ -254,11 +278,18 @@ $(function() {
                 digit = connection.getOverlay('digit').getLabel();
             else
                 digit = null
+
+            if (connection.getOverlay('action'))
+                action = connection.getOverlay('action').getLabel();
+            else
+                action = null
+
             connections.push({
                 connectionId: connection.id,
                 sourceId: connection.sourceId,
                 targetId: connection.targetId,
-                digitId: digit
+                digitId: digit,
+                action: action
             });
         });
 
@@ -323,6 +354,7 @@ $(function() {
 
         $.each(connections, function(index, value) {
             digit = value.digitId;
+            action = value.action;
             my_label = value.sourceId.substring(4) + "-" + value.targetId.substring(4);
             c = jsPlumb.connect({ 'source' : value.sourceId,
                                   'target': value.targetId,
@@ -335,6 +367,15 @@ $(function() {
                                          id:"digit",
                                          cssClass:"aLabel",
                                          label : digit
+                                       }
+                             ]);
+            }
+
+            if (action != null) {
+                c.addOverlay(["Label", { location:0.1,
+                                         id:"action",
+                                         cssClass:"aLabel",
+                                         label : action
                                        }
                              ]);
             }
@@ -394,16 +435,22 @@ $(function() {
         });
     };
 
-    endpoint_max_conn = function(elem) {
-        switch(elem) {
-            case 'wait4digits':
-                maxconn = -1;
+    endpoint_max_conn = function(elem, type) {
+        switch(type) {
+            case 'source':
+                maxconn = $("#" + elem).attr('maxconnsource')
+                break;
+            case 'target':
+                maxconn = $("#" + elem).attr('maxconntarget')
                 break;
             default:
                 maxconn = 1;
         }
 
-        return maxconn;
+        if (maxconn != undefined)
+            return maxconn;
+        else
+            return 1
     }
 
     add_endpoint = function(name, type) {
@@ -417,9 +464,9 @@ $(function() {
 	            anchor:"Continuous",
                     connector:[ "Flowchart", {  } ],
                     connectorStyle:{ strokeStyle:"#5c96bc", lineWidth:2, outlineColor:"transparent", outlineWidth:4 },
-	            maxConnections: endpoint_max_conn(elem),
+	            maxConnections: endpoint_max_conn(elem, 'source'),
 		    onMaxConnections:function(info, e) {
-		        alert("Maximum connections (" + info.maxConnections + ") reached");
+		        alert("Maximum connections source (" + info.maxConnections + ") reached");
 		    }
                 }
 
@@ -430,7 +477,10 @@ $(function() {
                     isTarget:true,
                     connector:[ "Flowchart", {  } ],
 		    anchor:"Continuous",
-                    maxConnections:-1
+                    maxConnections: endpoint_max_conn(elem, 'target'),
+		    onMaxConnections:function(info, e) {
+		        alert("Maximum connections target (" + info.maxConnections + ") reached");
+                    }
                 }
 
                 jsPlumb.makeTarget(name, endpointOptions);
@@ -476,6 +526,14 @@ $(function() {
 
         if($('#' + my_source).attr('action') == "wait4digits") {
             whatdigit(my_conn);
+        }
+
+        if($('#' + my_source).attr('action') == "gotoif") {
+            whattruefalse(my_conn);
+        }
+
+        if($('#' + my_source).attr('action') == "gotoiftime") {
+            whattruefalse(my_conn);
         }
     });
 

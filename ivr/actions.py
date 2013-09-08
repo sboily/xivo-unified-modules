@@ -31,7 +31,6 @@ class ivrActions(object):
                              'input' :  { 'wait_prompt_path' : 'Prompt File Path (optional)',
                                           'timeout' : 'Timeout (in seconds)'
                                        },
-                             'textarea' : { 'description' : 'Description' }
                            }
 
 
@@ -41,7 +40,6 @@ class ivrActions(object):
                          'tab' : 1,
                          'icon' : 'prompts.png',
                          'input' : { 'prompt_path' : 'Prompt File Path' },
-                         'textarea' : { 'description' : 'Description' }
                        }
 
         self.execute = { 'title' : 'Execute properties ...',
@@ -50,7 +48,6 @@ class ivrActions(object):
                          'tab' : 1,
                          'icon' : 'execute.png',
                          'input' : { 'application' : 'Asterisk application', 'arguments' : 'Arguments' },
-                         'textarea' : { 'description' : 'Description' }
                        }
 
         self.start = { 'title' : 'Start properties ...',
@@ -59,7 +56,6 @@ class ivrActions(object):
                        'tab' : 1,
                        'icon' : 'start.png',
                        'input' : { 'extension' : 'Extension (optionnal)' },
-                       'textarea' : { 'description' : 'Description' }
                      }
 
         self.voicemail = { 'title' : 'Voicemail properties ...',
@@ -68,7 +64,6 @@ class ivrActions(object):
                        'tab' : 1,
                        'icon' : 'voicemail.png',
                        'input' : { 'mailbox' : 'Mailbox number' },
-                       'textarea' : { 'description' : 'Description' }
                      }
 
         self.debug = { 'title' : 'Debug properties ...',
@@ -77,7 +72,6 @@ class ivrActions(object):
                        'tab' : 1,
                        'icon' : 'debug.png',
                        'input' : { 'arguments' : 'Arguments' },
-                       'textarea' : { 'description' : 'Description' }
                      }
 
         self.func = { 'title' : 'Function properties ...',
@@ -86,7 +80,7 @@ class ivrActions(object):
                        'tab' : 1,
                        'icon' : 'func.png',
                        'input' : { 'name' : 'Name' },
-                       'textarea' : { 'function' : 'Function', 'description' : 'Description' }
+                       'textarea' : { 'function' : 'Function' }
                      }
 
         self.language = { 'title' : 'Language properties ...',
@@ -95,7 +89,6 @@ class ivrActions(object):
                           'tab' : 1,
                           'icon' : 'language.png',
                           'input' : { 'language' : 'Language' },
-                          'textarea' : { 'description' : 'Description' }
                         }
 
         self.authenticate = { 'title' : 'Language properties ...',
@@ -104,17 +97,15 @@ class ivrActions(object):
                               'tab' : 2,
                               'icon' : 'authenticate.png',
                               'input' : { 'code' : 'Code', 'maxdigits' : 'Maximum digits (user need to finish with #)' },
-                              'textarea' : { 'description' : 'Description' }
-                        }
+                            }
 
         self.switchivr = { 'title' : 'Goto to another IVR properties ...',
-                              'height' : 300,
-                              'width' : 320,
-                              'tab' : 2,
-                              'icon' : 'authenticate.png',
-                              'input' : { 'context' : 'Context name (without auto prefix)', 'start' : 'Number of the start IVR (s if you haven\'t one' },
-                              'textarea' : { 'description' : 'Description' }
-                        }
+                           'height' : 300,
+                           'width' : 320,
+                           'tab' : 2,
+                           'icon' : 'authenticate.png',
+                           'input' : { 'context' : 'Context name (without auto prefix)', 'start' : 'Number of the start IVR (s if you haven\'t one' },
+                         }
 
         self.directory = { 'title' : 'Directory properties ...',
                            'height' : 300,
@@ -122,7 +113,6 @@ class ivrActions(object):
                            'tab' : 2,
                            'icon' : 'directory.png',
                            'input' : { 'vmcontext' : 'Voicemail context name' },
-                           'textarea' : { 'description' : 'Description' }
                         }
 
         self.read = { 'title' : 'Read properties ...',
@@ -131,7 +121,6 @@ class ivrActions(object):
                       'tab' : 2,
                       'icon' : 'read.png',
                       'input' : { 'variable' : 'Variable', 'timeout' : 'Timeout', 'prompt' : 'Prompt', 'maxdigits' : 'Max digits' },
-                      'textarea' : { 'description' : 'Description' }
                     }
 
         self.dial = { 'title' : 'Dial properties ...',
@@ -140,7 +129,6 @@ class ivrActions(object):
                       'tab' : 1,
                       'icon' : 'dial.png',
                       'input' : { 'arguments' : 'Arguments' },
-                      'textarea' : { 'description' : 'Description' }
                     }
 
         self.answer = { 'title' : 'Answer properties ...',
@@ -149,27 +137,24 @@ class ivrActions(object):
                         'tab' : 1,
                         'icon' : 'answer.png',
                         'input' : { 'timeout' : 'Timeout' },
-                        'textarea' : { 'description' : 'Description' }
                       }
 
         self.gotoif = { 'title' : 'Gotoif properties ...',
                         'height' : 300,
                         'width' : 320,
                         'tab' : 2,
-                        'maxconn' : { 'source' : 1, 'target' : 2 },
+                        'maxconn' : { 'source' : 2, 'target' : 1 },
                         'icon' : 'gotoif.png',
                         'input' : { 'expression' : 'Expression', 'true' : 'If true', 'false' : 'If false' },
-                        'textarea' : { 'description' : 'Description' }
                       }
 
         self.gotoiftime = { 'title' : 'Gotoiftime properties ...',
                             'height' : 300,
                             'width' : 320,
                             'tab' : 2,
-                            'maxconn' : { 'source' : 1, 'target' : 2 },
+                            'maxconn' : { 'source' : 2, 'target' : 1 },
                             'icon' : 'gotoiftime.png',
-                            'input' : { 'expression' : 'Expression', 'true' : 'If true', 'false' : 'If false' },
-                            'textarea' : { 'description' : 'Description' }
+                            'input' : { 'expression' : 'Expression' },
                           }
 
         self.setvar = { 'title' : 'Set variable properties ...',
@@ -178,7 +163,6 @@ class ivrActions(object):
                         'tab' : 2,
                         'icon' : 'setvar.png',
                         'input' : { 'variable' : 'Variable Name', 'value' : 'Values' },
-                        'textarea' : { 'description' : 'Description' }
                       }
 
         self.goto = { 'title' : 'Goto properties ...',
@@ -187,7 +171,6 @@ class ivrActions(object):
                       'tab' : 2,
                       'icon' : 'goto.png',
                       'input' : { 'arguments' : 'Arguments' },
-                      'textarea' : { 'description' : 'Description' }
                       }
 
         self.wait = { 'title' : 'Wait properties ...',
@@ -196,7 +179,6 @@ class ivrActions(object):
                       'tab' : 2,
                       'icon' : 'wait.png',
                       'input' : { 'timeout' : 'Timeout' },
-                      'textarea' : { 'description' : 'Description' }
                       }
 
         self.busy = { 'title' : 'Busy properties ...',
@@ -205,7 +187,6 @@ class ivrActions(object):
                       'tab' : 2,
                       'icon' : 'busy.png',
                       'input' : { 'timeout' : 'Timeout' },
-                      'textarea' : { 'description' : 'Description' }
                       }
 
         self.congestion = { 'title' : 'Congestion properties ...',
@@ -214,7 +195,6 @@ class ivrActions(object):
                             'tab' : 2,
                             'icon' : 'congestion.png',
                             'input' : { 'timeout' : 'Timeout' },
-                            'textarea' : { 'description' : 'Description' }
                           }
 
 
