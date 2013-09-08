@@ -24,7 +24,7 @@ class ivrActions(object):
 
         self.wait4digits = { 'title' : 'Wait4digits properties ...',
                              'height' : 350,
-                             'width' : 380,
+                             'width' : 320,
                              'tab' : 1,
                              'icon' : 'wait4digits.png',
                              'maxconn' : { 'source' : -1, 'target' : -1 },
@@ -35,23 +35,23 @@ class ivrActions(object):
 
 
         self.prompts = { 'title' : 'Prompts properties ...',
-                         'height' : 270,
-                         'width' : 500,
+                         'height' : 350,
+                         'width' : 320,
                          'tab' : 1,
                          'icon' : 'prompts.png',
                          'input' : { 'prompt_path' : 'Prompt File Path' },
                        }
 
         self.execute = { 'title' : 'Execute properties ...',
-                         'height' : 270,
-                         'width' : 500,
+                         'height' : 350,
+                         'width' : 320,
                          'tab' : 1,
                          'icon' : 'execute.png',
                          'input' : { 'application' : 'Asterisk application', 'arguments' : 'Arguments' },
                        }
 
         self.start = { 'title' : 'Start properties ...',
-                       'height' : 300,
+                       'height' : 350,
                        'width' : 320,
                        'tab' : 1,
                        'icon' : 'start.png',
@@ -59,7 +59,7 @@ class ivrActions(object):
                      }
 
         self.voicemail = { 'title' : 'Voicemail properties ...',
-                       'height' : 300,
+                       'height' : 350,
                        'width' : 320,
                        'tab' : 1,
                        'icon' : 'voicemail.png',
@@ -67,7 +67,7 @@ class ivrActions(object):
                      }
 
         self.debug = { 'title' : 'Debug properties ...',
-                       'height' : 300,
+                       'height' : 350,
                        'width' : 320,
                        'tab' : 1,
                        'icon' : 'debug.png',
@@ -75,7 +75,7 @@ class ivrActions(object):
                      }
 
         self.func = { 'title' : 'Function properties ...',
-                       'height' : 300,
+                       'height' : 350,
                        'width' : 320,
                        'tab' : 1,
                        'icon' : 'func.png',
@@ -84,7 +84,7 @@ class ivrActions(object):
                      }
 
         self.language = { 'title' : 'Language properties ...',
-                          'height' : 300,
+                          'height' : 350,
                           'width' : 320,
                           'tab' : 1,
                           'icon' : 'language.png',
@@ -108,7 +108,7 @@ class ivrActions(object):
                          }
 
         self.directory = { 'title' : 'Directory properties ...',
-                           'height' : 300,
+                           'height' : 350,
                            'width' : 320,
                            'tab' : 2,
                            'icon' : 'directory.png',
@@ -116,7 +116,7 @@ class ivrActions(object):
                         }
 
         self.read = { 'title' : 'Read properties ...',
-                      'height' : 300,
+                      'height' : 350,
                       'width' : 320,
                       'tab' : 2,
                       'icon' : 'read.png',
@@ -124,7 +124,7 @@ class ivrActions(object):
                     }
 
         self.dial = { 'title' : 'Dial properties ...',
-                      'height' : 300,
+                      'height' : 350,
                       'width' : 320,
                       'tab' : 1,
                       'icon' : 'dial.png',
@@ -132,7 +132,7 @@ class ivrActions(object):
                     }
 
         self.answer = { 'title' : 'Answer properties ...',
-                        'height' : 300,
+                        'height' : 350,
                         'width' : 320,
                         'tab' : 1,
                         'icon' : 'answer.png',
@@ -140,7 +140,7 @@ class ivrActions(object):
                       }
 
         self.gotoif = { 'title' : 'Gotoif properties ...',
-                        'height' : 300,
+                        'height' : 350,
                         'width' : 320,
                         'tab' : 2,
                         'maxconn' : { 'source' : 2, 'target' : 1 },
@@ -149,16 +149,16 @@ class ivrActions(object):
                       }
 
         self.gotoiftime = { 'title' : 'Gotoiftime properties ...',
-                            'height' : 300,
+                            'height' : 350,
                             'width' : 320,
                             'tab' : 2,
                             'maxconn' : { 'source' : 2, 'target' : 1 },
                             'icon' : 'gotoiftime.png',
-                            'input' : { 'expression' : 'Expression' },
+                            'input' : { 'expression' : 'Expression (ex. *,*,24,jun)' },
                           }
 
         self.setvar = { 'title' : 'Set variable properties ...',
-                        'height' : 300,
+                        'height' : 350,
                         'width' : 320,
                         'tab' : 2,
                         'icon' : 'setvar.png',
@@ -166,7 +166,7 @@ class ivrActions(object):
                       }
 
         self.goto = { 'title' : 'Goto properties ...',
-                      'height' : 300,
+                      'height' : 350,
                       'width' : 320,
                       'tab' : 2,
                       'icon' : 'goto.png',
@@ -174,7 +174,7 @@ class ivrActions(object):
                       }
 
         self.wait = { 'title' : 'Wait properties ...',
-                      'height' : 300,
+                      'height' : 350,
                       'width' : 320,
                       'tab' : 2,
                       'icon' : 'wait.png',
@@ -182,7 +182,7 @@ class ivrActions(object):
                       }
 
         self.busy = { 'title' : 'Busy properties ...',
-                      'height' : 300,
+                      'height' : 350,
                       'width' : 320,
                       'tab' : 2,
                       'icon' : 'busy.png',
@@ -190,7 +190,7 @@ class ivrActions(object):
                       }
 
         self.congestion = { 'title' : 'Congestion properties ...',
-                            'height' : 300,
+                            'height' : 350,
                             'width' : 320,
                             'tab' : 2,
                             'icon' : 'congestion.png',
