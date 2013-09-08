@@ -278,6 +278,14 @@ class Ivr(object):
             return ['Busy(%s)' % self.application_config(config, 'timeout')]
         if app == 'congestion':
             return ['Congestion(%s)' % self.application_config(config, 'timeout')]
+        if app == 'monitor':
+            return ['Monitor(wav,%s)' % self.application_config(config, 'filename')]
+        if app == 'monitorstop':
+            return ['StopMonitor()']
+        if app == 'monitorpause':
+            return ['PauseMonitor()']
+        if app == 'monitorunpause':
+            return ['UnpauseMonitor()']
         return ['NoOp(\'%s\')' % app]
 
 

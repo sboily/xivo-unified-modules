@@ -197,6 +197,14 @@ class ivrActions(object):
                             'input' : { 'timeout' : 'Timeout' },
                           }
 
+        self.monitor = { 'title' : 'Monitor properties ...',
+                         'height' : 350,
+                         'width' : 320,
+                         'tab' : 2,
+                         'icon' : 'congestion.png',
+                         'input' : { 'filename' : 'Filename (optional)' },
+                       }
+
 
     def getJsonactions(self):
         for act in self.__dict__.items():

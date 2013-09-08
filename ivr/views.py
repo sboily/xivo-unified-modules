@@ -51,6 +51,12 @@ def ivr_show(id):
 def ivr_shows(id):
     return ivr.shows(id)
 
+@bp_ivr.route('/ivr/check/<id>')
+@login_required
+def ivr_check(id):
+    return "Congrats ! You're dialplan is correct, \
+            there is no error ! <br><strong>BUT</strong> there is no check for the moment ;-)"
+
 @bp_ivr.route('/ivr/edit/<id>')
 @login_required
 def ivr_edit(id):
