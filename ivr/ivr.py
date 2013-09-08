@@ -275,9 +275,9 @@ class Ivr(object):
                 if a['action'] == 'true':
                     pass
 
-            app_config.append('GotoIfTime(%s?${PRIORITY}+%s)' %(self.application_config(config, 'expression'), len(dialplan[1][random_exten])))
+            app_config.append('GotoIfTime(%s?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), len(dialplan[1][random_exten])))
             for d in dialplan[1][random_exten]:
-                app_config.append(d)
+                app_config.append(d.split('same = n,')[1])
             del dialplan[1][random_exten]
 
             return app_config
