@@ -145,7 +145,7 @@ class ivrActions(object):
                         'tab' : 2,
                         'maxconn' : { 'source' : 2, 'target' : 1 },
                         'icon' : 'gotoif.png',
-                        'input' : { 'expression' : 'Expression', 'true' : 'If true', 'false' : 'If false' },
+                        'input' : { 'expression' : 'Expression' },
                       }
 
         self.gotoiftime = { 'title' : 'Gotoiftime properties ...',

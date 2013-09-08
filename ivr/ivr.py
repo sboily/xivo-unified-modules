@@ -263,24 +263,9 @@ class Ivr(object):
             return ['Read(%s,%s,%s,,,%s)' %(self.application_config(config, 'variable'), self.application_config(config, 'prompt'), \
                                             self.application_config(config, 'maxdigits'), self.application_config(config, 'timeout'))]
         if app == 'gotoif':
-            return ['GotoIf(%s?%s:%s)' %(self.application_config(config, 'expression'), self.application_config(config, 'true'), \
-                                         self.application_config(config, 'false'))]
+            return self.action_goto_if(id, config, app)
         if app == 'gotoiftime':
-            my_action = self.application_find_action(id)
-            random_exten = random.random()
-            for a in my_action:
-                if a['action'] == 'false':
-                    dialplan[1].update({random_exten : []})
-                    self.generate_same(a['target'], random_exten)
-                if a['action'] == 'true':
-                    pass
-
-            app_config.append('GotoIfTime(%s?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
-            for d in dialplan[1][random_exten]:
-                app_config.append(d.split('same = n,')[1])
-            del dialplan[1][random_exten]
-
-            return app_config
+            return self.action_goto_if(id, config, app)
         if app == 'setvar':
             return ['Set(%s=%s)' %(self.application_config(config, 'variable'), self.application_config(config, 'value'))]
         if app == 'goto':
@@ -294,6 +279,29 @@ class Ivr(object):
         if app == 'congestion':
             return ['Congestion(%s)' % self.application_config(config, 'timeout')]
         return ['NoOp(\'%s\')' % app]
+
+
+    def action_goto_if(self, id, config, application):
+        app_config = []
+        my_action = self.application_find_action(id)
+        random_exten = random.random()
+        for a in my_action:
+            dialplan[1].update({random_exten : []})
+            if a['action'] == 'false':
+                self.generate_same(a['target'], random_exten)
+
+        if application == 'gotoif':
+            app_config.append('GotoIf($[%s]?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
+        if application == 'gotoiftime':
+            app_config.append('GotoIfTime(%s?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
+
+        for d in dialplan[1][random_exten]:
+            app_config.append(d.split('same = n,')[1])
+
+        if dialplan[1].has_key(random_exten):
+            del dialplan[1][random_exten]
+
+        return app_config
 
     def application_find_digits(self, id):
         digits = []
