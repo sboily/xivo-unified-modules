@@ -103,6 +103,7 @@ class ivrActions(object):
                            'height' : 300,
                            'width' : 320,
                            'tab' : 2,
+                           'maxconn' : { 'source' : 0, 'target' : -1 },
                            'icon' : 'authenticate.png',
                            'input' : { 'context' : 'Context name (without auto prefix)', 'start' : 'Number of the start IVR (s if you haven\'t one' },
                          }
@@ -201,10 +202,41 @@ class ivrActions(object):
                          'height' : 350,
                          'width' : 320,
                          'tab' : 2,
-                         'icon' : 'congestion.png',
+                         'icon' : 'monitor.png',
                          'input' : { 'filename' : 'Filename (optional)' },
                        }
 
+        self.saydigits = { 'title' : 'Saydigits properties ...',
+                           'height' : 350,
+                           'width' : 320,
+                           'tab' : 2,
+                           'icon' : 'saydigits.png',
+                           'input' : { 'digits' : 'Digits' },
+                         }
+
+        self.wait4ring = { 'title' : 'Wait for ring properties ...',
+                           'height' : 350,
+                           'width' : 320,
+                           'tab' : 2,
+                           'icon' : 'wait4ring.png',
+                           'input' : { 'timeout' : 'Timeout' },
+                         }
+
+        self.wait4silence = { 'title' : 'Wait for silence properties ...',
+                              'height' : 350,
+                              'width' : 320,
+                              'tab' : 2,
+                              'icon' : 'wait4silence.png',
+                              'input' : { 'timeout' : 'Timeout' },
+                           }
+
+        self.wait4music = { 'title' : 'Wait for silence properties ...',
+                            'height' : 350,
+                            'width' : 320,
+                            'tab' : 2,
+                            'icon' : 'wait4silence.png',
+                            'input' : { 'timeout' : 'Timeout', 'musicclass' : 'Music class' },
+                         }
 
     def getJsonactions(self):
         for act in self.__dict__.items():

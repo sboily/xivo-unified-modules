@@ -286,6 +286,17 @@ class Ivr(object):
             return ['PauseMonitor()']
         if app == 'monitorunpause':
             return ['UnpauseMonitor()']
+        if app == 'saydigits':
+            return ['SayDigits(%s)' % self.application_config(config, 'digits')]
+        if app == 'wait4ring':
+            return ['WaitForRing(%s)' % self.application_config(config, 'timeout')]
+        if app == 'wait4silence':
+            return ['WaitForSilence(%s)' % self.application_config(config, 'timeout')]
+        if app == 'wait4music':
+            musicclass = self.application_config(config, 'musicclass')
+            if musicclass == False or len(musicclass) == 0:
+                musicclass = 'default'
+            return ['MusicOnHold(%s,%s)' %(musicclass, self.application_config(config, 'timeout'))]
         return ['NoOp(\'%s\')' % app]
 
 

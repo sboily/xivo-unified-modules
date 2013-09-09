@@ -13,9 +13,10 @@
 <div id="toolbar" class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Basic</a></li>
-        <li><a href="#tab2" data-toggle="tab">Goto</a></li>
-        <li><a href="#tab3" data-toggle="tab">Monitor</a></li>
-        <li><a href="#tab4" data-toggle="tab">Advanced</a></li>
+        <li><a href="#tab2" data-toggle="tab">Wait</a></li>
+        <li><a href="#tab3" data-toggle="tab">Goto</a></li>
+        <li><a href="#tab4" data-toggle="tab">Monitor</a></li>
+        <li><a href="#tab5" data-toggle="tab">Advanced</a></li>
     </ul>
     <div class="tab-content">
        <div class="tab-pane active" id="tab1">
@@ -23,34 +24,40 @@
            <div action="answer" class="nodes icon source target unique"><img src="{{ url_for('ivr.static', filename='images/answer.png') }}" title="answer"/></div>
            <div action="hangup" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/hangup.png') }}" title="hangup"/></div>
            <div action="prompts" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/prompt.png') }}" title="prompts"/></div>
-           <div action="wait4digits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
            <div action="voicemail" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/voicemail.png') }}" title="voicemail"/></div>
            <div action="dial" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/dial.png') }}" title="dial"/></div>
            <div action="directory" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/directory.png') }}" title="directory"/></div>
        </div>
        <div class="tab-pane" id="tab2">
+           <div action="wait" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait.png') }}" title="wait"/></div>
+           <div action="wait4digits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4digits.png') }}" title="wait4digits"/></div>
+           <div action="wait4ring" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4ring.png') }}" title="wait4ring"/></div>
+           <div action="wait4music" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4music.png') }}" title="wait4music"/></div>
+           <div action="wait4silence" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait4silence.png') }}" title="wait4silence"/></div>
+       </div>
+       <div class="tab-pane" id="tab3">
            <div action="goto" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/goto.png') }}" title="goto"/></div>
            <div action="gotoif" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/gotoif.png') }}" title="gotoif"/></div>
            <div action="gotoiftime" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/gotoiftime.png') }}" title="gotoiftime"/></div>
            <div action="switchivr" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/switchivr.png') }}" title="switchivr"/></div>
        </div>
-       <div class="tab-pane" id="tab3">
+       <div class="tab-pane" id="tab4">
            <div action="monitor" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitor.png') }}" title="monitor"/></div>
            <div action="monitorstop" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitorstop.png') }}" title="monitorstop"/></div>
            <div action="monitorpause" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitorpause.png') }}" title="monitorpause"/></div>
            <div action="monitorunpause" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitorunpause.png') }}" title="monitorunpause"/></div>
        </div>
-       <div class="tab-pane" id="tab4">
+       <div class="tab-pane" id="tab5">
            <div action="execute" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
            <div action="debug" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/debug.png') }}" title="debug"/></div>
            <div action="func" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/func.png') }}" title="func"/></div>
            <div action="authenticate" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/authenticate.png') }}" title="authenticate"/></div>
            <div action="read" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/read.png') }}" title="read"/></div>
            <div action="setvar" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/setvar.png') }}" title="setvar"/></div>
-           <div action="wait" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/wait.png') }}" title="wait"/></div>
            <div action="busy" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/busy.png') }}" title="busy"/></div>
            <div action="congestion" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/congestion.png') }}" title="congestion"/></div>
            <div action="language" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/language.png') }}" title="language"/></div>
+           <div action="saydigits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/saydigits.png') }}" title="saydigits"/></div>
        </div>
     </div>
 </div>
