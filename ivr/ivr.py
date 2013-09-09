@@ -297,6 +297,16 @@ class Ivr(object):
             if musicclass == False or len(musicclass) == 0:
                 musicclass = 'default'
             return ['MusicOnHold(%s,%s)' %(musicclass, self.application_config(config, 'timeout'))]
+        if app == 'dbexists':
+            return self.action_goto_if(id, config, app)
+        if app == 'dbput':
+            return ['Set(DB(%s)=%s)' %(self.application_config(config, 'key'), self.application_config(config, 'value'))]
+        if app == 'dbget':
+            return ['Set(%s=DB(%s))' %(self.application_config(config, 'variable'), self.application_config(config, 'key'))]
+        if app == 'dbdel':
+            return ['NoOp(DB_DELETE(%s))' % self.application_config(config, 'key')]
+        if app == 'dbdeltree':
+            return ['DBdeltree(%s)' % self.application_config(config, 'key')]
         return ['NoOp(\'%s\')' % app]
 
 
@@ -314,6 +324,8 @@ class Ivr(object):
             app_config.append('GotoIf($[%s]?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
         if application == 'gotoiftime':
             app_config.append('GotoIfTime(%s?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
+        if application == 'dbexists':
+            app_config.append('GotoIf($[DB_EXISTS(%s) == 1]?$[${PRIORITY}+%s])' %(self.application_config(config, 'key'),int(len(dialplan[1][random_exten])+1)))
 
         for d in dialplan[1][random_exten]:
             app_config.append(d.split('same = n,')[1])

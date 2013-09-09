@@ -16,7 +16,8 @@
         <li><a href="#tab2" data-toggle="tab">Wait</a></li>
         <li><a href="#tab3" data-toggle="tab">Goto</a></li>
         <li><a href="#tab4" data-toggle="tab">Monitor</a></li>
-        <li><a href="#tab5" data-toggle="tab">Advanced</a></li>
+        <li><a href="#tab5" data-toggle="tab">Db</a></li>
+        <li><a href="#tab6" data-toggle="tab">Advanced</a></li>
     </ul>
     <div class="tab-content">
        <div class="tab-pane active" id="tab1">
@@ -49,6 +50,13 @@
            <div action="monitorunpause" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitorunpause.png') }}" title="monitorunpause"/></div>
        </div>
        <div class="tab-pane" id="tab5">
+           <div action="dbexists" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbexists.png') }}" title="dbexists"/></div>
+           <div action="dbget" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbget.png') }}" title="dbget"/></div>
+           <div action="dbput" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbput.png') }}" title="dbput"/></div>
+           <div action="dbdel" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbdel.png') }}" title="dbdel"/></div>
+           <div action="dbdeltree" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbdeltree.png') }}" title="dbdeltree"/></div>
+       </div>
+       <div class="tab-pane" id="tab6">
            <div action="execute" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
            <div action="debug" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/debug.png') }}" title="debug"/></div>
            <div action="authenticate" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/authenticate.png') }}" title="authenticate"/></div>

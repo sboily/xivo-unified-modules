@@ -229,6 +229,47 @@ class ivrActions(object):
                             'input' : { 'timeout' : 'Timeout', 'musicclass' : 'Music class' },
                          }
 
+        self.dbexists = { 'title' : 'DBExists properties ...',
+                          'height' : 350,
+                          'width' : 320,
+                          'tab' : 2,
+                          'maxconn' : { 'source' : 2, 'target' : 1 },
+                          'icon' : 'dbexists.png',
+                          'input' : { 'key' : 'Family/key' },
+                         }
+
+        self.dbput = { 'title' : 'DBPut properties ...',
+                       'height' : 350,
+                       'width' : 320,
+                       'tab' : 2,
+                       'icon' : 'dbput.png',
+                       'input' : { 'key' : 'Family/key', 'value' : 'Value' },
+                     }
+
+        self.dbget = { 'title' : 'DBGet properties ...',
+                       'height' : 350,
+                       'width' : 320,
+                       'tab' : 2,
+                       'icon' : 'dbget.png',
+                       'input' : { 'key' : 'Family/key', 'variable' : 'Variable' },
+                     }
+
+        self.dbdel = { 'title' : 'DBDelete properties ...',
+                       'height' : 350,
+                       'width' : 320,
+                       'tab' : 2,
+                       'icon' : 'dbget.png',
+                       'input' : { 'key' : 'Family/key' },
+                     }
+
+        self.dbdeltree = { 'title' : 'DBDeltree properties ...',
+                           'height' : 350,
+                           'width' : 320,
+                           'tab' : 2,
+                           'icon' : 'dbget.png',
+                           'input' : { 'key' : 'Family/key' },
+                          }
+
     def getJsonactions(self):
         for act in self.__dict__.items():
             if act[0] != 'actions':

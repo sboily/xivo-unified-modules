@@ -46,6 +46,11 @@
     height: 150px;
 }
 
+.icon.ui-draggable {
+    width: 30px;
+    height: 30px;
+}
+
 .aLabel {
  	background-color:white; 
 	padding:0.4em; 

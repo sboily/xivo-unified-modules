@@ -555,6 +555,10 @@ $(function() {
         if($('#' + my_source).attr('action') == "gotoiftime") {
             whattruefalse(my_conn);
         }
+
+        if($('#' + my_source).attr('action') == "dbexists") {
+            whattruefalse(my_conn);
+        }
     });
 
     jsPlumb.bind("click", function(conn) {
