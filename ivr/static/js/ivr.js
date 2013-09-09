@@ -3,6 +3,10 @@ $(function() {
     var id=1;
     var node_config = Object();
     var ivr_name_edit = false;
+    var sUsrAg = navigator.userAgent;
+
+    if (sUsrAg.indexOf("Firefox") == -1) 
+        alert("Only the latest firefox is supported with this module !");
 
     $.each($('.nodes_config').children('.node_config'), function( index ) {
         node_config[this.id] = Object();
@@ -16,17 +20,33 @@ $(function() {
     });
 
     add_node = function(icon, name, styles) {
+        var comment = false;
+
         my_node = icon.clone()
                       .attr('id', name)
                       .removeClass("icon ui-draggable ui-draggable-dragging")
                       .addClass("dropped_icon node")
                       .css(styles);
 
+        if (my_node.attr('action') == 'comment') {
+            my_node.find("img").remove();
+            my_node.append("<textarea id='textarea-comment'></textarea>")
+                   .addClass("comment");
+            my_node.find("#textarea-comment").attr("cols", 50)
+                                             .attr("rows", 6)
+                                             .attr("placeholder", "Add comment here !")
+                                             .css("resize", "none");
+            comment = true;
+        }
+
         my_node.append("<i class='btn-icon-only icon-remove node-icon-action-remove'>");
         if (node_config[my_node.attr("action")])
             my_node.append("<i class='btn-icon-only icon-wrench node-icon-action-wrench'>");
 
         my_node.append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
+        if (comment == true) {
+            my_node.find(".endpoint").css("display", "none");
+        }
         $("#ivr").append(my_node);
 
         if (my_node.hasClass("source"))

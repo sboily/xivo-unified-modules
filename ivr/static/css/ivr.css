@@ -41,6 +41,11 @@
     display: none;
 }
 
+.comment.dropped_icon {
+    width: 250px;
+    height: 150px;
+}
+
 .aLabel {
  	background-color:white; 
 	padding:0.4em; 

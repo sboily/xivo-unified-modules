@@ -74,15 +74,6 @@ class ivrActions(object):
                        'input' : { 'arguments' : 'Arguments' },
                      }
 
-        self.func = { 'title' : 'Function properties ...',
-                       'height' : 350,
-                       'width' : 320,
-                       'tab' : 1,
-                       'icon' : 'func.png',
-                       'input' : { 'name' : 'Name' },
-                       'textarea' : { 'function' : 'Function' }
-                     }
-
         self.language = { 'title' : 'Language properties ...',
                           'height' : 350,
                           'width' : 320,
