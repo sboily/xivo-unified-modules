@@ -258,7 +258,7 @@ class ivrActions(object):
                        'height' : 350,
                        'width' : 320,
                        'tab' : 2,
-                       'icon' : 'dbget.png',
+                       'icon' : 'dbdel.png',
                        'input' : { 'key' : 'Family/key' },
                      }
 
@@ -266,9 +266,49 @@ class ivrActions(object):
                            'height' : 350,
                            'width' : 320,
                            'tab' : 2,
-                           'icon' : 'dbget.png',
+                           'icon' : 'dbdeltree.png',
                            'input' : { 'key' : 'Family/key' },
                           }
+
+        self.gosub = { 'title' : 'Gosub properties ...',
+                       'height' : 350,
+                       'width' : 320,
+                       'tab' : 2,
+                       'icon' : 'gosub.png',
+                       'input' : { 'arguments' : 'Arguments' },
+                     }
+
+        self.celgenuser = { 'title' : 'CELGenUserEvent properties ...',
+                            'height' : 350,
+                            'width' : 320,
+                            'tab' : 2,
+                            'icon' : 'celgenuser.png',
+                            'input' : { 'event' : 'Event name', 'extra' : 'Extra info' },
+                           }
+
+        self.agi = { 'title' : 'AGI properties ...',
+                     'height' : 350,
+                     'width' : 320,
+                     'tab' : 2,
+                     'icon' : 'agi.png',
+                     'input' : { 'command' : 'Command', 'arguments' : 'Arguments' },
+                   }
+ 
+        self.callerid = { 'title' : 'CallerID properties ...',
+                          'height' : 350,
+                          'width' : 320,
+                          'tab' : 2,
+                          'icon' : 'callerid.png',
+                          'input' : { 'name' : 'Name' },
+                        }
+
+        self.voicemailmain = { 'title' : 'CallerID properties ...',
+                               'height' : 350,
+                               'width' : 320,
+                               'tab' : 2,
+                               'icon' : 'voicemailmain.png',
+                               'input' : { 'mailbox' : 'Mailbox', 'options' : 'Options' },
+                             }
 
     def getJsonactions(self):
         for act in self.__dict__.items():

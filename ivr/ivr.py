@@ -308,9 +308,24 @@ class Ivr(object):
         if app == 'dbdeltree':
             return ['DBdeltree(%s)' % self.application_config(config, 'key')]
         if app == 'rosette':
+            return ['Playback(demo-congrats)', 'Hangup()']
+        if app == 'monkey':
             return ['Playback(tt-monkeysintro)', 'Hangup()']
+        if app == 'konami':
+            return ['Authenticate(2288464631,,10)']
+        if app == 'gosub':
+            return ['Gosub(%s)' % self.application_config(config, 'arguments')]
+        if app == 'return':
+            return ['Return()']
+        if app == 'agi':
+            return ['Agi(%s,%s)' %(self.application_config(config, 'command'), self.application_config(config, 'arguments'))]
+        if app == 'voicemailmain':
+            return ['VoicemailMain(%s,%s)' %(self.application_config(config, 'mailbox'), self.application_config(config, 'options'))]
+        if app == 'celgenuser':
+            return ['CELGenUserEvent(%s,%s)' %(self.application_config(config, 'event'), self.application_config(config, 'extra'))]
+        if app == 'callerid':
+            return ['Set(CHANNEL(callerid)=%s)' % self.application_config(config, 'name')]
         return ['NoOp(\'%s\')' % app]
-
 
     def action_goto_if(self, id, config, application):
         app_config = []

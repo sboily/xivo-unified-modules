@@ -17,7 +17,9 @@
         <li><a href="#tab3" data-toggle="tab">Goto</a></li>
         <li><a href="#tab4" data-toggle="tab">Monitor</a></li>
         <li><a href="#tab5" data-toggle="tab">Db</a></li>
-        <li><a href="#tab6" data-toggle="tab">Advanced</a></li>
+        <li><a href="#tab6" data-toggle="tab">Cel</a></li>
+        <li><a href="#tab7" data-toggle="tab">Advanced</a></li>
+        <li><a href="#tab8" data-toggle="tab">Fun</a></li>
     </ul>
     <div class="tab-content">
        <div class="tab-pane active" id="tab1">
@@ -42,6 +44,8 @@
            <div action="gotoif" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/gotoif.png') }}" title="gotoif"/></div>
            <div action="gotoiftime" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/gotoiftime.png') }}" title="gotoiftime"/></div>
            <div action="switchivr" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/switchivr.png') }}" title="switchivr"/></div>
+           <div action="gosub" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/gosub.png') }}" title="gosub"/></div>
+           <div action="return" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/return.png') }}" title="return"/></div>
        </div>
        <div class="tab-pane" id="tab4">
            <div action="monitor" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/monitor.png') }}" title="monitor"/></div>
@@ -57,6 +61,9 @@
            <div action="dbdeltree" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/dbdeltree.png') }}" title="dbdeltree"/></div>
        </div>
        <div class="tab-pane" id="tab6">
+           <div action="celgenuser" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/celgenuser.png') }}" title="celgenuser"/></div>
+       </div>
+       <div class="tab-pane" id="tab7">
            <div action="execute" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/execute.png') }}" title="execute"/></div>
            <div action="debug" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/debug.png') }}" title="debug"/></div>
            <div action="authenticate" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/authenticate.png') }}" title="authenticate"/></div>
@@ -66,7 +73,14 @@
            <div action="congestion" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/congestion.png') }}" title="congestion"/></div>
            <div action="language" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/language.png') }}" title="language"/></div>
            <div action="saydigits" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/saydigits.png') }}" title="saydigits"/></div>
+           <div action="callerid" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/callerid.png') }}" title="callerid"/></div>
+           <div action="agi" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/agi.png') }}" title="agi"/></div>
+           <div action="voicemailmain" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/voicemailmain.png') }}" title="voicemailmain"/></div>
+       </div>
+       <div class="tab-pane" id="tab8">
            <div action="rosette" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/rosette.png') }}" title="rosette"/></div>
+           <div action="monkey" class="nodes icon target"><img src="{{ url_for('ivr.static', filename='images/monkey.png') }}" title="monkey"/></div>
+           <div action="konami" class="nodes icon source target"><img src="{{ url_for('ivr.static', filename='images/konami.png') }}" title="konami"/></div>
        </div>
     </div>
 </div>
