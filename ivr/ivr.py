@@ -324,7 +324,7 @@ class Ivr(object):
         if app == 'celgenuser':
             return ['CELGenUserEvent(%s,%s)' %(self.application_config(config, 'event'), self.application_config(config, 'extra'))]
         if app == 'callerid':
-            return ['Set(CHANNEL(callerid)=%s)' % self.application_config(config, 'name')]
+            return ['Set(CALLERID(name)=%s)' % self.application_config(config, 'name')]
         return ['NoOp(\'%s\')' % app]
 
     def action_goto_if(self, id, config, application):
