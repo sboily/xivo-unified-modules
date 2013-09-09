@@ -305,7 +305,8 @@ class Ivr(object):
         my_action = self.application_find_action(id)
         random_exten = random.random()
         for a in my_action:
-            dialplan[1].update({random_exten : []})
+            if not dialplan[1].has_key(random_exten):
+                dialplan[1].update({random_exten : []})
             if a['action'] == 'false':
                 self.generate_same(a['target'], random_exten)
 
