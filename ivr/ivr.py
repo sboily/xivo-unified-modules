@@ -304,9 +304,11 @@ class Ivr(object):
         if app == 'dbget':
             return ['Set(%s=${DB(%s)})' %(self.application_config(config, 'variable'), self.application_config(config, 'key'))]
         if app == 'dbdel':
-            return ['NoOp(DB_DELETE(%s))' % self.application_config(config, 'key')]
+            return ['Set(${DB_DELETE(%s)})' % self.application_config(config, 'key')]
         if app == 'dbdeltree':
             return ['DBdeltree(%s)' % self.application_config(config, 'key')]
+        if app == 'rosette':
+            return ['Playback(tt-monkeysintro)', 'Hangup()']
         return ['NoOp(\'%s\')' % app]
 
 
