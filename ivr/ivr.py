@@ -302,7 +302,7 @@ class Ivr(object):
         if app == 'dbput':
             return ['Set(DB(%s)=%s)' %(self.application_config(config, 'key'), self.application_config(config, 'value'))]
         if app == 'dbget':
-            return ['Set(%s=DB(%s))' %(self.application_config(config, 'variable'), self.application_config(config, 'key'))]
+            return ['Set(%s=${DB(%s)})' %(self.application_config(config, 'variable'), self.application_config(config, 'key'))]
         if app == 'dbdel':
             return ['NoOp(DB_DELETE(%s))' % self.application_config(config, 'key')]
         if app == 'dbdeltree':
@@ -325,7 +325,7 @@ class Ivr(object):
         if application == 'gotoiftime':
             app_config.append('GotoIfTime(%s?$[${PRIORITY}+%s])' %(self.application_config(config, 'expression'), int(len(dialplan[1][random_exten])+1)))
         if application == 'dbexists':
-            app_config.append('GotoIf($[DB_EXISTS(%s) == 1]?$[${PRIORITY}+%s])' %(self.application_config(config, 'key'),int(len(dialplan[1][random_exten])+1)))
+            app_config.append('GotoIf($[${DB_EXISTS(%s)} == 1]?$[${PRIORITY}+%s])' %(self.application_config(config, 'key'),int(len(dialplan[1][random_exten])+1)))
 
         for d in dialplan[1][random_exten]:
             app_config.append(d.split('same = n,')[1])
