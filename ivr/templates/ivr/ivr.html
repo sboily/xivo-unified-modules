@@ -1,9 +1,16 @@
 {% extends "base.html" %}
+
+{% block header %}
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.form.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ajaxfileupload.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 
 <div class="container">
 <div class="widget stacked widget-table action-table">
   <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('ivr.ivr_add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
+  <p class="text-right"><a data-url="{{url_for('ivr.ivr_save')}}" class="btn btn-small confirm" data-toggle="modal" data-target="#upload-dialplan-dialog"><i class="btn-icon-only icon-upload"></i> Upload</a></p>
   <table class="table table-bordered">
 <div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
@@ -21,6 +28,7 @@
       <td>{{ i.created_time }}</td>
       <td class="td-actions">
         <a href="{{url_for('ivr.ivr_show', id=i.id)}}" class="btn btn-small confirm" id="{{i.id}}" data-toggle="modal" data-target="#dialplan-dialog"><i class="btn-icon-only icon-eye-open"></i></a>
+        <a href="{{url_for('ivr.ivr_export', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-download"></i></a>
         <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
         <a data-url="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-small confirm" id="{{i.id}}" data-toggle="modal" data-target="#confirm-dialog"><i class="btn-icon-only icon-remove"></i></a>
         </td>
@@ -33,4 +41,5 @@
 
 {% include "confirm.html" %}
 {% include "ivr_show.html" %}
+{% include "upload.html" %}
 {% endblock %}

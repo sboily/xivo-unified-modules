@@ -8,6 +8,11 @@ $(function() {
     if (sUsrAg.indexOf("Firefox") == -1) 
         alert("Only the latest firefox is supported with this module !");
 
+    $(window).resize(function(){
+        console.log('resize');
+        jsPlumb.repaintEverything();
+    });
+
     $.each($('.nodes_config').children('.node_config'), function( index ) {
         node_config[this.id] = Object();
         node_config[this.id].title = $(this).attr('title');
@@ -30,12 +35,13 @@ $(function() {
 
         if (my_node.attr('action') == 'comment') {
             my_node.find("img").remove();
-            my_node.append("<textarea id='textarea-comment'></textarea>")
+            my_node.append("<textarea id='textarea-comment' name='comment'></textarea>")
                    .addClass("comment");
             my_node.find("#textarea-comment").attr("cols", 50)
                                              .attr("rows", 6)
                                              .attr("placeholder", "Add comment here !")
                                              .css("resize", "none");
+
             comment = true;
         }
 
@@ -237,6 +243,7 @@ $(function() {
     set_node_config = function(value) {
         node = value.id;
         config = value.config;
+
         $.each(config, function(index, value) {
             $('#' + node).attr(index, value);
         });
@@ -246,6 +253,9 @@ $(function() {
         my_elem = $("#" + node);
         elem = my_elem.attr("config");
         var config = Object();
+
+        if (my_elem.find("#textarea-comment").val() != undefined)
+            config['comment'] = $("#textarea-comment").val()
 
         try {
             $.each(node_config[elem]["config"], function (i) {
@@ -368,6 +378,10 @@ $(function() {
 
             if ($('#' + value.id).attr('description')) {
                 add_popover(value.id);
+            }
+
+            if ($("#" + value.id).find("#textarea-comment").size() == 1) {
+                $("#" + value.id).find("#textarea-comment").text($("#" + value.id).attr('comment'));
             }
 
         });

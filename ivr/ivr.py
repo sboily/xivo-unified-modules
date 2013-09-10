@@ -95,6 +95,17 @@ class Ivr(object):
                             .first()
         return my_ivr
 
+    def export(self, id):
+        my_ivr = self.edit(id)
+
+        my_export = { "name" : my_ivr.name,
+                      "context" : my_ivr.context,
+                      "nodes" : json.loads(my_ivr.nodes),
+                      "connections" : json.loads(my_ivr.connections),
+                      "is_edit" : "add"
+                    }
+        return json.dumps(my_export)
+
     def debug(self, my_ivr):
         import pprint
         pprint.pprint(json.loads(my_ivr.nodes))

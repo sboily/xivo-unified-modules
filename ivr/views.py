@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, url_for, request, jsonify, redirect, flash
+from flask import render_template, url_for, request, jsonify, redirect, flash, Response
 from flask.ext.login import login_required
 import json
 
@@ -38,13 +38,30 @@ def ivr_add():
 @bp_ivr.route('/ivr/save', methods=['POST'])
 @login_required
 def ivr_save():
-    my_ivr = ivr.save(request.json)
+    my_json = request.json
+    url_redirect = False
+    if not my_json:
+        my_json = json.load(request.files['my_file'].stream)
+        url_redirect = True
+
+    my_ivr = ivr.save(my_json)
+    if url_redirect:
+        flash('Upload is completed !')
+        return redirect(url_for("ivr.ivr_list"))
     return jsonify(my_ivr)
 
 @bp_ivr.route('/ivr/show/<id>')
 @login_required
 def ivr_show(id):
     return ivr.show(id)
+
+@bp_ivr.route('/ivr/export/<id>')
+@login_required
+def ivr_export(id):
+    return Response(ivr.export(id),
+                       mimetype="application/json",
+                       headers={"Content-Disposition":
+                                    "attachment;filename=ivr.txt"})
 
 @bp_ivr.route('/ivr/shows/<id>')
 @login_required
