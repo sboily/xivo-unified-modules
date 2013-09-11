@@ -51,7 +51,7 @@ def add():
         voicemails.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
         flash('Voicemail added')
         return redirect(url_for('voicemails.list'))
-    return render_template('user_add.html', form=form)
+    return render_template('voicemail_add.html', form=form)
 
 @bp_voicemails.route('/voicemails/<id>', methods=['GET', 'POST'])
 @login_required
@@ -61,7 +61,7 @@ def edit(id):
     if form.is_submitted():
         voicemails.edit(VoicemailForm(obj=voicemails), id)
         return redirect(url_for("voicemails.list"))
-    return render_template('user_edit.html', voicemails=my_voicemails, form=form)
+    return render_template('voicemail_edit.html', voicemails=my_voicemails, form=form)
 
 @bp_voicemails.route('/voicemails/delete/<id>')
 @login_required

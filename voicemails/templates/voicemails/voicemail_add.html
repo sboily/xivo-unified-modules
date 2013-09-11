@@ -4,11 +4,10 @@
 
       <form class="form" method="post">
         {{ form.csrf_token }}
-        <h2 class="form">Add user</h2>
-        {{ render_field(form.id, class="input-xlarge") }}
-        {{ render_field(form.mac, class="input-xlarge") }}
-        {{ render_field(form.plugin, class="input-xlarge") }}
-        {{ render_field(form.template_id, class="input-xlarge") }}
+        <h2 class="form">Add voicemail</h2>
+        {{ render_field(form.mailbox, class="input-xlarge") }}
+        {{ render_field(form.email, class="input-xlarge") }}
+        {{ render_field(form.password, class="input-xlarge") }}
         {{ render_field(form.submit, class="input-xlarge") }}
       </form>
 
