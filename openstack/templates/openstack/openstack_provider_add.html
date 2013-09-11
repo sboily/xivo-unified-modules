@@ -2,8 +2,6 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
-    <div class="container">
-
       <form class="form" method="post">
         {{ form.csrf_token }}
         <h2 class="form">{{ _('Add Openstack configuration') }}</h2>
@@ -19,8 +17,6 @@
         {{ render_field(form.keypair_private) }}
         {{ render_field(form.submit, class="btn btn-primary") }}
       </form>
-
-    </div>
 
 {% endblock %}
 

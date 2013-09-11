@@ -2,8 +2,6 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
-    <div class="container">
-
       <form class="form" method="post">
         {{ form.csrf_token }}
         <h2 class="form">{{ _('Edit Amazon configuration') }}</h2>
@@ -14,8 +12,6 @@
         {{ render_field(form.ssh_key, class="input-xlarge") }}
         {{ render_field(form.submit, class="btn btn-primary") }}
       </form>
-
-    </div>
 
 {% endblock %}
 

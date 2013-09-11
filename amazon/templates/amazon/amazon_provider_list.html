@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
-
 <div class="widget stacked widget-table action-table">
   <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('amazon.provider_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
   <table class="table table-bordered table-striped table-highlight tablesorter" id="servers-table">
@@ -28,8 +26,6 @@
     {% endfor %}
     </tbody>
   </table>
-</div>
-
 </div>
 
 {% endblock %}

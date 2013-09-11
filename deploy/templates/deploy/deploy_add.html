@@ -2,13 +2,10 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
-    <div class="container">
         {{ form.csrf_token }}
         <h2 class="form">{{ _('Add Server') }}</h2>
         {{ render_field(form.cloud_provider) }}
       <div id='my_provider'></div>
-    </div>
-
 
 <script>
 
