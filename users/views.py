@@ -38,11 +38,10 @@ def before_request():
 @login_required
 def list():
     my_users = users.api_actions(g.url_rest, "GET", g.server.login, g.server.password)
-    print g.url_rest
     if not my_users:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
-    return render_template('list.html', users=my_users['items'])
+    return render_template('users_list.html', users=my_users['items'])
 
 @bp_users.route('/users/add', methods=['GET', 'POST'])
 @login_required
@@ -52,7 +51,7 @@ def add():
         users.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
         flash('User added')
         return redirect(url_for('users.list'))
-    return render_template('add.html', form=form)
+    return render_template('user_add.html', form=form)
 
 @bp_users.route('/users/<id>', methods=['GET', 'POST'])
 @login_required
@@ -62,7 +61,7 @@ def edit(id):
     if form.is_submitted():
         users.edit(UserForm(obj=users), id)
         return redirect(url_for("users.list"))
-    return render_template('edit.html', users=my_users, form=form)
+    return render_template('user_edit.html', users=my_users, form=form)
 
 @bp_users.route('/users/delete/<id>')
 @login_required
