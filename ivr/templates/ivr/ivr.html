@@ -7,7 +7,6 @@
 
 {% block content %}
 
-<div class="container">
 <div class="widget stacked widget-table action-table">
   <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('ivr.ivr_add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
   <p class="text-right"><a data-url="{{url_for('ivr.ivr_save')}}" class="btn btn-small confirm" data-toggle="modal" data-target="#upload-dialplan-dialog"><i class="btn-icon-only icon-upload"></i> Upload</a></p>
@@ -36,7 +35,6 @@
     {% endfor %}
     </tbody>
   </table>
-</div>
 </div>
 
 {% include "confirm.html" %}
