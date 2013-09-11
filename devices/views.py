@@ -41,7 +41,7 @@ def list():
     if not my_devices:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
-    return render_template('list.html', devices=my_devices['items'])
+    return render_template('devices_list.html', devices=my_devices['items'])
 
 @bp_devices.route('/devices/add', methods=['GET', 'POST'])
 @login_required
@@ -51,7 +51,7 @@ def add():
         devices.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
         flash('Device added')
         return redirect(url_for('devices.list'))
-    return render_template('add.html', form=form)
+    return render_template('device_add.html', form=form)
 
 @bp_devices.route('/devices/<id>', methods=['GET', 'POST'])
 @login_required
@@ -61,7 +61,7 @@ def edit(id):
     if form.is_submitted():
         devices.edit(DeviceForm(obj=devices), id)
         return redirect(url_for("devices.list"))
-    return render_template('edit.html', devices=my_devices, form=form)
+    return render_template('device_edit.html', devices=my_devices, form=form)
 
 @bp_devices.route('/devices/delete/<id>')
 @login_required
