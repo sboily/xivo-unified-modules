@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import Form, TextField, PasswordField, ValidationError
+from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError, SubmitField
 from flask.ext.wtf import Required
 
 class VoicemailForm(Form):
     mailbox = TextField('Mailbox', [Required()])
-    email = TextField('Email')
-    password = PasswordField('Password')
+    email = TextField('Email', [Required()])
+    password = TextField('Password')
+    submit = SubmitField('Submit')

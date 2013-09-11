@@ -16,5 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from voicemails import Voicemails
 
-voicemails = Blueprint('voicemails', __name__, template_folder='templates/voicemails')
+bp_voicemails = Blueprint('voicemails', __name__, template_folder='templates/voicemails')
+
+voicemails = Voicemails()

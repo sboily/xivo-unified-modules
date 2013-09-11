@@ -4,12 +4,13 @@
 <div class="container">
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('voicemails.voicemail_add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
+  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('voicemails.add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
   <table class="table table-bordered">
 <div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
+        <th>Fullname</th>
         <th>Mailbox</th>
         <th>Email</th>
         <th>Password</th>
@@ -19,12 +20,13 @@
     <tbody>
     {% for v in voicemails %}
       <tr>
+      <td>{{ v.fullname }}</td>
       <td>{{ v.mailbox }}</td>
-      <td>{{ v.email }}</td>
-      <td>{{ v.password }}</td>
+      <td>{{ v.email }} </td>
+      <td>{{ v.password }} </td>
       <td class="td-actions">
-        <a href="{{url_for('voicemails.voicemail_edit', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('voicemails.voicemail_del', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        <a href="{{url_for('voicemails.edit', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
+        <a href="{{url_for('voicemails.delete', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
         </td>
       </tr>
     {% endfor %}
