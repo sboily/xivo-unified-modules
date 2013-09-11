@@ -16,5 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from users import Users
 
-users = Blueprint('users', __name__, template_folder='templates/users')
+bp_users = Blueprint('users', __name__, template_folder='templates/users')
+
+users = Users()

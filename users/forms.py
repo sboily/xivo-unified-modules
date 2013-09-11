@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError
+from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError, SubmitField
 from flask.ext.wtf import Required
 
 class UserForm(Form):
-    firstname = TextField('Firstname', [Required()])
-    lastname = TextField('Lastname', [Required()])
-    username = TextField('Username')
-    password = PasswordField('Password')
+    mac = TextField('Mac', [Required()])
+    plugin = TextField('Plugin', [Required()])
+    id = TextField('Id')
+    template_id = TextField('Template')
+    submit = SubmitField('Submit')

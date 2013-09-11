@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from yapsy.IPlugin import IPlugin
-from setup import users
+from setup import bp_users
 import views
 
 class UsersPlugin(IPlugin):
 
     def setup(self, app):
-        app.register_blueprint(users)
+        app.register_blueprint(bp_users)
 
     def plugin_endpoint(self):
-        return "users.user"
+        return "users.list"
 
