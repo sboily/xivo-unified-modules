@@ -4,17 +4,15 @@
 
     <div class="container">
 
-      <form class="form" method="post" name="user/add">
-        {{ userform.csrf_token }}
-        <h2 class="form">Add user</h2>
-        {{ render_field(userform.firstname, class="input-xlarge") }}
-        {{ render_field(userform.lastname, class="input-xlarge") }}
-        {{ render_field(userform.username, class="input-xlarge") }}
-        {{ render_field(userform.password, class="input-xlarge") }}
-        <button class="btn btn-primary" type="submit">Submit</button>
-
+      <form class="form" method="post">
+        {{ form.csrf_token }}
+        <h2 class="form">Add device</h2>
+        {{ render_field(form.id, class="input-xlarge") }}
+        {{ render_field(form.mac, class="input-xlarge") }}
+        {{ render_field(form.plugin, class="input-xlarge") }}
+        {{ render_field(form.template_id, class="input-xlarge") }}
+        {{ render_field(form.submit, class="input-xlarge") }}
       </form>
-
     </div>
 
 {% endblock %}

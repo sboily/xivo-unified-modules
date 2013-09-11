@@ -59,15 +59,15 @@ class Devices(object):
         return self.check_json(response)
 
     def add(self, form):
-        user = { 'firstname' : userform.firstname.data,
-                 'lastname' : userform.lastname.data,
-                 'username' : userform.username.data,
-                 'password' : userform.password.data
+        user = { 'firstname' : form.firstname.data,
+                 'lastname' : form.lastname.data,
+                 'username' : form.username.data,
+                 'password' : form.password.data
                }
 
     def edit(self, form, id):
-        user = { 'firstname' : userform.firstname.data,
-                 'lastname' : userform.lastname.data,
-                 'username' : userform.username.data,
-                 'password' : userform.password.data
+        user = { 'firstname' : form.firstname.data,
+                 'lastname' : form.lastname.data,
+                 'username' : form.username.data,
+                 'password' : form.password.data
                }
