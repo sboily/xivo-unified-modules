@@ -16,5 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint
+from devices import Devices
 
-devices = Blueprint('devices', __name__, template_folder='templates/devices')
+bp_devices = Blueprint('devices', __name__, template_folder='templates/devices')
+
+devices = Devices()

@@ -4,7 +4,7 @@ Module = devices
 
 [Documentation]
 Module = devices
-DisplayName = Devices Plugin
+DisplayName = Devices
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr

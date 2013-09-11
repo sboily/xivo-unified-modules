@@ -15,15 +15,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from yapsy.IPlugin import IPlugin
-from setup import bp_devices
-import views
 
-class DevicesPlugin(IPlugin):
+from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError
+from flask.ext.wtf import Required
 
-    def setup(self, app):
-        app.register_blueprint(bp_devices)
-
-    def plugin_endpoint(self):
-        return "devices.list"
-
+class DevicesForm(Form):
+    firstname = TextField('Firstname', [Required()])
+    lastname = TextField('Lastname', [Required()])
+    username = TextField('Username')
+    password = PasswordField('Password')
