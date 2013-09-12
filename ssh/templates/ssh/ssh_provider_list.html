@@ -2,14 +2,14 @@
 {% block content %}
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('ssh.provider_add')}}"><i class="icon-plus icon-white"></i> {{_('Add') }}</a></p>
+  <p class="text-right"><a class="btn btn-default btn-primary btn-xs" href="{{url_for('ssh.provider_add')}}"><i class="glyphicon glyphicon-plus"></i> {{_('Add') }}</a></p>
   <table class="table table-bordered table-striped table-highlight tablesorter" id="servers-table">
     <thead>
       <tr>
         <th>{{ _('Name') }}</th>
         <th>{{ _('Ip') }}</th>
         <th>{{ _('Login') }}</th>
-      <th class="td-actions"></th>
+        <th style="width: 70px;"></th>
       </tr>
     </thead>
     <tbody>
@@ -19,8 +19,8 @@
       <td>{{ l.ip }}</td>
       <td>{{ l.login }}</td>
       <td class="td-actions">
-        <a href="{{url_for('ssh.provider_edit', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('ssh.provider_delete', id=l.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+        <a href="{{url_for('ssh.provider_edit', id=l.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="{{url_for('ssh.provider_delete', id=l.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
       </td>
       </tr>
     {% endfor %}

@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('users.add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
+  <p class="text-right"><a class="btn btn-default btn-xs btn-primary" href="{{url_for('users.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
   <table class="table table-bordered">
 <div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
@@ -10,7 +10,7 @@
       <tr>
         <th>id</th>
         <th>Name</th>
-      <th class="td-actions"></th>
+        <th style="width: 70px;"></th>
       </tr>
     </thead>
     <tbody>
@@ -18,9 +18,9 @@
       <tr>
       <td>{{ u.id }}</td>
       <td>{{ u.firstname }} {{ u.lastname }} </td>
-      <td class="td-actions">
-        <a href="{{url_for('users.edit', id=u.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('users.delete', id=u.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+      <td>
+        <a href="{{url_for('users.edit', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="{{url_for('users.delete', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
         </td>
       </tr>
     {% endfor %}

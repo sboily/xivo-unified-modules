@@ -1,14 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-    {% from "forms/macros.html" import render_field %}
+{% from "forms/macros.html" import render_field %}
 
-        {{ form.csrf_token }}
-        <h2 class="form">{{ _('Add Server') }}</h2>
-        {{ render_field(form.cloud_provider) }}
-      <div id='my_provider'></div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Add server') }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.cloud_provider) }}
+            <div id='my_provider'></div>
+        </form>
+      </div>
+    </div>
+</div>
 
 <script>
-
 $('#cloud_provider').change(function() {
    var id = $('[name="cloud_provider"] option:selected').val()
    $.getJSON('/deploy/provider/' + id,
@@ -16,7 +25,6 @@ $('#cloud_provider').change(function() {
              $('#my_provider').load(data.url);
         })
 });
-
 </script> 
 
 {% endblock %}

@@ -2,6 +2,8 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
+    <div class="container">
+
       <form class="form" method="post">
         {{ form.csrf_token }}
         <h2 class="form">{{ _('Add Ssh configuration') }}</h2>
@@ -11,6 +13,8 @@
         {{ render_field(form.password, class="input-xlarge") }}
         {{ render_field(form.submit, class="btn btn-primary") }}
       </form>
+
+    </div>
 
 {% endblock %}
 

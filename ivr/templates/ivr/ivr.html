@@ -8,8 +8,8 @@
 {% block content %}
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('ivr.ivr_add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
-  <p class="text-right"><a data-url="{{url_for('ivr.ivr_save')}}" class="btn btn-small confirm" data-toggle="modal" data-target="#upload-dialplan-dialog"><i class="btn-icon-only icon-upload"></i> Upload</a></p>
+  <p class="text-right"><a class="btn btn-default btn-primary btn-xs" href="{{url_for('ivr.ivr_add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
+  <p class="text-right"><a data-url="{{url_for('ivr.ivr_save')}}" class="btn btn-default btn-xs confirm" data-toggle="modal" data-target="#upload-dialplan-dialog"><i class="glyphicon glyphicon-upload"></i> Upload</a></p>
   <table class="table table-bordered">
 <div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
@@ -17,19 +17,19 @@
       <tr>
         <th>Name</th>
         <th>Date</th>
-      <th class="td-actions"></th>
+        <th style="width: 130px;"></th>
       </tr>
     </thead>
     <tbody>
     {% for i in ivr %}
       <tr>
-      <td>{{ i.name }}</td>
-      <td>{{ i.created_time }}</td>
-      <td class="td-actions">
-        <a href="{{url_for('ivr.ivr_show', id=i.id)}}" class="btn btn-small confirm" id="{{i.id}}" data-toggle="modal" data-target="#dialplan-dialog"><i class="btn-icon-only icon-eye-open"></i></a>
-        <a href="{{url_for('ivr.ivr_export', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-download"></i></a>
-        <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a data-url="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-small confirm" id="{{i.id}}" data-toggle="modal" data-target="#confirm-dialog"><i class="btn-icon-only icon-remove"></i></a>
+        <td>{{ i.name }}</td>
+        <td>{{ i.created_time }}</td>
+        <td>
+          <a href="{{url_for('ivr.ivr_show', id=i.id)}}" class="btn btn-default btn-xs" id="{{ i.id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-eye-open"></i></a>
+          <a href="{{url_for('ivr.ivr_export', id=i.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-download"></i></a>
+          <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+          <a data-url="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-default btn-xs confirm" data-toggle="modal" data-target="#confirm-dialog"><i class="glyphicon glyphicon-remove"></i></a>
         </td>
       </tr>
     {% endfor %}
@@ -39,5 +39,12 @@
 
 {% include "confirm.html" %}
 {% include "ivr_show.html" %}
-{% include "upload.html" %}
+{% include "ivr_upload.html" %}
+
+<script type="text/javascript">
+$('body').on('hidden.bs.modal', '.modal', function () {
+    $(this).removeData('bs.modal');
+});
+</script>
+
 {% endblock %}

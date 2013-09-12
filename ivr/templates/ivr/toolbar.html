@@ -1,9 +1,9 @@
 <div>
-   <button class="save btn-small btn-success"><i class="btn-icon-only icon-file icon-white"></i> Save</button>
-   <button class="reset btn-small btn-danger"><i class="btn-icon-only icon-ban-circle icon-white"></i> Reset</button>
+   <button class="save btn btn-default btn-sm btn-success"><i class="glyphicon glyphicon-file"></i> Save</button>
+   <button class="reset btn btn-default btn-sm btn-danger"><i class="glyphicon glyphicon-ban-circle icon-white"></i> Reset</button>
    {% if id is defined %}
-   <a href="{{url_for('ivr.ivr_check', id=id)}}" class="btn btn-small confirm dialplan-check" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="btn-icon-only icon-ok"></i> Check</a>
-   <a href="{{url_for('ivr.ivr_show', id=id)}}" class="btn btn-small confirm dialplan-show" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="btn-icon-only icon-eye-open"></i> Show</a>
+   <a href="{{url_for('ivr.ivr_check', id=id)}}" class="btn btn-default btn-sm dialplan-check" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-ok"></i> Check</a>
+   <a href="{{url_for('ivr.ivr_show', id=id)}}" class="btn btn-default btn-sm dialplan-show" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-eye-open"></i> Show</a>
    {% endif %}
 
 </div>

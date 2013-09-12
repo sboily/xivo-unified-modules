@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-primary btn-small" href="{{url_for('voicemails.add')}}"><i class="icon-plus icon-white"></i> Add</a></p>
+  <p class="text-right"><a class="btn btn-default btn-xs btn-primary" href="{{url_for('voicemails.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
   <table class="table table-bordered">
 <div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
@@ -12,7 +12,7 @@
         <th>Mailbox</th>
         <th>Email</th>
         <th>Password</th>
-      <th class="td-actions"></th>
+        <th style="width: 70px;"></th>
       </tr>
     </thead>
     <tbody>
@@ -22,9 +22,9 @@
       <td>{{ v.mailbox }}</td>
       <td>{{ v.email }} </td>
       <td>{{ v.password }} </td>
-      <td class="td-actions">
-        <a href="{{url_for('voicemails.edit', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-edit"></i></a>
-        <a href="{{url_for('voicemails.delete', id=v.id)}}" class="btn btn-small"><i class="btn-icon-only icon-remove"></i></a>
+      <td>
+        <a href="{{url_for('voicemails.edit', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="{{url_for('voicemails.delete', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
         </td>
       </tr>
     {% endfor %}

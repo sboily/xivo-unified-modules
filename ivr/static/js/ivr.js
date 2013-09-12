@@ -37,17 +37,17 @@ $(function() {
             my_node.find("img").remove();
             my_node.append("<textarea id='textarea-comment' name='comment'></textarea>")
                    .addClass("comment");
-            my_node.find("#textarea-comment").attr("cols", 50)
-                                             .attr("rows", 6)
+            my_node.find("#textarea-comment").attr("cols", 25)
+                                             .attr("rows", 2)
                                              .attr("placeholder", "Add comment here !")
                                              .css("resize", "none");
 
             comment = true;
         }
 
-        my_node.append("<i class='btn-icon-only icon-remove node-icon-action-remove'>");
+        my_node.append("<i class='glyphicon glyphicon-remove node-icon-action-remove'>");
         if (node_config[my_node.attr("action")])
-            my_node.append("<i class='btn-icon-only icon-wrench node-icon-action-wrench'>");
+            my_node.append("<i class='glyphicon glyphicon-wrench node-icon-action-wrench'>");
 
         my_node.append("<div class='endpoint' id='" + 'ep_' + id + "'></div>");
         if (comment == true) {
