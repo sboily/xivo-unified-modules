@@ -31,10 +31,12 @@
 
 .node-icon-action-remove {
     float: right;
+    cursor: pointer;
 }
 
 .node-icon-action-wrench {
     float: left;
+    cursor: pointer;
 }
 
 .hidden {
