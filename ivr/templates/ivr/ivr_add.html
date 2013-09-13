@@ -29,18 +29,18 @@
         width="{{ actions[act].width }}" height="{{ actions[act].height }}">
         {% for input in actions[act].input %}
             <div>{{ actions[act].input[input] }}</div>
-            <div><input type="text" name="{{ input }}" class="input-xlarge" /></div>
+            <div><input type="text" name="{{ input }}" class="form-control" /></div>
         {% endfor %}
         {% if actions[act].textarea %}
             {% for textarea in actions[act].textarea %}
                 <div>{{ actions[act].textarea[textarea] }}</div>
-                <div><textarea name="{{ textarea }}" class="input-xlarge"></textarea></div>
+                <div><textarea name="{{ textarea }}" class="form-control"></textarea></div>
             {% endfor %}
         {% endif %}
         <div>Label priority</div>
-        <div><input type="text" name="label" class="input-xlarge"/></div>
+        <div><input type="text" name="label" class="form-control"/></div>
         <div>Description</div>
-        <div><textarea name="description" class="input-xlarge"></textarea></div>
+        <div><textarea name="description" class="form-control"></textarea></div>
         </div>
     {% endfor %}
 

@@ -86,19 +86,20 @@ $(function() {
         }
 
         if(my_desc != undefined)
-            my_desc = '<i class="icon-comment"></i> ' + my_desc;
+            my_desc = '<i class="glyphicon glyphicon-comment"></i> ' + my_desc;
         else
-            my_desc = '<i class="icon-comment"></i> No information';
+            my_desc = '<i class="glyphicon glyphicon-comment"></i> No information';
 
         my_node.popover({ placement: 'top',
                           trigger: 'hover',
                           animation: true,
                           html: true,
+                          content: my_desc,
                           delay: { show: 0, hide: 100 },
                           title: name
                         });
 
-        my_node.data('popover').options.content = my_desc;
+        my_node.data('bs.popover').options.content = my_desc;
     }
 
     catch_action = function(node) {
