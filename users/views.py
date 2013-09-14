@@ -48,7 +48,7 @@ def list():
 def add():
     form = UserForm()
     if request.method == 'POST' and form.validate_on_submit():
-        users.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
+        users.api_actions(g.url_rest, "POST", g.server.login, g.server.password, form)
         flash('User added')
         return redirect(url_for('users.list'))
     return render_template('user_add.html', form=form)

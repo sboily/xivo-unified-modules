@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from yapsy.IPlugin import IPlugin
+from setup import bp_call_logs
+import views
 
-from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError, SubmitField
-from flask.ext.wtf import Required
+class CallLogsPlugin(IPlugin):
 
-class DeviceForm(Form):
-    mac = TextField('Mac', [Required()])
-    ip = TextField('Ip', [Required()])
-    plugin = TextField('Plugin', [Required()])
-    id = TextField('Id')
-    template_id = TextField('Template')
-    submit = SubmitField('Submit')
+    def setup(self, app):
+        app.register_blueprint(bp_call_logs)
+
+    def plugin_endpoint(self):
+        return "call_logs.list"
+

@@ -20,8 +20,6 @@ from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, Validati
 from flask.ext.wtf import Required
 
 class UserForm(Form):
-    mac = TextField('Mac', [Required()])
-    plugin = TextField('Plugin', [Required()])
-    id = TextField('Id')
-    template_id = TextField('Template')
+    firstname = TextField('Firstname', [Required()])
+    lastname = TextField('Lastname', [Required()])
     submit = SubmitField('Submit')

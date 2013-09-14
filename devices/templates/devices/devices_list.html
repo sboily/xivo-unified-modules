@@ -8,21 +8,36 @@
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
-        <th>id</th>
+        <th style="width: 15px;"></th>
         <th>Mac</th>
+        <th>Ip</th>
+        <th>Vendor</th>
+        <th>Model</th>
         <th>Plugin</th>
-        <th>Template</th>
-        <th style="width: 70px;"></th>
+        <th style="width: 130px;"></th>
       </tr>
     </thead>
     <tbody>
     {% for d in devices %}
+      {% if d.status == "configured" %}
+          {% set icon_status = "registration-mark" %}
+      {% endif %}
+      {% if d.status == "autoprov" %}
+          {% set icon_status = "record" %}
+      {% endif %}
+      {% if d.status == "not_configured" %}
+          {% set icon_status = "remove-circle" %}
+      {% endif %}
       <tr>
-      <td>{{ d.id }}</td>
+      <td title="{{d.status}}"><i class="glyphicon glyphicon-{{ icon_status }}"></i></td>
       <td>{{ d.mac }}</td>
+      <td>{{ d.ip }}</td>
+      <td>{{ d.vendor }}</td>
+      <td>{{ d.model }}</td>
       <td>{{ d.plugin }}</td>
-      <td>{{ d.template_id }}</td>
       <td class="td-actions">
+        <a href="{{url_for('devices.synchronize', id=d.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-refresh"></i></a>
+        <a href="{{url_for('devices.autoprov', id=d.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-flash"></i></a>
         <a href="{{url_for('devices.edit', id=d.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
         <a href="{{url_for('devices.delete', id=d.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
         </td>

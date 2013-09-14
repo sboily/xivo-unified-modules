@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="widget stacked widget-table action-table">
+  <p class="text-right"><a class="btn btn-default btn-xs btn-primary" href="{{url_for('users.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
+  <table class="table table-bordered">
+<div class="widget-content">
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th style="width: 70px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for u in users %}
+      <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.firstname }} {{ u.lastname }} </td>
+      <td>
+        <a href="{{url_for('users.edit', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="{{url_for('users.delete', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

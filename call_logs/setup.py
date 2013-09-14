@@ -15,14 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from flask import Blueprint
+from call_logs import CallLogs
 
-from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError, SubmitField
-from flask.ext.wtf import Required
+bp_call_logs = Blueprint('call_logs', __name__, template_folder='templates/call_logs')
 
-class DeviceForm(Form):
-    mac = TextField('Mac', [Required()])
-    ip = TextField('Ip', [Required()])
-    plugin = TextField('Plugin', [Required()])
-    id = TextField('Id')
-    template_id = TextField('Template')
-    submit = SubmitField('Submit')
+call_logs = CallLogs()

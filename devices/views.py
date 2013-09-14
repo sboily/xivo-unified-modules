@@ -69,3 +69,17 @@ def delete(id):
     devices.api_actions(g.url_rest + "/" + id, "DELETE", g.server.login, g.server.password)
     flash('Device delete !')
     return redirect(url_for("devices.list"))
+
+@bp_devices.route('/devices/<id>/autoprov')
+@login_required
+def autoprov(id):
+    devices.api_actions(g.url_rest + "/" + id + "/autoprov", "GET", g.server.login, g.server.password)
+    flash('Device is set to autoprov mode !')
+    return redirect(url_for("devices.list"))
+
+@bp_devices.route('/devices/<id>/synchronize')
+@login_required
+def synchronize(id):
+    devices.api_actions(g.url_rest + "/" + id + "/synchronize", "GET", g.server.login, g.server.password)
+    flash('Device has been synchronize !')
+    return redirect(url_for("devices.list"))
