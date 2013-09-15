@@ -1,6 +1,6 @@
 [Core]
 Name = call_logs
-Module = call_logs
+Module = ../../call_logs
 
 [Documentation]
 Module = call_logs

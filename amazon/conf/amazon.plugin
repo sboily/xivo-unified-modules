@@ -1,14 +1,14 @@
 [Core]
-Name = ssh
-Module = ssh
+Name = amazon
+Module = ../../amazon
 
 [Documentation]
-Module = ssh
-DisplayName = Ssh
+Module = amazon
+DisplayName =  Amazon
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
-Description = Ssh plugin
+Description = Amazon plugin
 License = AGPLv3
 Parent = organisation
 Dependance = deploy

@@ -1,13 +1,13 @@
 [Core]
-Name = devices
-Module = devices
+Name = users
+Module = ../../users
 
 [Documentation]
-Module = devices
-DisplayName = Devices
+Module = users
+DisplayName = Users
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
-Description = Devices plugin for XiVO REST API
+Description = Users plugin for REST API XiVO
 License = AGPLv3
 Parent = server

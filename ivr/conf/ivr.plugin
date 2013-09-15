@@ -1,13 +1,13 @@
 [Core]
-Name = example
-Module = example
+Name = ivr
+Module = ../../ivr
 
 [Documentation]
-Module = example
-DisplayName = Example Plugin
+Module = ivr
+DisplayName = Ivr
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
-Description = Test plugin
+Description = IVR plugin
 License = AGPL
 Parent = server

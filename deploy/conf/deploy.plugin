@@ -1,14 +1,13 @@
 [Core]
-Name = amazon
-Module = amazon
+Name = deploy
+Module = ../../deploy
 
 [Documentation]
-Module = amazon
-DisplayName =  Amazon
+Module = deploy
+DisplayName = Deploy
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
-Description = Amazon plugin
+Description = Deploy plugin
 License = AGPLv3
 Parent = organisation
-Dependance = deploy

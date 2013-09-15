@@ -1,0 +1,13 @@
+[Core]
+Name = devices
+Module = ../../devices
+
+[Documentation]
+Module = devices
+DisplayName = Devices
+Author = Sylvain Boily
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = Devices plugin for XiVO REST API
+License = AGPLv3
+Parent = server

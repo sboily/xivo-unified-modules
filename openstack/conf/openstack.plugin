@@ -1,6 +1,6 @@
 [Core]
 Name = openstack
-Module = openstack
+Module = ../../openstack
 
 [Documentation]
 Module = openstack

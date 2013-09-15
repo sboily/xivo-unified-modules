@@ -1,13 +1,14 @@
 [Core]
-Name = deploy
-Module = deploy
+Name = ssh
+Module = ../../ssh
 
 [Documentation]
-Module = deploy
-DisplayName = Deploy
+Module = ssh
+DisplayName = Ssh
 Author = Sylvain Boily
 Version = 0.1
 Website = http://blog.xivo.fr
-Description = Deploy plugin
+Description = Ssh plugin
 License = AGPLv3
 Parent = organisation
+Dependance = deploy

@@ -1,6 +1,6 @@
 [Core]
 Name = voicemails
-Module = voicemails
+Module = ../../voicemails
 
 [Documentation]
 Module = voicemails
