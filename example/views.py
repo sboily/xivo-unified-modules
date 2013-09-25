@@ -15,10 +15,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template
+from flask import render_template, g
 from flask.ext.login import login_required
 
 from setup import example
+
+@example.url_defaults
+def add_user_id(endpoint, values):
+    values.setdefault('user_id', g.user.id)
+
+@example.url_value_preprocessor
+def pull_user_id(endpoint, values):
+    g.user_id = values.pop('user_id')
 
 @example.route('/example')
 @login_required
