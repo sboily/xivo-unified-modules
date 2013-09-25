@@ -17,4 +17,4 @@
 
 from flask import Blueprint
 
-example = Blueprint('example', __name__, template_folder='templates/example', url_prefix='/<user_id>')
+example = Blueprint('example', __name__, template_folder='templates/example')

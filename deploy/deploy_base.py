@@ -37,10 +37,6 @@ class Deploy(object):
 
         plugin = RegisterProviders.query.filter(RegisterProviders.name == plugin_name.capitalize()) \
                                         .first()
-
-        if not hasattr(g, 'user_organisation'):
-            return
-
         if plugin and plugin.id:
             provider_registered = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
                                                           .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
