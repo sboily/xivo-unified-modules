@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import QuerySelectField, Required
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.validators import Required
 from app.utils import Form
 from flask import g
 from flask.ext.babel import lazy_gettext as _

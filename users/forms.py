@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import Form, TextField, BooleanField, PasswordField, ValidationError, SubmitField
-from flask.ext.wtf import Required
+from flask.ext.wtf import Form
+from wtforms.fields import TextField, SubmitField
+from wtforms.validators import Required
 
 class UserForm(Form):
     firstname = TextField('Firstname', [Required()])

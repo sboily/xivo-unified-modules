@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flask.ext.wtf import TextField, SubmitField, TextAreaField, QuerySelectField
-from flask.ext.wtf import Required, Regexp, validators
+from wtforms.fields import TextField, SubmitField, TextAreaField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.validators import Required, Regexp, Length
 from flask.ext.babel import lazy_gettext as _
 from flask import g
 from app.utils import Form
@@ -29,8 +30,8 @@ def get_configurations():
 
 class OpenStackForm(Form):
     name = TextField(_('Name'), [Required(),
-        validators.Length(min=3, max=30),
-        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
+        Length(min=3, max=30),
+        Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
     ])
 
     login = TextField(_('Login'))
@@ -47,8 +48,8 @@ class OpenStackForm(Form):
 
 class OpenStackServerForm(Form):
     name = TextField(_('Name'), [Required(),
-        validators.Length(min=3, max=30),
-        validators.Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
+        Length(min=3, max=30),
+        Regexp(r'^[^@:]*$', message=_("Name shouldn't contain '@' or ':'"))
     ])
 
     configuration = QuerySelectField(_('OpenStack configuration'), [Required()], get_label='name', \
