@@ -37,7 +37,7 @@ def before_request():
 @bp_voicemails.route('/voicemails')
 @login_required
 def list():
-    my_voicemails = voicemails.api_actions(g.url_rest, "GET", g.server.login, g.server.password)
+    my_voicemails = voicemails.list(g.url_rest)
     if not my_voicemails:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
@@ -48,7 +48,7 @@ def list():
 def add():
     form = VoicemailForm()
     if request.method == 'POST' and form.validate_on_submit():
-        voicemails.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
+        voicemails.add(g.url_rest, form)
         flash('Voicemail added')
         return redirect(url_for('voicemails.list'))
     return render_template('voicemail_add.html', form=form)
@@ -56,16 +56,16 @@ def add():
 @bp_voicemails.route('/voicemails/<id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    my_voicemails = voicemails.api_actions(g.url_rest + "/" + id, "GET", g.server.login, g.server.password)
+    my_voicemails = voicemails.show(g.url_rest + "/" + id)
     form = VoicemailForm.from_json(my_voicemails)
     if form.is_submitted():
-        voicemails.edit(VoicemailForm(obj=voicemails), id)
+        voicemails.edit(g.url_rest + "/" + id, VoicemailForm(obj=voicemails))
         return redirect(url_for("voicemails.list"))
     return render_template('voicemail_edit.html', voicemails=my_voicemails, form=form)
 
 @bp_voicemails.route('/voicemails/delete/<id>')
 @login_required
 def delete(id):
-    voicemails.api_actions(g.url_rest + "/" + id, "DELETE", g.server.login, g.server.password)
+    voicemails.delete(g.url_rest + "/" + id)
     flash('Voicemail delete !')
     return redirect(url_for("voicemails.list"))
