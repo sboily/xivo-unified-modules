@@ -29,9 +29,10 @@ class Voicemails(object):
 
     def add(self, url, form):
         conn = self.connect()
-        voicemail = { 'firstname' : form.firstname.data,
-                      'lastname' : form.lastname.data,
-                      'username' : form.username.data,
+        voicemail = { 'name' : form.name.data,
+                      'context' : form.context.data,
+                      'number' : form.number.data,
+                      'email' : form.email.data,
                       'password' : form.password.data
                     }
         return conn.post(url, voicemail)
@@ -42,9 +43,10 @@ class Voicemails(object):
 
     def edit(self, url, form):
         conn = self.connect()
-        voicemail = { 'firstname' : form.firstname.data,
-                      'lastname' : form.lastname.data,
-                      'username' : form.username.data,
+        voicemail = { 'name' : form.name.data,
+                      'context' : form.context.data,
+                      'number' : form.number.data,
+                      'email' : form.email.data,
                       'password' : form.password.data
                     }
         return conn.put(url, voicemail)

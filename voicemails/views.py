@@ -27,7 +27,7 @@ wtforms_json.init()
 def before_request():
     if current_user.is_authenticated():
         if hasattr(g, 'server'):
-            g.url_rest = "https://%s:50051/1.0/voicemails" %(g.server.address)
+            g.url_rest = "https://%s:50051/%s/voicemails" %(g.server.address, g.server.protocol)
         else:
             flash('Sorry you need to choose a server !')
             return redirect(url_for('home.homepage'))

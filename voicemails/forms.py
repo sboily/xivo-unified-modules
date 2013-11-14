@@ -22,7 +22,9 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required
 
 class VoicemailForm(Form):
-    mailbox = TextField('Mailbox', [Required()])
-    email = TextField('Email', [Required()])
+    name = TextField('Full name', [Required()])
+    context = TextField('Context', [Required()])
+    number = TextField('Mailbox', [Required()])
+    email = TextField('Email')
     password = TextField('Password')
     submit = SubmitField('Submit')
