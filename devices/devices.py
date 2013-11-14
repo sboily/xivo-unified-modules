@@ -25,7 +25,7 @@ class Devices(object):
 
     def list(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)
 
     def add(self, url, form):
         conn = self.connect()
@@ -34,11 +34,11 @@ class Devices(object):
                  'username' : form.username.data,
                  'password' : form.password.data
                }
-        return conn.actions(url, "POST", user)
+        return conn.post(url, user)
 
     def show(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)
 
     def edit(self, url, form):
         conn = self.connect()
@@ -47,16 +47,16 @@ class Devices(object):
                  'username' : form.username.data,
                  'password' : form.password.data
                }
-        return conn.actions(url, "PUT", user)
+        return conn.put(url, user)
 
     def delete(self, url):
         conn = self.connect()
-        return conn.actions(url, "DELETE")
+        return conn.delete(url)
 
     def autoprov(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)
 
     def synchronize(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)

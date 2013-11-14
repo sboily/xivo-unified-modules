@@ -25,4 +25,4 @@ class CallLogs(object):
 
     def list(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)

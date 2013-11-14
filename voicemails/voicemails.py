@@ -25,30 +25,30 @@ class Voicemails(object):
 
     def list(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)
 
     def add(self, url, form):
         conn = self.connect()
-        user = { 'firstname' : form.firstname.data,
-                 'lastname' : form.lastname.data,
-                 'username' : form.username.data,
-                 'password' : form.password.data
-               }
-        return conn.actions(url, "POST", user)
+        voicemail = { 'firstname' : form.firstname.data,
+                      'lastname' : form.lastname.data,
+                      'username' : form.username.data,
+                      'password' : form.password.data
+                    }
+        return conn.post(url, voicemail)
 
     def show(self, url):
         conn = self.connect()
-        return conn.actions(url, "GET")
+        return conn.get(url)
 
     def edit(self, url, form):
         conn = self.connect()
-        user = { 'firstname' : form.firstname.data,
-                 'lastname' : form.lastname.data,
-                 'username' : form.username.data,
-                 'password' : form.password.data
-               }
-        return conn.actions(url, "PUT", user)
+        voicemail = { 'firstname' : form.firstname.data,
+                      'lastname' : form.lastname.data,
+                      'username' : form.username.data,
+                      'password' : form.password.data
+                    }
+        return conn.put(url, voicemail)
 
     def delete(self, url):
         conn = self.connect()
-        return conn.actions(url, "DELETE")
+        return conn.delete(url)
