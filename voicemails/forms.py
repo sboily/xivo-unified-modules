@@ -16,12 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flask.ext.wtf import Form
 from wtforms.fields import TextField, SubmitField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required
 
 class VoicemailForm(Form):
-    mailbox = TextField('Mailbox', [Required()])
-    email = TextField('Email', [Required()])
+    name = TextField('Full name', [Required()])
+    context = TextField('Context', [Required()])
+    number = TextField('Mailbox', [Required()])
+    email = TextField('Email')
     password = TextField('Password')
     submit = SubmitField('Submit')

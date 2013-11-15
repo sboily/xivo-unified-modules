@@ -34,7 +34,7 @@ def before_request():
 @bp_users.route('/users')
 @login_required
 def list():
-    my_users = users.api_actions(g.url_rest, "GET", g.server.login, g.server.password)
+    my_users = users.list(g.url_rest)
     if not my_users:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
@@ -45,7 +45,7 @@ def list():
 def add():
     form = UserForm()
     if request.method == 'POST' and form.validate_on_submit():
-        users.api_actions(g.url_rest, "POST", g.server.login, g.server.password, form)
+        users.add(g.url_rest, form)
         flash('User added')
         return redirect(url_for('users.list'))
     return render_template('user_add.html', form=form)
@@ -53,16 +53,16 @@ def add():
 @bp_users.route('/users/<id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    my_users = users.api_actions(g.url_rest + "/" + id, "GET", g.server.login, g.server.password)
+    my_users = users.show(g.url_rest + "/" + id)
     form = UserForm.from_json(my_users)
     if form.is_submitted():
-        users.edit(UserForm(obj=users), id)
+        users.edit(g.url_rest + "/" + id, UserForm(obj=users))
         return redirect(url_for("users.list"))
     return render_template('user_edit.html', users=my_users, form=form)
 
 @bp_users.route('/users/delete/<id>')
 @login_required
 def delete(id):
-    users.api_actions(g.url_rest + "/" + id, "DELETE", g.server.login, g.server.password)
+    users.delete(g.url_rest + "/" + id)
     flash('User delete !')
     return redirect(url_for("users.list"))

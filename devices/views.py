@@ -34,8 +34,8 @@ def before_request():
 @bp_devices.route('/devices')
 @login_required
 def list():
-    my_devices = devices.api_actions(g.url_rest, "GET", g.server.login, g.server.password)
-    if not my_devices:
+    my_devices = devices.list(g.url_rest)
+    if my_devices == False:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
     return render_template('devices_list.html', devices=my_devices['items'])
@@ -45,7 +45,7 @@ def list():
 def add():
     form = DeviceForm()
     if request.method == 'POST' and form.validate_on_submit():
-        devices.api_ations(g.url_rest, "POST", g.server.login, g.server.password, form)
+        devices.add(g.url_rest, form)
         flash('Device added')
         return redirect(url_for('devices.list'))
     return render_template('device_add.html', form=form)
@@ -53,30 +53,32 @@ def add():
 @bp_devices.route('/devices/<id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    my_devices = devices.api_actions(g.url_rest + "/" + id, "GET", g.server.login, g.server.password)
+    my_devices = devices.show(g.url_rest + "/" + id)
     form = DeviceForm.from_json(my_devices)
     if form.is_submitted():
-        devices.edit(DeviceForm(obj=devices), id)
+        devices.edit(g.url_rest + "/" + id, DeviceForm(obj=devices))
         return redirect(url_for("devices.list"))
     return render_template('device_edit.html', devices=my_devices, form=form)
 
 @bp_devices.route('/devices/delete/<id>')
 @login_required
 def delete(id):
-    devices.api_actions(g.url_rest + "/" + id, "DELETE", g.server.login, g.server.password)
-    flash('Device delete !')
+    if devices.delete(g.url_rest + "/" + id) == False:
+        flash('Error on delete !')
+    else:
+        flash('Device delete !')
     return redirect(url_for("devices.list"))
 
 @bp_devices.route('/devices/<id>/autoprov')
 @login_required
 def autoprov(id):
-    devices.api_actions(g.url_rest + "/" + id + "/autoprov", "GET", g.server.login, g.server.password)
+    devices.autoprov(g.url_rest + "/" + id + "/autoprov")
     flash('Device is set to autoprov mode !')
     return redirect(url_for("devices.list"))
 
 @bp_devices.route('/devices/<id>/synchronize')
 @login_required
 def synchronize(id):
-    devices.api_actions(g.url_rest + "/" + id + "/synchronize", "GET", g.server.login, g.server.password)
+    devices.synchronize(g.url_rest + "/" + id + "/synchronize")
     flash('Device has been synchronize !')
     return redirect(url_for("devices.list"))
