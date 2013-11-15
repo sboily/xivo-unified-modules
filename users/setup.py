@@ -17,7 +17,9 @@
 
 from flask import Blueprint
 from users import Users
+import wtforms_json
 
 bp_users = Blueprint('users', __name__, template_folder='templates/users')
 
 users = Users()
+wtforms_json.init()

@@ -17,7 +17,9 @@
 
 from flask import Blueprint
 from voicemails import Voicemails
+import wtforms_json
 
 bp_voicemails = Blueprint('voicemails', __name__, template_folder='templates/voicemails')
 
 voicemails = Voicemails()
+wtforms_json.init()

@@ -17,7 +17,10 @@
 
 from flask import Blueprint
 from devices import Devices
+import wtforms_json
 
 bp_devices = Blueprint('devices', __name__, template_folder='templates/devices')
 
 devices = Devices()
+wtforms_json.init()
+

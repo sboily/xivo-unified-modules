@@ -18,10 +18,7 @@
 from flask import render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
 from forms import VoicemailForm
-import wtforms_json
 from setup import bp_voicemails, voicemails
-
-wtforms_json.init()
 
 @bp_voicemails.before_request
 def before_request():
