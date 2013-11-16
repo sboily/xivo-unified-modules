@@ -118,7 +118,7 @@
 #ivr {
     width: 95%;
     height: 600px;
-    background: url('/app.plugins.ivr.setup/images/grid.png') rgb(153, 153, 153);
+    background: url('images/grid.png') rgb(153, 153, 153);
     border: 1px solid;
     margin-top: 4%;
     margin-left: 0px;
