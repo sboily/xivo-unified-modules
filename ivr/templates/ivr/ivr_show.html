@@ -22,4 +22,8 @@
 $('body').on('hidden.bs.modal', '.modal', function () {
     $(this).removeData('bs.modal');
 });
+
+$('body').on('show.bs.modal', '#dialplan-dialog', function (e) {
+    $('.modal-body').load(e.relatedTarget.dataset.url);
+});
 </script>

@@ -26,7 +26,7 @@
         <td>{{ i.name }}</td>
         <td>{{ i.created_time }}</td>
         <td>
-          <a href="{{url_for('ivr.ivr_show', id=i.id)}}" class="btn btn-default btn-xs" id="{{ i.id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-eye-open"></i></a>
+          <a data-url="{{url_for('ivr.ivr_show', id=i.id)}}" class="btn btn-default btn-xs" id="{{ i.id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-eye-open"></i></a>
           <a href="{{url_for('ivr.ivr_export', id=i.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-download"></i></a>
           <a href="{{url_for('ivr.ivr_edit', id=i.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
           <a data-url="{{url_for('ivr.ivr_del', id=i.id)}}" class="btn btn-default btn-xs confirm" data-toggle="modal" data-target="#confirm-dialog"><i class="glyphicon glyphicon-remove"></i></a>
