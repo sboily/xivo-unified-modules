@@ -13,7 +13,8 @@ for dir in dirs:
    if not os.path.isfile(dir) and not "." in dir:
        parser.read('%s/conf/%s.plugin' %(dir, dir))
        module = parser.get('Documentation', 'Module')
-       description = parser.get('Documentation', 'DisplayName')
+       displayname = parser.get('Documentation', 'DisplayName')
+       description = parser.get('Documentation', 'Description')
        author = parser.get('Documentation', 'Author')
        email = parser.get('Documentation', 'Email')
        version = parser.get('Documentation', 'Version')
@@ -23,6 +24,7 @@ for dir in dirs:
        json_market = { "name" : module,
                        "informations" : { "description" : description,
                                           "author" : author,
+                                          "displayname" : displayname,
                                           "email" : email,
                                           "license" : license,
                                           "version" : version
