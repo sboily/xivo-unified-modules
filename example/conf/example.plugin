@@ -6,6 +6,7 @@ Module = ../../example
 Module = example
 DisplayName = Example Plugin
 Author = Sylvain Boily
+Email = sboily@proformatique.com
 Version = 0.1
 Website = http://blog.xivo.fr
 Description = Test plugin

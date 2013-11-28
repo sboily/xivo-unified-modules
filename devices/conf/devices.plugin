@@ -6,6 +6,7 @@ Module = ../../devices
 Module = devices
 DisplayName = Devices
 Author = Sylvain Boily
+Email = sboily@proformatique.com
 Version = 0.1
 Website = http://blog.xivo.fr
 Description = Devices plugin for XiVO REST API

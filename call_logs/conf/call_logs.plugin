@@ -6,6 +6,7 @@ Module = ../../call_logs
 Module = call_logs
 DisplayName = Call Logs
 Author = Sylvain Boily
+Email = sboily@proformatique.com
 Version = 0.1
 Website = http://blog.xivo.fr
 Description = Call logs plugin for REST API XiVO

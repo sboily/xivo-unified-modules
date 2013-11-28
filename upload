@@ -5,5 +5,8 @@ do
  tar cfvz $a.tgz $a
 done
 
-scp *.tgz root@market.xivo.fr:/var/www/market.xivo.fr/
+./generate > market.json
+
+scp *.tgz market.json root@market.xivo.fr:/var/www/market.xivo.fr/
 rm *.tgz
+rm market.json

@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+from ConfigParser import SafeConfigParser
+import os, sys
+import json
+
+market = []
+path = "."
+dirs = os.listdir(path)
+parser = SafeConfigParser()
+
+for dir in dirs:
+   if not os.path.isfile(dir) and not "." in dir:
+       parser.read('%s/conf/%s.plugin' %(dir, dir))
+       module = parser.get('Documentation', 'Module')
+       description = parser.get('Documentation', 'DisplayName')
+       author = parser.get('Documentation', 'Author')
+       email = parser.get('Documentation', 'Email')
+       version = parser.get('Documentation', 'Version')
+       license = parser.get('Documentation', 'License')
+       parent = parser.get('Documentation', 'Parent')
+
+       json_market = { "name" : module,
+                       "informations" : { "description" : description,
+                                          "author" : author,
+                                          "email" : email,
+                                          "license" : license,
+                                          "version" : version
+                                        },
+                       "plugin" : { "parent" : parent }
+                     }
+       market.append(json_market)
+
+print json.dumps(market)

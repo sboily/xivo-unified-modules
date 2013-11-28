@@ -6,6 +6,7 @@ Module = ../../voicemails
 Module = voicemails
 DisplayName = Voicemails
 Author = Sylvain Boily
+Email = sboily@proformatique.com
 Version = 0.1
 Website = http://blog.xivo.fr
 Description = Voicemails plugin for REST API XiVO
