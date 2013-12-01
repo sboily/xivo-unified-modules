@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    {% from "forms/macros.html" import render_field %}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Edit extension') }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.extension, with_label=1) }}
+            {{ render_field(form.context, with_label=1) }}
+            {{ render_field(form.submit, class="btn btn-default btn-primary") }}
+        </form>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+

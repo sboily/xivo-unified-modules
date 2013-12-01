@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="widget stacked widget-table action-table">
+  <p class="text-right"><a class="btn btn-default btn-xs btn-primary" href="{{url_for('extensions.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
+  <table class="table table-bordered">
+<div class="widget-content">
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>Extension</th>
+        <th>Context</th>
+        <th style="width: 70px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for v in extensions %}
+      <tr>
+      <td>{{ v.extension }}</td>
+      <td>{{ v.context }}</td>
+      <td>
+        <a href="{{url_for('extensions.edit', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="{{url_for('extensions.delete', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

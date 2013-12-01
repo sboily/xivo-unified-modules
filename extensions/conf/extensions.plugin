@@ -1,0 +1,14 @@
+[Core]
+Name = extensions
+Module = ../../extensions
+
+[Documentation]
+Module = extensions
+DisplayName = Extensions
+Author = Sylvain Boily
+Email = sboily@proformatique.com
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = Extensions plugin for REST API XiVO
+License = AGPLv3
+Parent = server
