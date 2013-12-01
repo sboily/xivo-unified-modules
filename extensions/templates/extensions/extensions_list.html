@@ -16,7 +16,7 @@
     <tbody>
     {% for v in extensions %}
       <tr>
-      <td>{{ v.extension }}</td>
+      <td>{{ v.exten }}</td>
       <td>{{ v.context }}</td>
       <td>
         <a href="{{url_for('extensions.edit', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>

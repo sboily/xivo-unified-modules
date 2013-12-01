@@ -29,7 +29,7 @@ class Extensions(object):
 
     def add(self, url, form):
         conn = self.connect()
-        extension = { 'extension' : form.extension.data,
+        extension = { 'exten' : form.exten.data,
                       'context' : form.context.data,
                     }
         return conn.post(url, extension)
@@ -40,7 +40,7 @@ class Extensions(object):
 
     def edit(self, url, form):
         conn = self.connect()
-        extension = { 'extension' : form.extension.data,
+        extension = { 'exten' : form.exten.data,
                       'context' : form.context.data,
                     }
         return conn.put(url, extension)
