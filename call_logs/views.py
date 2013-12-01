@@ -35,11 +35,12 @@ def before_request():
 @bp_call_logs.route('/call_logs')
 @login_required
 def list():
-    my_call_logs = call_logs.list(g.url_rest + "?start_date=2013-09-14T00:00:00&end_date=2013-09-16T00:00:00")
-    pouet = csv.DictReader(my_call_logs, quoting=csv.QUOTE_NONE)
-    for row in pouet:
-        print row
+    my_call_logs = call_logs.list(g.url_rest)
+    print my_call_logs
     if not my_call_logs:
         flash('Sorry the server have not any correct json data !')
         return redirect(url_for('home.homepage'))
+    pouet = csv.DictReader(my_call_logs, quoting=csv.QUOTE_NONE)
+    for row in pouet:
+        print row
     return render_template('call_logs_list.html', call_logs=csv.DictReader(my_call_logs))
