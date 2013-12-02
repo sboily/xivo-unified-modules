@@ -31,8 +31,6 @@ class Users(object):
         conn = self.connect()
         user = { 'firstname' : form.firstname.data,
                  'lastname' : form.lastname.data,
-                 'username' : form.username.data,
-                 'password' : form.password.data
                }
         return conn.post(url, user)
 
@@ -44,8 +42,6 @@ class Users(object):
         conn = self.connect()
         user = { 'firstname' : form.firstname.data,
                  'lastname' : form.lastname.data,
-                 'username' : form.username.data,
-                 'password' : form.password.data
                }
         return conn.put(url, user)
 

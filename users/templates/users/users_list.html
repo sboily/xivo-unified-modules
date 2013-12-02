@@ -10,14 +10,22 @@
       <tr>
         <th>id</th>
         <th>Name</th>
+        <th>Language</th>
+        <th>Username</th>
+        <th>Mobile</th>
+        <th>Caller ID</th>
         <th style="width: 70px;"></th>
       </tr>
     </thead>
     <tbody>
-    {% for u in users %}
+    {% for u in users|sort(attribute = 'firstname') %}
       <tr>
       <td>{{ u.id }}</td>
       <td>{{ u.firstname }} {{ u.lastname }} </td>
+      <td>{{ u.language }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.mobilephonenumber }}</td>
+      <td>{{ u.callerid }}</td>
       <td>
         <a href="{{url_for('users.edit', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
         <a href="{{url_for('users.delete', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
