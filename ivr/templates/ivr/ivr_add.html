@@ -4,22 +4,43 @@
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery-ui.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.jsPlumb-1.5.5.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.ui-contextmenu.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/jquery.ui.touch-punch.min.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('ivr.static', filename='js/ivr.js') }}"></script>
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/jquery-ui.css') }}">
     <link rel="stylesheet" media="screen" href="{{ url_for('ivr.static', filename='css/ivr.css') }}">
 {% endblock %}
 
 {% block content %}
-    {% include 'toolbar.html' %}
-    {% block ivr_toolbar %}
-    {% endblock %}
+    <div class="row">
+        <div class="col-md-6">
+            {% include 'actions.html' %}
+        </div>
+        <div class="col-md-6">
+            {% block ivr_name %}
+            {% endblock %}
+        </div>
+    </div>
 
-{% block ivr_content %}
-<div id="ivr" class="span10">
-</div>
-{% endblock %}
+    <br>
 
-<div class="hidden dialog nodes_config">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'toolbar.html' %}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% block ivr_content %}
+            <div id="ivr">
+            </div>
+        {% endblock %}
+        </div>
+    </div>
+
+    <div class="hidden dialog nodes_config">
 
     {% for act in actions %}
         <div id="{{ act }}" class="node_config" title="{{ actions[act].title }}" 
@@ -81,7 +102,7 @@
 
     <div id="dialog"></div>
 
-</div>
+    </div>
 
 {% include "ivr_show.html" %}
 {% endblock %}
