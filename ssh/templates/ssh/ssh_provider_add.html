@@ -2,19 +2,23 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
-    <div class="container">
-
-      <form class="form" method="post">
-        {{ form.csrf_token }}
-        <h2 class="form">{{ _('Add Ssh configuration') }}</h2>
-        {{ render_field(form.name, class="input-xlarge") }}
-        {{ render_field(form.ip, class="input-xlarge") }}
-        {{ render_field(form.login, class="input-xlarge") }}
-        {{ render_field(form.password, class="input-xlarge") }}
-        {{ render_field(form.submit, class="btn btn-primary") }}
-      </form>
-
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Add Ssh configuration') }}</h4>
     </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.name, with_label=1) }}
+            {{ render_field(form.ip, with_label=1) }}
+            {{ render_field(form.login, with_label=1) }}
+            {{ render_field(form.password, with_label=1) }}
+            {{ render_field(form.submit, class="btn btn-primary") }}
+        </form>
+      </div>
+    </div>
+</div>
 
 {% endblock %}
 
