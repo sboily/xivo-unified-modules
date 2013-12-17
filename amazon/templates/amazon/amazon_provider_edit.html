@@ -2,20 +2,24 @@
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
-    <div class="container">
-
-      <form class="form" method="post">
-        {{ form.csrf_token }}
-        <h2 class="form">{{ _('Edit Amazon configuration') }}</h2>
-        {{ render_field(form.name, class="input-xlarge") }}
-        {{ render_field(form.access_key, class="input-xlarge") }}
-        {{ render_field(form.secret_key, class="input-xlarge") }}
-        {{ render_field(form.key_name, class="input-xlarge") }}
-        {{ render_field(form.ssh_key, class="input-xlarge") }}
-        {{ render_field(form.submit, class="btn btn-primary") }}
-      </form>
-
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Edit Amazon configuration') }}</h4>
     </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.name, with_label=1) }}
+            {{ render_field(form.access_key, with_label=1) }}
+            {{ render_field(form.secret_key, with_label=1) }}
+            {{ render_field(form.key_name, with_label=1) }}
+            {{ render_field(form.ssh_key, with_label=1) }}
+            {{ render_field(form.submit, class="btn btn-primary") }}
+        </form>
+      </div>
+    </div>
+</div>
 
 {% endblock %}
 
