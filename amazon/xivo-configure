@@ -220,7 +220,21 @@ def provd():
         'registrar_main': ADDRESS
     }
     data = {'config': config}
-    # provd_http_request.run('provd/cfg_mgr/configs', data=data)
+    provd_http_request.run('provd/cfg_mgr/configs', data=data)
+
+    config = {
+        'X_type': 'internal',
+        'id': 'base',
+        'deletable': False,
+        'displayname': 'base',
+        'parent_ids': [],
+        'raw_config': {'X_key':'xivo',
+                       'ntp_enabled': True,
+                       'ntp_ip': ADDRESS,
+                       'X_xivo_phonebook_ip': ADDRESS},
+    }
+    data = {'config': config}
+    provd_http_request.run('provd/cfg_mgr/configs', data=data)
 
 
 def netiface():
@@ -257,7 +271,7 @@ def netiface():
         'gateway': GATEWAY
     }
     qry = {'ifname': IFACE}
-    #sysconfd('modify_eth_ipv4', data, qry)
+    # sysconfd('modify_eth_ipv4', data, qry)
 
 
 @xivo_daosession
