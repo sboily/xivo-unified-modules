@@ -22,9 +22,9 @@
       {% for s in l.sql %}
       <tr>
       <td>{{ s.name }}</td>
-      <td class="status" id="status-{{ s.id }}">
-      <div class="progress progress-warning" id="status-{{ s.id }}">
-          <div class="bar" id="status-{{ s.id }}" data-percentage="0"></div>
+      <td class="status" id="status-{{ l.provider}}-{{ s.id }}">
+      <div class="progress progress-warning" id="status-{{ l.provider}}-{{ s.id }}">
+          <div class="bar" id="status-{{ l.provider}}-{{ s.id }}" data-percentage="0"></div>
       </div>
       </td>
       <td class="ip" id="ip-{{ s.id }}">{% if s.address %}<a href="https://{{ s.address }}" target="_blank">{{ s.address }}</a>{% endif %}</td>
@@ -75,7 +75,7 @@ function loadStatus() {
                 })
             });
     $("#servers-table").tablesorter();
-    setTimeout(loadStatus, 2000);
+    setTimeout(loadStatus, 10000);
     }
 
 loadStatus();
