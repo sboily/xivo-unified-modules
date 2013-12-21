@@ -18,17 +18,15 @@
 from flask import render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
 from setup import bp_addressbook, addressbook
-from forms import AddressBookForm
+from forms import AddressBookForm, AddressBookServerLdapForm
+from flask.ext.babel import gettext as _
+from models import ServerLdap
 
 @bp_addressbook.route('/addressbook')
 @login_required
 def list():
     addrbook = addressbook.list()
-    if not addrbook:
-        flash('Sorry the server have not any informations !')
-        return redirect(url_for('home.homepage'))
     return render_template('addressbook_list.html', addressbook=addrbook)
-
 
 @bp_addressbook.route('/addressbook/show/<uid>')
 @login_required
@@ -41,3 +39,18 @@ def show(uid):
 @login_required
 def get_image(uid):
     return addressbook.get_image(uid)
+
+@bp_addressbook.route('/addressbook/server/configure', methods=['GET', 'POST'])
+@login_required
+def configure_ldap_server():
+    server = ServerLdap.query.first()
+    form = AddressBookServerLdapForm(obj=server)
+    if form.validate_on_submit():
+        if server:
+            addressbook.edit_server(form, server)
+            flash(_('Server LDAP edited'))
+        else:
+            addressbook.add_server(form)
+            flash(_('Server LDAP added'))
+        return redirect(url_for('addressbook.list'))
+    return render_template('addressbook_server_configure.html', form=form)

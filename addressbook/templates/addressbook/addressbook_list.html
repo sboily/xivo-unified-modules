@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% set url_add = url_for('addressbook.configure_ldap_server') %}
+
 <div class="table-responsive">
   {% include "table-header.html" %}
   <table class="table table-bordered table-striped table-highlight">

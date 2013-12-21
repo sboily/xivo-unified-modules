@@ -43,3 +43,11 @@ class AddressBookForm(Form):
     mobile = TextField(_('Mobile'))
     city = TextField(_('City'))
     submit = SubmitField(_('Save'))
+
+class AddressBookServerLdapForm(Form):
+    name = TextField(_('Name'), [Required()])
+    host = TextField(_('LDAP host'), [Required()])
+    basedn = TextField(_('Base DN'), [Required()])
+    login = TextField(_('Admin DN'))
+    secret = TextField(_('Secret'))
+    submit = SubmitField(_('Save'))

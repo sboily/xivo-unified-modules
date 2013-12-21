@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 # Copyright (C) 2013 Sylvain Boily <sboily@proformatique.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,16 +16,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from yapsy.IPlugin import IPlugin
-from setup import bp_addressbook, addressbook
-import views
+from app import db
+from datetime import datetime
 
-class AddressBookPlugin(IPlugin):
+class ServerLdap(db.Model):
+    __bind_key__ = 'addressbook'
+    __tablename__ = 'server_ldap'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    host = db.Column(db.Text())
+    basedn = db.Column(db.Text())
+    login = db.Column(db.Text())
+    secret = db.Column(db.Text())
+    organisation_id = db.Column(db.Integer)
+    created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def setup(self, app):
-        app.register_blueprint(bp_addressbook)
-        addressbook.setup(app)
+    def __init__(self, name):
+        self.name = name
 
-    def plugin_endpoint(self):
-        return "addressbook.list"
-
+    def __repr__(self):
+        return "<%d : %s>" % (self.id, self.name)

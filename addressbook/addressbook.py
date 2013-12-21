@@ -16,23 +16,38 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import ldap
+from models import ServerLdap
+from flask import g, current_app
+import os
+from app import db
 
 class AddressBook(object):
 
     def __init__(self):
         self.basedn = ""
-        self.admindn = ""
+        self.login = ""
         self.secret = ""
         self.searchscope = ldap.SCOPE_SUBTREE
-        self.host = ""
+
+    def setup(self, app):
+        db_bind = 'addressbook'
+        mydbplugindir = os.path.join(app.config['BASEDIR'],'app/plugins/addressbook/db/server_ldap.db')
+        app.config['SQLALCHEMY_BINDS'].update({db_bind : 'sqlite:///%s' % mydbplugindir})
+
+        with app.app_context():
+            db.create_all(bind=db_bind)
 
     def connect(self):
+        server = ServerLdap.query.filter(ServerLdap.organisation_id == g.user_organisation.id).first()
+        self.login = server.login
+        self.secret = server.secret
+        self.basedn = server.basedn
         try:
-            conn = ldap.open(self.host)
+            conn = ldap.open(server.host)
             conn.protocol_version = ldap.VERSION3
             return conn
         except ldap.LDAPError, e:
-            print e
+            print "error : ", e
 
     def list(self):
         retrieveAttributes = ['givenName', 'sn', 'telephoneNumber', 'roomNumber']
@@ -102,3 +117,17 @@ class AddressBook(object):
                 return unicode(info[field][0],  "UTF-8")
             else:
                 return info[field][0]
+
+    def add_server(self, form):
+        server = ServerLdap(form.name.data)
+        server.host = form.host.data
+        server.basedn = form.basedn.data
+        server.organisation_id = g.user_organisation.id
+
+        db.session.add(server)
+        db.session.commit()
+
+    def edit_server(self, form, server):
+        form.populate_obj(server)
+        db.session.add(server)
+        db.session.commit()
