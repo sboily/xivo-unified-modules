@@ -48,6 +48,7 @@ class AddressBookServerLdapForm(Form):
     name = TextField(_('Name'), [Required()])
     host = TextField(_('LDAP host'), [Required()])
     basedn = TextField(_('Base DN'), [Required()])
+    searchfilter = TextField(_('Search filter'), [Required()])
     login = TextField(_('Admin DN'))
     secret = TextField(_('Secret'))
     submit = SubmitField(_('Save'))

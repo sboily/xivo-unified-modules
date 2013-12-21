@@ -26,6 +26,7 @@ class ServerLdap(db.Model):
     name = db.Column(db.String(200))
     host = db.Column(db.Text())
     basedn = db.Column(db.Text())
+    searchfilter = db.Column(db.Text())
     login = db.Column(db.Text())
     secret = db.Column(db.Text())
     organisation_id = db.Column(db.Integer)

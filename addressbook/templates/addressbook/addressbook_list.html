@@ -2,6 +2,8 @@
 {% block content %}
 
 {% set url_add = url_for('addressbook.configure_ldap_server') %}
+{% set name_url_add = "Configure" %}
+{% set icon_url_add = "wrench" %}
 
 <div class="table-responsive">
   {% include "table-header.html" %}
@@ -16,6 +18,7 @@
       </tr>
     </thead>
     <tbody>
+    {% if addressbook %}
     {% for a in addressbook %}
       <tr>
         <td>{{ a.givenname }}</td>
@@ -27,6 +30,7 @@
         </td>
       </tr>
     {% endfor %}
+    {% endif %}
     </tbody>
   {% include "table-footer.html" %}
   </table>

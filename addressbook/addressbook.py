@@ -27,6 +27,7 @@ class AddressBook(object):
         self.basedn = ""
         self.login = ""
         self.secret = ""
+        self.searchfilter = ""
         self.searchscope = ldap.SCOPE_SUBTREE
 
     def setup(self, app):
@@ -39,9 +40,14 @@ class AddressBook(object):
 
     def connect(self):
         server = ServerLdap.query.filter(ServerLdap.organisation_id == g.user_organisation.id).first()
-        self.login = server.login
-        self.secret = server.secret
-        self.basedn = server.basedn
+        if server:
+            self.login = server.login
+            self.secret = server.secret
+            self.basedn = server.basedn
+            self.searchfilter = server.searchfilter
+        else:
+            return False
+
         try:
             conn = ldap.open(server.host)
             conn.protocol_version = ldap.VERSION3
@@ -51,28 +57,29 @@ class AddressBook(object):
 
     def list(self):
         retrieveAttributes = ['givenName', 'sn', 'telephoneNumber', 'roomNumber']
-        searchFilter = "cn=*"
         results = []
         conn = self.connect()
-        try:
-            ldap_result_id = conn.search(self.basedn, self.searchscope, searchFilter, retrieveAttributes)
-            while 1:
-                result_type, result_data = conn.result(ldap_result_id, 0)
-                if (result_data == []):
-                    break
-                else:
-                    if result_type == ldap.RES_SEARCH_ENTRY: 
-                        contact = { 'uid' : str(result_data[0][0]).encode('base64','strict'),
-                                    'givenname' : self.set_info_from_ldap(result_data[0][1], 'givenName', 1),
-                                    'sn' : self.set_info_from_ldap(result_data[0][1], 'sn', 1),
-                                    'phonenumber' : self.set_info_from_ldap(result_data[0][1], 'telephoneNumber', 1),
-                                    'internalphone' : self.set_info_from_ldap(result_data[0][1], 'roomNumber', 1)
-                                  }
-                        results.append(contact)
-        except ldap.LDAPError, e:
-            print e
+        if conn:
+            try:
+                ldap_result_id = conn.search(self.basedn, self.searchscope, self.searchfilter, retrieveAttributes)
+                while 1:
+                    result_type, result_data = conn.result(ldap_result_id, 0)
+                    if (result_data == []):
+                        break
+                    else:
+                        if result_type == ldap.RES_SEARCH_ENTRY: 
+                            contact = { 'uid' : str(result_data[0][0]).encode('base64','strict'),
+                                        'givenname' : self.set_info_from_ldap(result_data[0][1], 'givenName', 1),
+                                        'sn' : self.set_info_from_ldap(result_data[0][1], 'sn', 1),
+                                        'phonenumber' : self.set_info_from_ldap(result_data[0][1], 'telephoneNumber', 1),
+                                        'internalphone' : self.set_info_from_ldap(result_data[0][1], 'roomNumber', 1)
+                                      }
+                            results.append(contact)
+            except ldap.LDAPError, e:
+                print e
 
-        return results
+            return results
+        return False
 
     def show(self, uid):
         uid = uid.decode('base64','strict')
@@ -122,6 +129,7 @@ class AddressBook(object):
         server = ServerLdap(form.name.data)
         server.host = form.host.data
         server.basedn = form.basedn.data
+        server.searchfilter = form.searchfilter.data
         server.organisation_id = g.user_organisation.id
 
         db.session.add(server)
