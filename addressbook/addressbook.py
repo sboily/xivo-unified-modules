@@ -139,3 +139,6 @@ class AddressBook(object):
         form.populate_obj(server)
         db.session.add(server)
         db.session.commit()
+
+    def get_server(self):
+        return ServerLdap.query.filter(ServerLdap.organisation_id == g.user_organisation.id).first()

@@ -20,7 +20,6 @@ from flask.ext.login import login_required, current_user
 from setup import bp_addressbook, addressbook
 from forms import AddressBookForm, AddressBookServerLdapForm
 from flask.ext.babel import gettext as _
-from models import ServerLdap
 
 @bp_addressbook.route('/addressbook')
 @login_required
@@ -43,7 +42,7 @@ def get_image(uid):
 @bp_addressbook.route('/addressbook/server/configure', methods=['GET', 'POST'])
 @login_required
 def configure_ldap_server():
-    server = ServerLdap.query.first()
+    server = addressbook.get_server()
     form = AddressBookServerLdapForm(obj=server)
     if form.validate_on_submit():
         if server:
