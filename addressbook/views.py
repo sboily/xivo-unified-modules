@@ -42,7 +42,7 @@ def get_image(uid):
 
 @bp_addressbook.route('/addressbook/server/configure', methods=['GET', 'POST'])
 @login_required
-@manager_role(403)
+@manager_role.require(403)
 def configure_ldap_server():
     server = addressbook.get_server()
     form = AddressBookServerLdapForm(obj=server)
