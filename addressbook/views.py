@@ -17,6 +17,7 @@
 
 from flask import render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required, current_user
+from apps.helpers.acl.roles import manager_role
 from setup import bp_addressbook, addressbook
 from forms import AddressBookForm, AddressBookServerLdapForm
 from flask.ext.babel import gettext as _
@@ -41,6 +42,7 @@ def get_image(uid):
 
 @bp_addressbook.route('/addressbook/server/configure', methods=['GET', 'POST'])
 @login_required
+@manager_role(403)
 def configure_ldap_server():
     server = addressbook.get_server()
     form = AddressBookServerLdapForm(obj=server)
