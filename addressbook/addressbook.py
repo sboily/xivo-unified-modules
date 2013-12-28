@@ -49,9 +49,12 @@ class AddressBook(object):
             return False
 
         try:
-            conn = ldap.open(server.host)
-            conn.protocol_version = ldap.VERSION3
-            return conn
+            ldapobj = ldap.initialize("ldap://%s:389" % server.host, 0)
+            ldapobj.set_option(ldap.OPT_TIMEOUT, 1)
+            ldapobj.set_option(ldap.OPT_NETWORK_TIMEOUT, 0.5)
+            ldapobj.set_option(ldap.OPT_REFERRALS, 0)
+            ldapobj.protocol_version = ldap.VERSION3
+            return ldapobj
         except ldap.LDAPError, e:
             print "error : ", e
 
