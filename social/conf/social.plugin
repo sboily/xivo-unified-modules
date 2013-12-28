@@ -1,0 +1,14 @@
+[Core]
+Name = social
+Module = ../../social
+
+[Documentation]
+Module = social
+DisplayName = Be social
+Author = Sylvain Boily
+Email = sboily@proformatique.com
+Version = 0.1
+Website = http://blog.xivo.fr
+Description = PLugin to be social :)
+License = AGPLv3
+Parent = user
