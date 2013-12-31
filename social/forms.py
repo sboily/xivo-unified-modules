@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint
-from social import Social
 
-bp_social = Blueprint('social', __name__, template_folder='templates/social')
+from wtforms.fields import TextField
+from wtforms.validators import Required
+from flask.ext.babel import lazy_gettext as _
+from app.utils import Form
 
-social = Social()
+class SocialForm(Form):
+    status = TextField(_('Send message to every people on your organisation !'), [Required()])

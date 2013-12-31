@@ -15,11 +15,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template
+from flask import render_template, redirect, url_for
 from flask.ext.login import login_required
-from setup import bp_social
+from forms import SocialForm
+from setup import bp_social, social
 
-@bp_social.route('/social')
+@bp_social.route('/social', methods=['GET', 'POST'])
 @login_required
 def be():
-    return render_template('social.html')
+    form = SocialForm()
+    msg = social.list()
+    if form.validate_on_submit():
+        social.add(form.status.data)
+        return redirect(url_for('social.be'))
+    return render_template('social.html', form=form, msg=msg)

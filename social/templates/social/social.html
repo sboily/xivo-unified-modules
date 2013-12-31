@@ -1,6 +1,38 @@
 {% extends "base.html" %}
+     {% from "forms/macros.html" import render_field %}
+
 {% block content %}
 
-Be social ! :)
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Be social ! :)') }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.status) }}
+        </form>
+      </div>
+    </div>
+    <div class="panel-body">
+    {% for m in msg %}
+      <div class="row">
+        <div class="well col-md-6">
+          <p><strong>{{ m.displayname }} say:</strong></p>
+          <p>{{ m.status }}</p>
+          <p class="pull-right">
+              <a href=""><small><i class="glyphicon glyphicon-thumbs-up"></i></small></a>
+              {% if current_user.id == m.user_id %}
+                  <a href=""><small><i class="glyphicon glyphicon-remove"></i></small></a>
+              {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+</div>
+
+
 
 {% endblock %}
