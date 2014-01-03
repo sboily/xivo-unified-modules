@@ -16,10 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from wtforms.fields import TextField
+from wtforms.fields import TextField, SubmitField
 from wtforms.validators import Required
 from flask.ext.babel import lazy_gettext as _
 from app.utils import Form
 
 class SocialForm(Form):
-    status = TextField(_('Send message to every people on your organisation !'), [Required()])
+    status = TextField(_('What\'s on your mind !'), [Required()])
+
+class SocialCommentForm(Form):
+    comment = TextField(_('Write a comment ...'), [Required()])
+    submit = SubmitField('Submit')

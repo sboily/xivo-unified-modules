@@ -15,17 +15,37 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask.ext.login import login_required
-from forms import SocialForm
+from flask.ext.couchdb import paginate
+from forms import SocialForm, SocialCommentForm
 from setup import bp_social, social
 
 @bp_social.route('/social', methods=['GET', 'POST'])
 @login_required
 def be():
     form = SocialForm()
+    comment = SocialCommentForm()
     msg = social.list()
     if form.validate_on_submit():
         social.add(form.status.data)
         return redirect(url_for('social.be'))
-    return render_template('social.html', form=form, msg=msg)
+    return render_template('social.html', form=form, msg=msg, comment=comment)
+
+
+@bp_social.route('/social/like/<id>')
+@login_required
+def like(id):
+    social.like(id)
+    return redirect(url_for('social.be'))
+
+@bp_social.route('/social/comment/<id>', methods=['POST'])
+@login_required
+def comment(id):
+    return social.comment(id)
+
+@bp_social.route('/social/delete/<id>')
+@login_required
+def delete(id):
+    social.delete(id)
+    return redirect(url_for('social.be'))

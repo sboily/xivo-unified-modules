@@ -18,6 +18,7 @@
 from flask import Blueprint
 from social import Social
 
-bp_social = Blueprint('social', __name__, template_folder='templates/social')
+bp_social = Blueprint('social', __name__, template_folder='templates/social',
+                      static_folder='static', static_url_path='/%s' % __name__)
 
 social = Social()

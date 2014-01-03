@@ -1,24 +1,73 @@
-from couchdb.design import ViewDefinition
-from app.extensions import couchdbmanager
-from flask import g
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2013 Sylvain Boily <sboily@proformatique.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from flask.ext.couchdb import ViewDefinition, paginate
 from flask.ext.login import current_user
+from app.extensions import couchdbmanager
+from flask import g, request, jsonify
 from models import Messages
-from app.models import User
 
 class Social(object):
-    def __init__(self):
-        self.xmesg = ViewDefinition('docs', 'byauthor',
-                                    'function(doc) { emit(doc.author, doc); }')
-        couchdbmanager.add_viewdef(self.xmesg)
 
-    def add(self, status):
-        xmesg = Messages(user_id=current_user.id, organisation_id=current_user.organisation_id, \
-                         displayname=current_user.displayname, status=status)
-        xmesg.store(g.couch)
+    def add(self, content):
+        message = Messages(user_id=current_user.id, \
+                           organisation_id=current_user.organisation_id, \
+                           displayname=current_user.displayname, \
+                           content=content)
+        message.store()
+
+    def set_views(self):
+        all = ViewDefinition('messages', 'all',
+                             '''function(doc) {
+                                    if (doc.organisation_id == '%s') {
+                                        emit(doc.added, doc)
+                                    }
+                                }''' % current_user.organisation_id,
+                             descending=True)
+        couchdbmanager.add_viewdef(all)
+        return all
 
     def list(self):
-        xmesg = []
-        for msg in self.xmesg(g.couch):
-            if msg.value.get('organisation_id') == current_user.organisation_id:
-                xmesg.append(msg.value)
-        return sorted(xmesg, reverse=True)
+        return paginate(self.set_views(), 5, request.args.get('start'))
+
+    def view_comment(self, id):
+        comment = '?startkey=["%s"]&endkey=["%s", 2]' %(id, id)
+
+    def like(self, id):
+        message = Messages.load(id)
+        if message:
+            message.like.append(user_id=current_user.id, \
+                                displayname=current_user.displayname, \
+                                organisation_id=current_user.organisation_id, \
+                                is_like = 1)
+            message.store()
+
+    def delete(self, id):
+        message = Messages.load(id)
+        if message:
+            message.organisation_id = None
+            message.store()
+
+    def comment(self, id):
+        content=request.form['comment']
+        message = Messages.load(id)
+        message.comments.append(user_id=current_user.id, \
+                                organisation_id=current_user.organisation_id, \
+                                displayname=current_user.displayname, \
+                                content=content)
+        message.store()
+        return jsonify({'response' : True})
