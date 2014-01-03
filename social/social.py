@@ -44,9 +44,6 @@ class Social(object):
     def list(self):
         return paginate(self.set_views(), 5, request.args.get('start'))
 
-    def view_comment(self, id):
-        comment = '?startkey=["%s"]&endkey=["%s", 2]' %(id, id)
-
     def like(self, id):
         message = Messages.load(id)
         if message:
