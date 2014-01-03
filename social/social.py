@@ -38,7 +38,6 @@ class Social(object):
         message.store()
 
     def list(self):
-        print dir(self.all())
         return paginate(self.all[current_user.organisation_id], 5, request.args.get('start'))
 
     def like(self, id):
