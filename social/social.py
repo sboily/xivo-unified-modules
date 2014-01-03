@@ -22,6 +22,13 @@ from flask import g, request, jsonify
 from models import Messages
 
 class Social(object):
+    def __init__(self):
+        self.all = ViewDefinition('messages', 'all',
+                                  '''function(doc) {
+                                         emit(doc.organisation_id, doc)
+                                     }''',
+                                  descending=True)
+        couchdbmanager.add_viewdef(self.all)
 
     def add(self, content):
         message = Messages(user_id=current_user.id, \
@@ -30,19 +37,9 @@ class Social(object):
                            content=content)
         message.store()
 
-    def set_views(self):
-        all = ViewDefinition('messages', 'all',
-                             '''function(doc) {
-                                    if (doc.organisation_id == '%s') {
-                                        emit(doc.added, doc)
-                                    }
-                                }''' % current_user.organisation_id,
-                             descending=True)
-        couchdbmanager.add_viewdef(all)
-        return all
-
     def list(self):
-        return paginate(self.set_views(), 5, request.args.get('start'))
+        print dir(self.all())
+        return paginate(self.all[current_user.organisation_id], 5, request.args.get('start'))
 
     def like(self, id):
         message = Messages.load(id)
