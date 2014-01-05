@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+     {% from "forms/macros.html" import render_field %}
+
+{% block content %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>{{ _('Be social ! :)') }}</h4>
+    </div>
+    <div class="panel-body">
+      <div class="well well-xs col-md-6">
+        <form class="form" role="form" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.status) }}
+        </form>
+      </div>
+    </div>
+    <div class="panel-body">
+    {% for m in msg.items %}
+      <div class="row">
+        <div class="well col-md-6">
+          <div class="row">
+              <div class="col-md-1">
+                  <p><img src="{{ url_for('addressbook.static', filename='img/unknown.png') }}" alt="Photo" class="img-rounded" width="40px"></img><p>
+              </div>
+              <div class="col-md-9">
+                  <p><strong>{{ m.value.displayname }} {{ _('say') }}:</strong></p>
+                  <p>{{ m.value.content }}</p>
+              </div>
+              <div class="col-md-2">
+                  <p>
+                    <a href="{{ url_for('social.like', id=m.id) }}">
+                      <small>
+                          <i class="glyphicon glyphicon-thumbs-up" 
+                            {% for l in m.value.like %}
+                                {% if current_user.id == l.user_id %}
+                                    style="color: orange;"
+                                {% endif %}
+                            {% endfor %}>
+                          </i>
+                      </small>
+                    </a>
+                    {% if m.value.like %} <small class="btn-link">{{m.value.like|count}}</small> {% endif %}
+                    <button id="do-comment-{{m.id}}" data-id="{{m.id}}" class="btn-link" data-url={{ url_for('social.comment', id=m.id) }}>
+                      <small><i class="glyphicon glyphicon-share-alt"></i></small></button>
+                    {% if current_user.id == m.value.user_id %}
+                         <a href="{{ url_for('social.delete', id=m.id) }}"><small><i class="glyphicon glyphicon-remove"></i></small></a>
+                    {% endif %}
+                  </p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-8">
+                  {% for c in m.value.comments %}
+                      <p>{{ c.content }} <br>
+                      <strong><small><em>{{ _('from') }} {{ c.displayname }}</em></small></strong></p>
+                  {% endfor %}
+              </div>
+          </div>
+          <div id="sent-comment-{{m.id}}" class="row hidden">
+              <div><strong>{{ _('Your comment') }}:</strong></div>
+              <div id="{{m.id}}">{{ render_field(comment.comment) }}</div>
+              <div><button id="do-submit-{{m.id}}">Sent</button></div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% if msg.prev %}<a href="{{ url_for('social.be', start=msg.prev) }}">Prev</a>{% endif %}
+    {% if msg.next %}<a href="{{ url_for('social.be', start=msg.next) }}">Next</a>{% endif %}
+    </div>
+</div>
+
+<script>
+$('button[id^=do-comment]').click(function() {
+    var id=$(this).attr('data-id');
+    var url=$(this).attr('data-url');
+    $('div[id=sent-comment-'+id+']').fadeIn().removeClass('hidden');
+
+    $('button[id=do-submit-'+id+']').click(function() {
+        var comment = $('#'+id+' :input').val();
+        $.ajax({type: "POST",
+                url: url,
+                data: { comment: comment }
+               }).done(function(msg) {
+                           $('div[id=sent-comment-'+id+']').fadeOut().addClass('hidden');
+                           window.location.href = "{{ url_for('social.be') }}";
+        });
+    });
+});
+
+$('#status').focus(function() {
+    console.log('focus on status');
+});
+</script>
+
+{% endblock %}

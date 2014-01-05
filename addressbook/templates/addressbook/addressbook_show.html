@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+    {% from "forms/macros.html" import render_field %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>{{ _('Contact informations') }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="well well-xs col-md-12">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#informations" data-toggle="tab">{{ _('Informations') }}</a></li>
+                </ul>
+                <br>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="informations">
+                        <form class="form" method="post">
+                            {{ form.csrf_token }}
+                            <fieldset>
+                            <div class="col-md-2">
+                            {% if contact.photo %}
+                                 <img src="{{ url_for('addressbook.get_image', uid=contact.id) }}" alt="Photo" class="img-rounded" width="140px"></img><hr>
+                            {% else %}
+                                 <img src="{{ url_for('addressbook.static', filename='img/unknown.png') }}" alt="Photo" class="img-rounded" width="140px"></img><hr>
+                            {% endif %}
+                            <h4>{{ contact.displayname }}</h4>
+                            </div>
+                            <div class="col-md-5">
+                             <h4>{{ _('Personnal') }}</h4>
+                            {{ render_field(form.username, with_label=1, disabled="disabled", with_icon="user") }}
+                            {{ render_field(form.gender, with_label=1) }}
+                            {{ render_field(form.birthday, with_label=1, with_icon="calendar") }}
+                            {{ render_field(form.email, with_label=1, with_icon="envelope") }}
+                            </div>
+                            <div class="col-md-5">
+                             <h4>{{ _('Company') }}</h4>
+                            {{ render_field(form.organisation, with_label=1, with_icon="home") }}
+                            {{ render_field(form.city, with_label=1, with_icon="map-marker") }}
+                            {{ render_field(form.internal_number, with_label=1, disabled="disabled", with_icon="phone-alt") }}
+                            {{ render_field(form.phonenumber, with_label=1, with_icon="earphone") }}
+                            {{ render_field(form.mobile, with_label=1, with_icon="earphone") }}
+                            </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

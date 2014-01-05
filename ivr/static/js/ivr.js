@@ -10,7 +10,9 @@ $(function() {
 
     $(window).resize(function(){
         console.log('resize');
-        jsPlumb.repaintEverything();
+        ivr_clean();
+        name = $("#ivr").attr("name");
+        ivr_load(name);
     });
 
     $.each($('.nodes_config').children('.node_config'), function( index ) {
@@ -297,13 +299,13 @@ $(function() {
 
         var nodes = []
         $("#ivr .node").each(function (idx, elem) {
-            var $elem = $(elem);
+            position = $(elem).position();
             nodes.push({
-                id: $elem.attr('id'),
-                action: $elem.attr('action'),
-                positionX: parseInt($elem.css("left"), 10),
-                positionY: parseInt($elem.css("top"), 10),
-                config: get_node_config($elem.attr('id'))
+                id: $(elem).attr('id'),
+                action: $(elem).attr('action'),
+                positionX: position.left,
+                positionY: position.top,
+                config: get_node_config($(elem).attr('id'))
             });
         });
 
@@ -368,6 +370,24 @@ $(function() {
 
         $.each(nodes, function(index, value) {
             id = value.id.toString().substr(4);
+            position = $("#ivr").position();
+            zoneY = $("#ivr").height();
+            zoneX = $("#ivr").width();
+
+            console.log("position X position:zoneX");
+            console.log(position.left);
+            console.log(zoneX);
+
+            console.log("position Y position:zoneX");
+            console.log(position.top);
+            console.log(zoneY);
+
+            if (value.positionX > zoneX)
+                value.positionX = zoneX-60;
+
+            //if (value.positionY > zoneY) 
+            //    value.positionY = zoneY-60;
+
             styles = { position: "absolute",
                        top: value.positionY +"px",
                        left: value.positionX + "px"
@@ -434,14 +454,18 @@ $(function() {
                                         $(this).dialog('close');
                                     },
                          'Reset' : function() {
-                                       jsPlumb.deleteEveryEndpoint();
-                                       $(".dropped_icon").remove();
-                                       $(".icon").draggable('enable');
-                                       id=1;
+                                       ivr_clean();
                                        $(this).dialog('close');
                                    }
              }
         });
+    }
+
+    ivr_clean = function() {
+        jsPlumb.deleteEveryEndpoint();
+        $(".dropped_icon").remove();
+        $(".icon").draggable('enable');
+        id=1;
     }
 
     delete_node = function(node) {

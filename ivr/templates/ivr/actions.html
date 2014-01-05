@@ -1,0 +1,9 @@
+<div>
+   <button class="save btn btn-default btn-sm btn-success"><i class="glyphicon glyphicon-file"></i> Save</button>
+   <button class="reset btn btn-default btn-sm btn-danger"><i class="glyphicon glyphicon-ban-circle icon-white"></i> Reset</button>
+   {% if id is defined %}
+   <a data-url="{{url_for('ivr.ivr_check', id=id)}}" class="btn btn-default btn-sm dialplan-check" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-ok"></i> Check</a>
+   <a data-url="{{url_for('ivr.ivr_show', id=id)}}" class="btn btn-default btn-sm dialplan-show" id="{{ id }}" data-toggle="modal" data-target="#dialplan-dialog"><i class="glyphicon glyphicon-eye-open"></i> Show</a>
+   {% endif %}
+
+</div>

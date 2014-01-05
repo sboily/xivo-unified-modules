@@ -7,9 +7,13 @@ Module = openstack
 DisplayName =  OpenStack
 Author = Sylvain Boily
 Email = sboily@proformatique.com
+<<<<<<< HEAD
 Version = 0.1.1
+=======
+Version = 0.2.1
+>>>>>>> d9e6f9c01fd49ac7f0ca4067d5808e6ae773e16e
 Website = http://blog.xivo.fr
 Description = OpenStack plugin
 License = AGPLv3
 Parent = organisation
-Dependance = deploy
+Depend = deploy

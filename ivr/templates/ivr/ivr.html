@@ -7,17 +7,15 @@
 
 {% block content %}
 
-<div class="widget stacked widget-table action-table">
+<div class="table-responsive">
   <p class="text-right"><a class="btn btn-default btn-primary btn-xs" href="{{url_for('ivr.ivr_add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
   <p class="text-right"><a data-url="{{url_for('ivr.ivr_save')}}" class="btn btn-default btn-xs confirm" data-toggle="modal" data-target="#upload-dialplan-dialog"><i class="glyphicon glyphicon-upload"></i> Upload</a></p>
-  <table class="table table-bordered">
-<div class="widget-content">
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
         <th>Name</th>
         <th>Date</th>
-        <th style="width: 130px;"></th>
+        <th style="width: 9%;" class="sorter-false"></th>
       </tr>
     </thead>
     <tbody>

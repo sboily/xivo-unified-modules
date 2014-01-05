@@ -49,9 +49,9 @@ def deploy_xivo_on_amazon(ip_address, ssh_key):
     basedir = os.path.abspath(os.path.dirname(__file__))
     env.key_filename = key_file
     remote_dahdi_init = '/etc/init.d/'
-    dahdi_src = os.path.join(basedir, 'dahdi')
-    xivo_configure_src = os.path.join(basedir, 'xivo-configure')
-    webservice_sql_src = os.path.join(basedir, 'webservices.sql')
+    dahdi_src = os.path.join(basedir, '../deploy/dahdi')
+    xivo_configure_src = os.path.join(basedir, '../deploy/xivo-configure')
+    webservice_sql_src = os.path.join(basedir, '../deploy/webservices.sql')
 
     # Install XiVO
     sudo('apt-get update')
