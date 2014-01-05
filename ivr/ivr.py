@@ -21,6 +21,7 @@ from flask import g
 import os
 import json
 import random
+from flask.ext.login import current_user
 
 class Ivr(object):
 
@@ -51,7 +52,7 @@ class Ivr(object):
 
         my_ivr = IvrDB.query.filter(IvrDB.name == query_name) \
                             .filter(IvrDB.server_id == g.server_id) \
-                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .filter(IvrDB.organisation_id == current_user.organisation_id) \
                             .first()
 
         if is_edit and my_ivr:
@@ -65,7 +66,7 @@ class Ivr(object):
             my_ivr.name = name
         my_ivr.nodes = json.dumps(result['nodes'])
         my_ivr.connections = json.dumps(result['connections'])
-        my_ivr.organisation_id = g.user_organisation.id
+        my_ivr.organisation_id = current_user.organisation_id
         my_ivr.server_id = g.server_id
 
         db.session.add(my_ivr)
@@ -74,7 +75,7 @@ class Ivr(object):
         return { 'action' : info, 'id' : my_ivr.id }
 
     def list(self):
-        return IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+        return IvrDB.query.filter(IvrDB.organisation_id == current_user.organisation_id) \
                           .filter(IvrDB.server_id == g.server_id) \
                           .order_by(IvrDB.name) 
 
@@ -82,7 +83,7 @@ class Ivr(object):
         my_ivr = IvrDB.query \
                       .filter(IvrDB.id == id) \
                             .filter(IvrDB.server_id == g.server_id) \
-                      .filter(IvrDB.organisation_id == g.user_organisation.id) \
+                      .filter(IvrDB.organisation_id == current_user.organisation_id) \
                       .first()
         if my_ivr:
             db.session.delete(my_ivr)
@@ -91,7 +92,7 @@ class Ivr(object):
     def edit(self, id):
         my_ivr = IvrDB.query.filter(IvrDB.id == id) \
                             .filter(IvrDB.server_id == g.server_id) \
-                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .filter(IvrDB.organisation_id == current_user.organisation_id) \
                             .first()
         return my_ivr
 
@@ -113,7 +114,7 @@ class Ivr(object):
 
 
     def shows(self, server_id):
-        my_ivr = IvrDB.query.filter(IvrDB.organisation_id == g.user_organisation.id) \
+        my_ivr = IvrDB.query.filter(IvrDB.organisation_id == current_user.organisation_id) \
                             .filter(IvrDB.server_id == server_id) \
                             .all()
 
@@ -133,7 +134,7 @@ class Ivr(object):
 
         my_ivr = IvrDB.query.filter(IvrDB.id == id) \
                             .filter(IvrDB.server_id == server_id) \
-                            .filter(IvrDB.organisation_id == g.user_organisation.id) \
+                            .filter(IvrDB.organisation_id == current_user.organisation_id) \
                             .first()
 
         nodes = json.loads(my_ivr.nodes)

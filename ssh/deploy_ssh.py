@@ -27,6 +27,7 @@ from app.models import User, Servers, Organisations
 from models import ProviderSsh, ServersSsh
 from forms import SshForm
 from celery.task.control import revoke
+from flask.ext.login import current_user
 
 from fabric_ssh import deploy_xivo_on_ssh
 
@@ -51,7 +52,7 @@ class DeployOnSsh(Deploy):
                             })
 
     def get_configurations(self):
-        configuration =  ProviderSsh.query.filter(ProviderSsh.organisation_id == g.user_organisation.id) \
+        configuration =  ProviderSsh.query.filter(ProviderSsh.organisation_id == current_user.organisation_id) \
                                              .order_by(ProviderSsh.name)
         return configuration
 
@@ -60,7 +61,7 @@ class DeployOnSsh(Deploy):
         provider.login = form.login.data
         provider.password = form.password.data
         provider.ip = form.ip.data
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
 
         db.session.add(provider)
         db.session.commit()
@@ -81,13 +82,13 @@ class DeployOnSsh(Deploy):
         db.session.commit()
         
     def get_servers(self):
-        servers =  ServersSsh.query.filter(ServersSsh.organisation_id == g.user_organisation.id) \
+        servers =  ServersSsh.query.filter(ServersSsh.organisation_id == current_user.organisation_id) \
                                       .order_by(ServersSsh.name)
         return servers
 
     def add_server(self, form):
         provider = ServersSsh(form.name.data)
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
         provider.servers = form.configuration.data
 
         db.session.add(provider)

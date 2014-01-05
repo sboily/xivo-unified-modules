@@ -26,6 +26,7 @@ from app.models import User, Servers, Organisations
 from models import ProviderOpenStack, ServersOpenStack
 from forms import OpenStackForm
 from celery.task.control import revoke
+from flask.ext.login import current_user
 
 from openstack import OpenStackConn
 from fabric_openstack import deploy_xivo_on_openstack
@@ -50,14 +51,14 @@ class DeployOnOpenStack(Deploy):
                             })
 
     def get_configurations(self):
-        configuration =  ProviderOpenStack.query.filter(ProviderOpenStack.organisation_id == g.user_organisation.id) \
+        configuration =  ProviderOpenStack.query.filter(ProviderOpenStack.organisation_id == current_user.organisation_id) \
                                              .order_by(ProviderOpenStack.name)
         return configuration
 
     def add_provider(self, form):
         provider = ProviderOpenStack(form.name.data)
         form.populate_obj(provider)
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
         db.session.add(provider)
         db.session.commit()
 
@@ -77,13 +78,13 @@ class DeployOnOpenStack(Deploy):
         db.session.commit()
         
     def get_servers(self):
-        servers =  ServersOpenStack.query.filter(ServersOpenStack.organisation_id == g.user_organisation.id) \
+        servers =  ServersOpenStack.query.filter(ServersOpenStack.organisation_id == current_user.organisation_id) \
                                       .order_by(ServersOpenStack.name)
         return servers
 
     def add_server(self, form):
         provider = ServersOpenStack(form.name.data)
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
         provider.servers = form.configuration.data
 
         db.session.add(provider)

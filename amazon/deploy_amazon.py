@@ -26,6 +26,7 @@ from app.models import User, Servers
 from models import ProviderAmazon, ServersAmazon
 from forms import AmazonForm
 from celery.task.control import revoke
+from flask.ext.login import current_user
 
 from amazon import EC2Conn
 from fabric_amazon import deploy_xivo_on_amazon
@@ -50,7 +51,7 @@ class DeployOnAmazon(Deploy):
                             })
 
     def get_configurations(self):
-        configuration =  ProviderAmazon.query.filter(ProviderAmazon.organisation_id == g.user_organisation.id) \
+        configuration =  ProviderAmazon.query.filter(ProviderAmazon.organisation_id == current_user.organisation_id) \
                                              .order_by(ProviderAmazon.name)
         return configuration
 
@@ -60,7 +61,7 @@ class DeployOnAmazon(Deploy):
         provider.secret_key = form.secret_key.data
         provider.key_name = form.key_name.data
         provider.ssh_key = form.ssh_key.data
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
 
         db.session.add(provider)
         db.session.commit()
@@ -81,13 +82,13 @@ class DeployOnAmazon(Deploy):
         db.session.commit()
         
     def get_servers(self):
-        servers =  ServersAmazon.query.filter(ServersAmazon.organisation_id == g.user_organisation.id) \
+        servers =  ServersAmazon.query.filter(ServersAmazon.organisation_id == current_user.organisation_id) \
                                       .order_by(ServersAmazon.name)
         return servers
 
     def add_server(self, form):
         provider = ServersAmazon(form.name.data)
-        provider.organisation_id = g.user_organisation.id
+        provider.organisation_id = current_user.organisation_id
         provider.servers = form.configuration.data
 
         db.session.add(provider)
@@ -115,8 +116,8 @@ class DeployOnAmazon(Deploy):
         print 'Finish !'
 
         self._update_status_in_db(id, 'running')
-        user_info = {'user_id' : g.user.id,
-                     'organisation_id' : g.user_organisation.id,
+        user_info = {'user_id' : current_user.id,
+                     'organisation_id' : current_user.organisation_id,
                      'name' : server.name}
         self._add_server_in_servers(instance, user_info)
         return (id, instance)

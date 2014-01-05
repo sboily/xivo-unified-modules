@@ -22,6 +22,7 @@ from flask import g
 from register_class import registerclass
 from tasks import deploy_on_cloud, undeploy_on_cloud
 import datetime
+from flask.ext.login import current_user
 
 class Deploy(object): 
 
@@ -43,12 +44,12 @@ class Deploy(object):
 
         if plugin and plugin.id:
             provider_registered = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
-                                                          .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                                          .filter(AssociateProviders.organisation_id == current_user.organisation_id) \
                                                           .first()
 
             if not provider_registered:
                 associate = AssociateProviders()
-                associate.organisation_id = g.user_organisation.id
+                associate.organisation_id = current_user.organisation_id
                 associate.provider_id = plugin.id
                 db.session.add(associate)
                 db.session.commit()
@@ -62,7 +63,7 @@ class Deploy(object):
 
         if plugin and plugin.id:
             provider_registred = AssociateProviders.query.filter(AssociateProviders.provider_id == plugin.id) \
-                                                         .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                                         .filter(AssociateProviders.organisation_id == current_user.organisation_id) \
                                                          .first()
             if provider_registred:
                 db.session.delete(provider_registred)
@@ -78,7 +79,7 @@ class Deploy(object):
 
     def get_provider(self, id):
         provider = RegisterProviders.query.filter(RegisterProviders.id == id) \
-                                          .filter(AssociateProviders.organisation_id == g.user_organisation.id) \
+                                          .filter(AssociateProviders.organisation_id == current_user.organisation_id) \
                                           .first()
         return provider.base_url + '/server/add'
 
@@ -92,7 +93,7 @@ class Deploy(object):
 
     def add_server(self, form):
         server = DeployServers(form.name.data)
-        server.organisation_id = g.user_organisation.id
+        server.organisation_id = current_user.organisation_id
         db.session.add(server)
         db.session.commit()
 
@@ -100,8 +101,8 @@ class Deploy(object):
         pass
 
     def deploy_server(self, provider, id):
-        user_info = {'user_id' : g.user.id,
-                     'organisation_id' : g.user_organisation.id
+        user_info = {'user_id' : current_user.id,
+                     'organisation_id' : current_user.organisation_id
                     }
         return deploy_on_cloud.apply_async((provider, id, user_info))
 

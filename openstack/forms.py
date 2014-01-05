@@ -20,12 +20,13 @@ from wtforms.fields import TextField, SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required, Regexp, Length
 from flask.ext.babel import lazy_gettext as _
+from flask.ext.login import current_user
 from flask import g
 from app.utils import Form
 from models import ProviderOpenStack
 
 def get_configurations():
-    return ProviderOpenStack.query.filter(ProviderOpenStack.organisation_id == g.user_organisation.id) \
+    return ProviderOpenStack.query.filter(ProviderOpenStack.organisation_id == current_user.organisation_id) \
                                .all()
 
 class OpenStackForm(Form):
