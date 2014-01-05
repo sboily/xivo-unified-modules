@@ -20,6 +20,7 @@ from models import ServerLdap
 from flask import g, current_app
 import os
 from app import db
+from flask.ext.login import current_user
 
 class AddressBook(object):
 
@@ -39,7 +40,7 @@ class AddressBook(object):
             db.create_all(bind=db_bind)
 
     def connect(self):
-        server = ServerLdap.query.filter(ServerLdap.organisation_id == g.user_organisation.id).first()
+        server = ServerLdap.query.filter(ServerLdap.organisation_id == current_user.organisation_id).first()
         if server:
             self.login = server.login
             self.secret = server.secret
@@ -133,7 +134,7 @@ class AddressBook(object):
         server.host = form.host.data
         server.basedn = form.basedn.data
         server.searchfilter = form.searchfilter.data
-        server.organisation_id = g.user_organisation.id
+        server.organisation_id = current_user.organisation_id
 
         db.session.add(server)
         db.session.commit()
@@ -144,4 +145,4 @@ class AddressBook(object):
         db.session.commit()
 
     def get_server(self):
-        return ServerLdap.query.filter(ServerLdap.organisation_id == g.user_organisation.id).first()
+        return ServerLdap.query.filter(ServerLdap.organisation_id == current_user.organisation_id).first()
