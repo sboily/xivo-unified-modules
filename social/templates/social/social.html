@@ -42,7 +42,7 @@
                     </a>
                     {% if m.value.like %} <small class="btn-link">{{m.value.like|count}}</small> {% endif %}
                     <button id="do-comment-{{m.id}}" data-id="{{m.id}}" class="btn-link" data-url={{ url_for('social.comment', id=m.id) }}>
-                      <small><i class="glyphicon glyphicon-share-alt"></i></small></button>
+                      <small><i class="glyphicon glyphicon-comment"></i></small></button>
                     {% if current_user.id == m.value.user_id %}
                          <a href="{{ url_for('social.delete', id=m.id) }}"><small><i class="glyphicon glyphicon-remove"></i></small></a>
                     {% endif %}
