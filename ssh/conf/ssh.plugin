@@ -7,11 +7,7 @@ Module = ssh
 DisplayName = Ssh
 Author = Sylvain Boily
 Email = sboily@proformatique.com
-<<<<<<< HEAD
-Version = 0.1.1
-=======
-Version = 0.2.1
->>>>>>> d9e6f9c01fd49ac7f0ca4067d5808e6ae773e16e
+Version = 0.2.2
 Website = http://blog.xivo.fr
 Description = Ssh plugin
 License = AGPLv3
