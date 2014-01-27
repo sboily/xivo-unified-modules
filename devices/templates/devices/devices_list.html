@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-default btn-primary btn-xs" href="{{url_for('devices.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
-  <table class="table table-bordered">
-<div class="widget-content">
+{% set url_add = url_for('devices.add') %}
+
+<div class="table-responsive">
+  {% include "table-header.html" %}
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
@@ -14,7 +14,7 @@
         <th>Vendor</th>
         <th>Model</th>
         <th>Plugin</th>
-        <th style="width: 130px;"></th>
+        <th style="width: 8%;" class="sorter-false"></th>
       </tr>
     </thead>
     <tbody>
@@ -44,6 +44,7 @@
       </tr>
     {% endfor %}
     </tbody>
+  {% include "table-footer.html" %}
   </table>
 </div>
 

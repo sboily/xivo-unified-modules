@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="widget stacked widget-table action-table">
-  <p class="text-right"><a class="btn btn-default btn-xs btn-primary" href="{{url_for('voicemails.add')}}"><i class="glyphicon glyphicon-plus"></i> Add</a></p>
-  <table class="table table-bordered">
-<div class="widget-content">
+{% set url_add = url_for('voicemails.add') %}
+
+<div class="table-responsive">
+  {% include "table-header.html" %}
   <table class="table table-bordered table-striped table-highlight">
     <thead>
       <tr>
@@ -12,7 +12,7 @@
         <th>Mailbox</th>
         <th>Email</th>
         <th>Password</th>
-        <th style="width: 70px;"></th>
+        <th style="width: 6%;" class="sorter-false"></th>
       </tr>
     </thead>
     <tbody>
@@ -29,6 +29,7 @@
       </tr>
     {% endfor %}
     </tbody>
+  {% include "table-footer.html" %}
   </table>
 </div>
 
