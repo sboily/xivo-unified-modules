@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-responsive">
+  {% include "table-header.html" %}
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th style="width: 4%;" class="sorter-false"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for u in cti_profiles|sort(attribute = 'name') %}
+      <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.name }}</td>
+      <td>
+        <a href="{{url_for('cti_profiles.show', id=u.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  {% include "table-footer.html" %}
+  </table>
+</div>
+
+{% endblock %}
