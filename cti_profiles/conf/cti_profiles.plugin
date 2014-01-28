@@ -1,0 +1,14 @@
+[Core]
+Name = cti_profiles
+Module = ../../cti_profiles
+
+[Documentation]
+Module = cti_profiles
+DisplayName = CTI profiles
+Author = Sylvain Boily
+Email = sboily@proformatique.com
+Version = 0.1.2
+Website = http://blog.xivo.fr
+Description = CTI profiles for REST API XiVO
+License = AGPLv3
+Parent = server
