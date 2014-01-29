@@ -1,0 +1,14 @@
+[Core]
+Name = lines
+Module = ../../lines
+
+[Documentation]
+Module = lines
+DisplayName = Lines
+Author = Sylvain Boily
+Email = sboily@proformatique.com
+Version = 0.1.1
+Website = http://blog.xivo.fr
+Description = Lines for REST API XiVO
+License = AGPLv3
+Parent = server
