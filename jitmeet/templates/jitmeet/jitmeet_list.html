@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set url_add = url_for('jitmeet.add') %}
+
+<div class="table-responsive">
+  {% include "table-header.html" %}
+  <table class="table table-bordered table-striped table-highlight">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th style="width: 6%;" class="sorter-false"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for v in room %}
+      <tr>
+      <td>{{ v.name }}</td>
+      <td>
+        <a href="{{url_for('jitmeet.delete', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  {% include "table-footer.html" %}
+  </table>
+</div>
+
+{% endblock %}
+

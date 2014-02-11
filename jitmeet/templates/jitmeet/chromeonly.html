@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/chromeonly.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div id="wrap"> 
+        <a href="http://google.com/chrome"><div id="left"></div></a>
+        <div id="middle"></div>
+        <div id="text">
+            <p>This service only works with Chrome.</p>
+            <p><a href="http://google.com/chrome">Download Chrome</a></p>
+        </div>
+    </div>
+{% endblock %}

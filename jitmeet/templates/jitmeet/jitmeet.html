@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/jquery-ui.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/strophejingle.bundle.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/colibri.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/muc.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/estos_log.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/smileys.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/replacement.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/jquery-impromptu.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/jquery.autosize.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/config.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/prezi_player.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/app.js') }}"></script>
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/main.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/jquery-impromptu.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/modaldialog.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/font-awesome.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div id="settings">
+      <h1>Connection Settings</h1>
+      <form id="loginInfo">
+        <label>JID: <input id="jid" type="text" name="jid" placeholder="me@example.com"/></label>
+        <label>Password: <input id="password" type="password" name="password" placeholder="secret"/></label>
+        <label>BOSH URL: <input id="boshURL" type="text" name="boshURL" placeholder="/http-bind"/></label>
+        <input id="connect" type="submit" value="Connect" />
+      </form>
+    </div>
+
+    <div id="videospace">
+        <div class="fade_line"></div>
+        <div id="largeVideoContainer" class="videocontainer">
+            <video id="largeVideo" autoplay oncontextmenu="return false;"></video>
+        </div>
+        <div class="fade_line"></div>
+        <div id="remoteVideos">
+            <span id="localVideoContainer" class="videocontainer">
+                <span id="localNick"></span>
+                <video id="localVideo" autoplay oncontextmenu="return false;" muted></video>
+                <span id="localVideoToolbar" class="focusindicator"></span>
+            </span>
+        </div>
+    </div>
+    <div id="chatspace">
+        <div id="nickname">
+            Enter a nickname in the box below
+            <form>
+                <input type='text' id="nickinput" placeholder='Choose a nickname' autofocus>
+            </form>
+        </div>
+        <div id="chatconversation"></div>
+        <textarea id="usermsg" placeholder='Enter text...' autofocus></textarea>
+    </div>
+{% endblock %}
