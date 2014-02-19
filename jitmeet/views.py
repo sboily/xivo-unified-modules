@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import render_template, url_for, redirect
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 from setup import bp_jitmeet, jitmeet
 from forms import RoomForm
 
@@ -42,9 +42,16 @@ def delete(id):
     return redirect(url_for('jitmeet.list'))
 
 @bp_jitmeet.route('/jitmeet_<id>')
-@login_required
 def open(id):
-    return render_template('jitmeet.html')
+    is_anonymous_content=0
+    if current_user.is_anonymous:
+        is_anonymous_content=1
+    return render_template('jitmeet.html', is_anonymous_content=is_anonymous_content)
+
+@bp_jitmeet.route('/jitmeet/invite/<id>')
+@login_required
+def invite(id):
+    return render_template('invite.html', id=id)
 
 @bp_jitmeet.route('/jitmeet/chromeonly')
 @login_required
