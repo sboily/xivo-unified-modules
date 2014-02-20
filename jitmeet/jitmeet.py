@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask.ext.login import current_user
+from flask.ext.mail import Message
 from flask import request
-from app.extensions import db
+from app.extensions import db, mail
 from models import RoomDB
 import os
 
@@ -51,3 +52,13 @@ class JitMeet(object):
         if room:
             db.session.delete(room)
             db.session.commit()
+
+    def send_invite(self, form, url):
+        recipients = form['email'].split(";")
+        body="Hello !\r\n\r\nYou are invited to partipate to this videoconferencing, please click on this link (only working with the latest chrome browser)\r\n%s" % url
+        msg = Message(subject="Video conf invitation",
+                      body=body,
+                      sender="xivo-cloud@xivo.fr",
+                      recipients=recipients)
+
+        mail.send(msg)

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request
 from flask.ext.login import login_required, current_user
 from setup import bp_jitmeet, jitmeet
 from forms import RoomForm
@@ -52,6 +52,13 @@ def open(id):
 @login_required
 def invite(id):
     return render_template('invite.html', id=id)
+
+@bp_jitmeet.route('/jitmeet/invite/send/<id>', methods=['POST'])
+@login_required
+def send_invite(id):
+    url_room = "%sjitmeet_%s" % (request.url_root, id)
+    jitmeet.send_invite(request.form, url_room)
+    return redirect(url_for('jitmeet.list'))
 
 @bp_jitmeet.route('/jitmeet/chromeonly')
 @login_required

@@ -1,2 +1,6 @@
-Share this link with everyone you want to invite : <br>
-<strong>{{request.url_root}}jitmeet_{{ id }}</strong>
+<div id="invite">
+    <form id="form-invite">
+    <p>Invite people in your video conferencing !</p>
+    <textarea id="email" data-url="{{url_for('jitmeet.send_invite', id=id)}}" name="email" style="width: 100%;" placeholder="Please add with semi-coma the people you want to invite ..."></textarea>
+    </form>
+</div>
