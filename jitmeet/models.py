@@ -18,6 +18,7 @@
 
 from app import db
 from datetime import datetime
+from app.models import User
 
 class RoomDB(db.Model):
     __bind_key__ = 'jitmeet'
@@ -25,9 +26,9 @@ class RoomDB(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
     hash = db.Column(db.String(200))
-    user_id = db.Column(db.Integer)
-    start_time = db.Column(db.DateTime, default=datetime.utcnow)
-    end_time = db.Column(db.DateTime)
+    organized_by = db.Column(db.String(200))
+    start_time = db.Column(db.String(200))
+    end_time = db.Column(db.String(200))
     pin = db.Column(db.String(200))
     organisation_id = db.Column(db.Integer)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)

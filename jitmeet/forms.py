@@ -23,4 +23,7 @@ from app.utils import Form
 
 class RoomForm(Form):
     name = TextField(_('Room name'), [Required()])
+    pin = TextField(_('Pin'))
+    start_time = TextField(_('Start time'))
+    end_time = TextField(_('End time'))
     submit = SubmitField('Submit')

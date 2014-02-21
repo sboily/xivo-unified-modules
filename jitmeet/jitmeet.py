@@ -32,13 +32,41 @@ class JitMeet(object):
         with app.app_context():
             db.create_all(bind=self.db_bind)
 
-    def add(self, name):
+    def add(self, form):
+        name = form.name.data
+        pin = form.pin.data
+        start_time = form.start_time.data
+        end_time = form.end_time.data
+
         room = RoomDB(name=name)
         room.organisation_id = current_user.organisation_id
         room.hash = os.urandom(16).encode('hex')
+        room.organized_by = current_user.displayname
+
+        if pin:
+            room.pin = pin
+
+        if start_time:
+           room.start_time = start_time
+
+        if end_time:
+           room.end_time = end_time
 
         db.session.add(room)
         db.session.commit()
+
+    def edit(self, form, id):
+        room = RoomDB.query.filter_by(id=id).first()
+        if form.validate_on_submit():
+            form.populate_obj(room)
+            db.session.add(room)
+            db.session.commit()
+            return True
+
+        return False
+
+    def get(self, id):
+        return RoomDB.query.filter_by(id=id).first()
 
     def list(self):
         return RoomDB.query.filter(RoomDB.organisation_id == current_user.organisation_id) \

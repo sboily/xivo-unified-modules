@@ -31,9 +31,18 @@ def list():
 def add():
     form = RoomForm()
     if form.validate_on_submit():
-        jitmeet.add(form.name.data)
+        jitmeet.add(form)
         return redirect(url_for('jitmeet.list'))
     return render_template('add.html', form=form)
+
+@bp_jitmeet.route("/jitmeet/edit/<id>", methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    room = jitmeet.get(id)
+    form = RoomForm(obj=room)
+    if jitmeet.edit(form, id):
+        return redirect(url_for('jitmeet.list'))
+    return render_template('edit.html', form=form)
 
 @bp_jitmeet.route('/jitmeet/delete/<id>')
 @login_required

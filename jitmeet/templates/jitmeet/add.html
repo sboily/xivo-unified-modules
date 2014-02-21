@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+
+{% block header %}
+    <link rel="stylesheet" media="screen" href="{{ url_for('jitmeet.static', filename='css/bootstrap-datetimepicker.min.css') }}">
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/moment.min.js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('jitmeet.static', filename='js/bootstrap-datetimepicker.min.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     {% from "forms/macros.html" import render_field %}
 
@@ -12,11 +19,20 @@
         <form class="form" role="form" method="post">
             {{ form.csrf_token }}
             {{ render_field(form.name, with_label=1) }}
+            {{ render_field(form.pin, with_label=1) }}
+            {{ render_field(form.start_time, with_label=1) }}
+            {{ render_field(form.end_time, with_label=1) }}
             {{ render_field(form.submit, class="btn btn-default btn-primary") }}
         </form>
       </div>
     </div>
 </div>
 
-{% endblock %}
+<script type="text/javascript">
+$(function() {
+    $("#start_time").datetimepicker();
+    $("#end_time").datetimepicker();
+});
+</script>
 
+{% endblock %}

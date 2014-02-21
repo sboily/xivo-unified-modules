@@ -11,6 +11,8 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Organized by</th>
+        <th>Pin</th>
         <th style="width: 8%;" class="sorter-false"></th>
       </tr>
     </thead>
@@ -18,11 +20,14 @@
     {% for v in room %}
       <tr>
       <td>{{ v.name }}</td>
+      <td>{{ v.organized_by }}</td>
+      <td>{{ v.pin }}</td>
       <td>
         <a href="{{url_for('jitmeet.open', id=v.hash)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-facetime-video"></i></a>
         <a data-url="{{url_for('jitmeet.invite', id=v.hash)}}" class="btn btn-default btn-xs" id="{{ v.hash }}" data-toggle="modal" data-target="#jitmeet-invite">
             <i class="glyphicon glyphicon-envelope"></i>
         </a>
+        <a href="{{url_for('jitmeet.edit', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
         <a href="{{url_for('jitmeet.delete', id=v.id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
         </td>
       </tr>
