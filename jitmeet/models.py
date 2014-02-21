@@ -25,6 +25,10 @@ class RoomDB(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
     hash = db.Column(db.String(200))
+    user_id = db.Column(db.Integer)
+    start_time = db.Column(db.DateTime, default=datetime.utcnow)
+    end_time = db.Column(db.DateTime)
+    pin = db.Column(db.String(200))
     organisation_id = db.Column(db.Integer)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
