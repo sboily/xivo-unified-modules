@@ -21,7 +21,7 @@
 
 {% if current_user.is_anonymous %}
     {% block anonymous_content %}
-        {% include "jitmeet_video.html" %}
+        {% include "jitmeet_video_guest.html" %}
     {% endblock %}
 {% else %}
     {% block content %}
